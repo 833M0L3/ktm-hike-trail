@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -59,6 +59,67 @@ function MapResizer() {
   return null;
 }
 
+const TILE_LAYERS = {
+  street: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  },
+  satellite: {
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+  },
+};
+
+function TileLayerToggle({ theme }) {
+  const [mode, setMode] = useState('street');
+  const tile = TILE_LAYERS[mode];
+
+  // Toggle data-satellite on <html> so CSS can skip dark-mode filter for satellite
+  useEffect(() => {
+    if (mode === 'satellite') {
+      document.documentElement.setAttribute('data-satellite', '');
+    } else {
+      document.documentElement.removeAttribute('data-satellite');
+    }
+  }, [mode]);
+
+  return (
+    <>
+      <TileLayer key={mode} url={tile.url} attribution={tile.attribution} />
+      <div style={{
+        position: 'absolute', top: 12, right: 12, zIndex: 1000,
+      }}>
+        <button
+          onClick={() => setMode(m => m === 'street' ? 'satellite' : 'street')}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '7px 12px', borderRadius: 8,
+            background: 'var(--bg-card)', border: '1px solid var(--border)',
+            color: 'var(--text-secondary)', fontSize: 11, fontWeight: 600,
+            cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            transition: 'border-color 0.2s, color 0.2s',
+            backdropFilter: 'blur(8px)',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent-primary)'; e.currentTarget.style.color = 'var(--accent-primary)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+          title={mode === 'street' ? 'Switch to Satellite View' : 'Switch to Street View'}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            {mode === 'street' ? (
+              /* Globe icon */
+              <><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></>
+            ) : (
+              /* Map icon */
+              <><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16"/><path d="M16 6v16"/></>
+            )}
+          </svg>
+          {mode === 'street' ? 'Satellite' : 'Map'}
+        </button>
+      </div>
+    </>
+  );
+}
+
 export default function MapView({ routes, activeRoute, onRouteClick, theme, detailPanelHeight }) {
   const center = [27.7172, 85.3240];
 
@@ -71,10 +132,7 @@ export default function MapView({ routes, activeRoute, onRouteClick, theme, deta
       attributionControl={true}
     >
       <MapResizer />
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <TileLayerToggle theme={theme} />
       <ZoomControl position="bottomright" />
 
       {routes.map((route, idx) => {

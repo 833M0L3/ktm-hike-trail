@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download } from 'lucide-react';
+import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download, MapPin, Flag } from 'lucide-react';
 import ElevationChart from './ElevationChart';
 
 const ROUTE_COLORS = [
@@ -251,7 +251,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                   onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.08)'; }}
                   title={`Open start point in Google Maps (${start.lat.toFixed(4)}, ${start.lng.toFixed(4)})`}
                 >
-                  <span style={{ fontSize: 13 }}>📍</span> Start Point
+                  <MapPin size={13} /> Start Point
                 </a>
                 <a
                   href={gmapsUrl(end.lat, end.lng)}
@@ -268,7 +268,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                   onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; }}
                   title={`Open end point in Google Maps (${end.lat.toFixed(4)}, ${end.lng.toFixed(4)})`}
                 >
-                  <span style={{ fontSize: 13 }}>🏁</span> End Point
+                  <Flag size={13} /> End Point
                 </a>
               </div>
             );

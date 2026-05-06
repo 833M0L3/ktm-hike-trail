@@ -1,5 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { MapPin } from 'lucide-react';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -12,7 +13,9 @@ const CustomTooltip = ({ active, payload, label }) => {
         fontSize: 12,
         boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
       }}>
-        <div style={{ color: 'var(--text-secondary)', marginBottom: 4 }}>📍 {label} km</div>
+        <div style={{ color: 'var(--text-secondary)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <MapPin size={11} /> {label} km
+        </div>
         <div style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>{payload[0].value}m elevation</div>
       </div>
     );

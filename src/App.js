@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Compass, X, Filter, Sun, Moon, RefreshCw, Menu, Trees } from 'lucide-react';
+import { Search, Compass, X, Filter, Sun, Moon, RefreshCw, Menu, Trees, AlertTriangle } from 'lucide-react';
 import MapView from './components/MapView';
 import RouteCard from './components/RouteCard';
 import RouteDetail from './components/RouteDetail';
@@ -23,7 +23,7 @@ export default function App() {
   const [filterDifficulty, setFilterDifficulty] = useState('All');
   const [sortBy, setSortBy] = useState('name');
   const [showFilters, setShowFilters] = useState(false);
-  const [theme, setTheme] = useState(() => localStorage.getItem('ht-theme') || 'dark');
+  const [theme, setTheme] = useState(() => localStorage.getItem('ht-theme') || 'day');
   const [loadingState, setLoadingState] = useState({ status: 'idle', progress: 0, total: 0, loaded: 0, errors: [] });
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isLoading, setIsLoading] = useState(true);
@@ -384,7 +384,7 @@ function LoadingStatus({ state, onReload }) {
   if (state.status === 'error') {
     return (
       <div style={{ marginTop:12, padding:'8px 12px', borderRadius:8, background:'rgba(239,68,68,0.1)', border:'1px solid rgba(239,68,68,0.25)' }}>
-        <div style={{ fontSize:11, color:'#ef4444', marginBottom:4 }}>⚠ Failed to load KML files</div>
+        <div style={{ fontSize:11, color:'#ef4444', marginBottom:4, display:'flex', alignItems:'center', gap:4 }}><AlertTriangle size={12} /> Failed to load KML files</div>
         <div style={{ fontSize:10, color:'var(--text-muted)' }}>{state.errors[0]}</div>
         <button onClick={onReload} style={{ marginTop:6, fontSize:10, color:'var(--accent-primary)', background:'none', border:'none', cursor:'pointer', display:'flex', alignItems:'center', gap:4 }}>
           <RefreshCw size={10}/> Retry
