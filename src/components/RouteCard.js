@@ -69,7 +69,7 @@ const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onD
                 {route.difficulty}
               </span>
               <a
-                href={`/kml/${encodeURIComponent(route.fileName)}`}
+                href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
                 download
                 onClick={(e) => e.stopPropagation()}
                 style={{

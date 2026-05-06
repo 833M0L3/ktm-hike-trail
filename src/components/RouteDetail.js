@@ -197,7 +197,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                 {route.difficulty}
               </span>
               <a
-                href={`/kml/${encodeURIComponent(route.fileName)}`}
+                href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
                 download
                 style={{
                   display: 'flex', alignItems: 'center', gap: 4,
