@@ -6,6 +6,13 @@ import RouteDetail from './components/RouteDetail';
 import { parseKML } from './utils/kmlParser';
 import './index.css';
 
+// Notify the map whenever sidebar toggles
+const fireSidebarToggle = () => {
+  setTimeout(() => window.dispatchEvent(new Event('sidebar-toggle')), 50);
+  setTimeout(() => window.dispatchEvent(new Event('sidebar-toggle')), 200);
+  setTimeout(() => window.dispatchEvent(new Event('sidebar-toggle')), 400);
+};
+
 
 
 export default function App() {
@@ -83,9 +90,9 @@ export default function App() {
 
   useEffect(() => { loadKMLFolder(); }, [loadKMLFolder]);
 
-  const handleRouteClick = async (route) => {
+  const handleRouteClick = useCallback(async (route) => {
     // On mobile, hide the sidebar so the map + elevation card are visible
-    if (isMobile) setSidebarOpen(false);
+    if (isMobile) { setSidebarOpen(false); fireSidebarToggle(); }
 
     if (!route.isLazyLoaded) {
       setIsLoading(true);
@@ -93,35 +100,33 @@ export default function App() {
         const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
         const text = await res.text();
         const fullParsed = parseKML(text, route.fileName);
-        
         if (fullParsed) {
           const updatedRoute = {
             ...fullParsed,
-            id: route.id, 
-            name: route.name, 
+            id: route.id,
+            name: route.name,
             description: route.description,
             difficulty: route.difficulty,
             isLazyLoaded: true
           };
           updatedRoute.stats.estimatedHours = route.stats.estimatedHours;
-          
           setRoutes(prev => prev.map(r => r.id === route.id ? updatedRoute : r));
           setActiveRoute(updatedRoute);
         }
       } catch (err) {
-        console.error("Failed to load KML", err);
+        console.error('Failed to load KML', err);
       } finally {
         setIsLoading(false);
       }
     } else {
       setActiveRoute(route);
     }
-  };
+  }, [isMobile]);
 
-  const handleDeleteRoute = (id) => {
+  const handleDeleteRoute = useCallback((id) => {
     setRoutes(prev => prev.filter(r => r.id !== id));
-    if (activeRoute?.id === id) setActiveRoute(null);
-  };
+    setActiveRoute(prev => (prev?.id === id ? null : prev));
+  }, []);
 
   const filteredRoutes = routes
     .filter(r => {
@@ -164,7 +169,7 @@ export default function App() {
           <div style={{ padding:'16px 16px 0', flexShrink:0 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
               {/* Sidebar toggle */}
-              <button className="theme-toggle" onClick={() => setSidebarOpen(false)} title="Close Sidebar" style={{ border: 'none', background: 'transparent' }}>
+              <button className="theme-toggle" onClick={() => { setSidebarOpen(false); fireSidebarToggle(); }} title="Close Sidebar" style={{ border: 'none', background: 'transparent' }}>
                 <Menu size={18} />
               </button>
               {/* Logo */}
@@ -308,7 +313,7 @@ export default function App() {
         {!sidebarOpen && (
           <div style={{ position:'absolute', top: isMobile ? 12 : 16, left: isMobile ? 12 : 16, zIndex:1000 }}>
             <div style={{ padding: isMobile ? '6px 10px' : '8px 14px', background:'var(--bg-primary)', border:`1px solid var(--border)`, borderRadius:12, backdropFilter:'blur(12px)', display:'flex', alignItems:'center', gap:8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-              <button className="theme-toggle" onClick={() => setSidebarOpen(true)} title="Open Sidebar" style={{ border:'none', background:'transparent', color: 'var(--text-primary)' }}>
+              <button className="theme-toggle" onClick={() => { setSidebarOpen(true); fireSidebarToggle(); }} title="Open Sidebar" style={{ border:'none', background:'transparent', color: 'var(--text-primary)' }}>
                 <Menu size={18}/>
               </button>
               <div style={{ width:24, height:24, borderRadius:6, background:'linear-gradient(135deg, #10b981 0%, #059669 100%)', display:'flex', alignItems:'center', justifyContent:'center' }}>

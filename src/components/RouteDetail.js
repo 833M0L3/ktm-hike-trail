@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers } from 'lucide-react';
+import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download } from 'lucide-react';
 import ElevationChart from './ElevationChart';
 
 const ROUTE_COLORS = [
@@ -16,15 +16,27 @@ const MAX_HEIGHT_VH = 85;
 
 export default function RouteDetail({ route, index, onClose, isMobile, onHeightChange }) {
   const [panelHeight, setPanelHeight] = useState(null);
-  const [isDragging, setIsDragging] = useState(false);
   const [isHandleHovered, setIsHandleHovered] = useState(false);
+  const isDraggingRef = useRef(false);
   const dragStartY = useRef(0);
   const dragStartHeight = useRef(0);
   const panelRef = useRef(null);
+  const handleBarRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
+  const [showChartDeferred, setShowChartDeferred] = useState(false);
 
   const defaultHeightVh = isMobile ? 40 : 65;
 
-  // Report height to parent whenever it changes
+  useEffect(() => {
+    // Trigger entrance animation on mount
+    requestAnimationFrame(() => {
+      setIsMounted(true);
+      // Defer heavy chart rendering to avoid jank during entrance
+      setTimeout(() => setShowChartDeferred(true), 150);
+    });
+  }, []);
+
+  // Report height to parent whenever committed height changes
   useEffect(() => {
     const h = panelHeight != null ? panelHeight : window.innerHeight * defaultHeightVh / 100;
     onHeightChange?.(h);
@@ -36,36 +48,55 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
 
   const handleMouseDown = useCallback((e) => {
     e.preventDefault();
-    setIsDragging(true);
-    dragStartY.current = e.clientY || e.touches?.[0]?.clientY || 0;
-    const currentH = panelRef.current?.offsetHeight || (window.innerHeight * defaultHeightVh / 100);
-    dragStartHeight.current = currentH;
-  }, [defaultHeightVh]);
+    isDraggingRef.current = true;
+    dragStartY.current = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+    dragStartHeight.current = panelRef.current?.offsetHeight ?? (window.innerHeight * defaultHeightVh / 100);
 
-  useEffect(() => {
-    if (!isDragging) return;
-    const handleMove = (e) => {
-      const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
-      const delta = dragStartY.current - clientY;
-      const maxH = window.innerHeight * MAX_HEIGHT_VH / 100;
-      setPanelHeight(Math.min(maxH, Math.max(MIN_HEIGHT, dragStartHeight.current + delta)));
-    };
-    const handleUp = () => setIsDragging(false);
-    window.addEventListener('mousemove', handleMove);
-    window.addEventListener('mouseup', handleUp);
-    window.addEventListener('touchmove', handleMove);
-    window.addEventListener('touchend', handleUp);
+    // Style handle imperatively
+    if (handleBarRef.current) {
+      handleBarRef.current.style.width = '56px';
+      handleBarRef.current.style.background = 'var(--accent-primary)';
+    }
+    // Disable CSS transition during drag so it doesn't fight direct DOM changes
+    if (panelRef.current) panelRef.current.style.transition = 'none';
     document.body.style.cursor = 'ns-resize';
     document.body.style.userSelect = 'none';
-    return () => {
+
+    const handleMove = (ev) => {
+      if (!isDraggingRef.current || !panelRef.current) return;
+      const clientY = ev.clientY ?? ev.touches?.[0]?.clientY ?? 0;
+      const delta = dragStartY.current - clientY;
+      const maxH = window.innerHeight * MAX_HEIGHT_VH / 100;
+      const newH = Math.min(maxH, Math.max(MIN_HEIGHT, dragStartHeight.current + delta));
+      // Direct DOM mutation — zero React re-renders during drag
+      panelRef.current.style.height = `${newH}px`;
+    };
+
+    const handleUp = () => {
+      if (!isDraggingRef.current) return;
+      isDraggingRef.current = false;
+      // Commit final height to React state (1 re-render total)
+      const finalH = panelRef.current ? parseFloat(panelRef.current.style.height) || null : null;
+      setPanelHeight(finalH);
+      // Re-enable CSS transition after committing
+      if (panelRef.current) panelRef.current.style.transition = '';
+      if (handleBarRef.current) {
+        handleBarRef.current.style.width = '';
+        handleBarRef.current.style.background = '';
+      }
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
       window.removeEventListener('mousemove', handleMove);
       window.removeEventListener('mouseup', handleUp);
       window.removeEventListener('touchmove', handleMove);
       window.removeEventListener('touchend', handleUp);
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
     };
-  }, [isDragging]);
+
+    window.addEventListener('mousemove', handleMove, { passive: true });
+    window.addEventListener('mouseup', handleUp);
+    window.addEventListener('touchmove', handleMove, { passive: true });
+    window.addEventListener('touchend', handleUp);
+  }, [defaultHeightVh]);
 
   if (!route) return null;
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
@@ -90,9 +121,11 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           flexDirection: 'column',
           height: panelHeight != null ? `${panelHeight}px` : `${defaultHeightVh}vh`,
           overflow: 'hidden',
-          transition: isDragging ? 'none' : 'height 0.25s ease',
+          transform: isMounted ? 'translateY(0)' : 'translateY(100%)',
+          transition: 'height 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)',
           pointerEvents: 'auto',
           boxShadow: '0 -4px 32px rgba(0,0,0,0.15)',
+          willChange: 'transform, height',
         }}
       >
         {/* Drag Handle */}
@@ -111,13 +144,16 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           }}
           title="Drag to resize"
         >
-          <div style={{
-            width: isDragging ? 56 : (isHandleHovered ? 48 : 36),
-            height: 4,
-            background: isDragging ? 'var(--accent-primary)' : (isHandleHovered ? 'var(--text-secondary)' : 'var(--border)'),
-            borderRadius: 2,
-            transition: 'all 0.2s ease',
-          }} />
+          <div
+            ref={handleBarRef}
+            style={{
+              width: isHandleHovered ? 48 : 36,
+              height: 4,
+              background: isHandleHovered ? 'var(--text-secondary)' : 'var(--border)',
+              borderRadius: 2,
+              transition: 'width 0.2s ease, background 0.2s ease',
+            }}
+          />
         </div>
 
         {/* Header — always visible */}
@@ -140,7 +176,22 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
               }}>
                 {route.difficulty}
               </span>
-              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{route.fileName}</span>
+              <a
+                href={`/kml/${encodeURIComponent(route.fileName)}`}
+                download
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  fontSize: 11, fontWeight: 600, color: '#0ea5e9',
+                  padding: '2px 10px', borderRadius: 20,
+                  background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
+                  textDecoration: 'none', transition: 'background 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
+                title={`Download ${route.fileName}`}
+              >
+                <Download size={11} /> KML
+              </a>
             </div>
           </div>
           <button
@@ -180,8 +231,8 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           {showChart && (
             <div style={{ flex: 1, minHeight: 60, padding: '8px 20px 0', display: 'flex', flexDirection: 'column' }}>
               <div className="section-label" style={{ marginBottom: 6, flexShrink: 0 }}>Elevation Profile</div>
-              <div style={{ flex: 1, minHeight: 0 }}>
-                <ElevationChart route={route} color={color} />
+              <div style={{ flex: 1, minHeight: 0, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease' }}>
+                {showChartDeferred && <ElevationChart route={route} color={color} />}
               </div>
             </div>
           )}

@@ -74,7 +74,8 @@ export default function ElevationChart({ route, color = '#f97316' }) {
             tickLine={false}
             axisLine={false}
             tickFormatter={(v) => `${v}km`}
-            interval="preserveStartEnd"
+            interval={Math.ceil(data.length / 5) - 1}
+            minTickGap={40}
           />
           <YAxis
             domain={domain}

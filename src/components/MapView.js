@@ -36,6 +36,28 @@ function AllRoutesBounds({ routes }) {
   }, [routes, map]);
   return null;
 }
+// Watches for container resize and sidebar-toggle events
+function MapResizer() {
+  const map = useMap();
+  useEffect(() => {
+    const container = map.getContainer();
+    let timer;
+    const invalidate = () => {
+      map.invalidateSize({ animate: false });
+      clearTimeout(timer);
+      timer = setTimeout(() => map.invalidateSize({ animate: false }), 400);
+    };
+    const observer = new ResizeObserver(invalidate);
+    observer.observe(container);
+    window.addEventListener('sidebar-toggle', invalidate);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('sidebar-toggle', invalidate);
+      clearTimeout(timer);
+    };
+  }, [map]);
+  return null;
+}
 
 export default function MapView({ routes, activeRoute, onRouteClick, theme, detailPanelHeight }) {
   const center = [27.7172, 85.3240];
@@ -48,6 +70,7 @@ export default function MapView({ routes, activeRoute, onRouteClick, theme, deta
       zoomControl={false}
       attributionControl={true}
     >
+      <MapResizer />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

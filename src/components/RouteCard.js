@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, Download } from 'lucide-react';
 
 const ROUTE_COLORS = [
@@ -12,14 +13,17 @@ const DIFFICULTY_CLASS = {
   Extreme: 'badge-extreme',
 };
 
-export default function RouteCard({ route, index, isActive, onClick, onDelete }) {
+const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onDelete }) {
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
+
+  const handleClick = () => onClick(route);
+  const handleDelete = (e) => { e.stopPropagation(); onDelete(route.id); };
 
   return (
     <div
       className={`route-card rounded-xl p-4 cursor-pointer relative group ${isActive ? 'active' : ''}`}
-      onClick={onClick}
-      style={{ animationDelay: `${index * 0.05}s` }}
+      onClick={handleClick}
+      style={{ '--card-delay': `${Math.min(index * 0.04, 0.3)}s`, animationDelay: `${Math.min(index * 0.04, 0.3)}s` }}
     >
       {/* Accent color bar */}
       <div style={{
@@ -55,7 +59,7 @@ export default function RouteCard({ route, index, isActive, onClick, onDelete })
                   fontSize: 10, fontWeight: 600, color: '#0ea5e9',
                   padding: '2px 8px', borderRadius: 20,
                   background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
-                  textDecoration: 'none', transition: 'all 0.2s',
+                  textDecoration: 'none', transition: 'background 0.2s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
@@ -67,7 +71,7 @@ export default function RouteCard({ route, index, isActive, onClick, onDelete })
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <button
-              onClick={(e) => { e.stopPropagation(); onDelete(route.id); }}
+              onClick={handleDelete}
               style={{
                 opacity: 0,
                 background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
@@ -109,7 +113,9 @@ export default function RouteCard({ route, index, isActive, onClick, onDelete })
       </div>
     </div>
   );
-}
+});
+
+export default RouteCard;
 
 function StatItem({ icon, value, label, color }) {
   return (

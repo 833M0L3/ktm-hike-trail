@@ -62,7 +62,7 @@ html, body, #root {
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'DM Sans', sans-serif;
-  transition: background 0.3s ease, color 0.3s ease;
+  /* No full-page transitions — they repaint everything */
 }
 
 ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -92,7 +92,14 @@ html, body, #root {
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 .skeleton { background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
 
-.route-card { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); border: 1px solid var(--border); background: var(--bg-card); }
+.route-card {
+  transition: transform 0.2s cubic-bezier(0.4,0,0.2,1), border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  will-change: transform;
+  /* Cap animation delay so large lists don't lag */
+  animation-delay: min(var(--card-delay, 0s), 0.3s);
+}
 .route-card:hover { transform: translateY(-2px); border-color: var(--accent-primary); background: var(--bg-card-hover); box-shadow: var(--shadow-glow); }
 .route-card.active { border-color: var(--accent-primary); background: var(--bg-card-hover); box-shadow: var(--shadow-glow); }
 
