@@ -41,7 +41,9 @@ export function parseKML(kmlText, fileName) {
   const elevationProfile = sampled.map((c, i, arr) => ({
     distance: parseFloat(cumulativeDistance(arr, i).toFixed(2)),
     elevation: Math.round(c.ele),
+    index: i,  // keep index for hover sync
   }));
+  const sampledCoords = sampled; // GPS coords aligned 1:1 with elevationProfile
 
   const waypoints = [
     { lat: coordinates[0].lat, lng: coordinates[0].lng, label: 'Start', type: 'start' },
@@ -62,6 +64,7 @@ export function parseKML(kmlText, fileName) {
     stats,
     difficulty,
     elevationProfile,
+    sampledCoords,
     waypoints,
     bounds,
     fileName,

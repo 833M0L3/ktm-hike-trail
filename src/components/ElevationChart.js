@@ -32,10 +32,28 @@ export default function ElevationChart({ route, color = '#f97316' }) {
   const maxEle = Math.max(...data.map(d => d.elevation));
   const domain = [Math.max(0, minEle - 200), maxEle + 200];
 
+  const handleMouseMove = (state) => {
+    if (state && state.activeTooltipIndex != null && route.sampledCoords) {
+      const coord = route.sampledCoords[state.activeTooltipIndex];
+      if (coord) {
+        window.dispatchEvent(new CustomEvent('chart-hover', { detail: { lat: coord.lat, lng: coord.lng } }));
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    window.dispatchEvent(new CustomEvent('chart-hover', { detail: null }));
+  };
+
   return (
     <div style={{ width: '100%', height: '100%', minHeight: 0 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+        <AreaChart
+          data={data}
+          margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <defs>
             <linearGradient id={`grad-${route.id}`} x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%"   stopColor={color} stopOpacity={0.4} />

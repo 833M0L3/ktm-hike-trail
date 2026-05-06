@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polyline, CircleMarker, Popup, Tooltip, useMap, ZoomControl } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const ROUTE_COLORS = [
@@ -134,6 +135,48 @@ export default function MapView({ routes, activeRoute, onRouteClick, theme, deta
 
       {activeRoute && <FitBounds route={activeRoute} bottomPadding={detailPanelHeight} />}
       {!activeRoute && routes.length > 0 && <AllRoutesBounds routes={routes} />}
+
+      {/* Imperative hover dot — listens to DOM events, zero React overhead */}
+      <HoverDot />
     </MapContainer>
   );
+}
+
+// Fully imperative: listens to 'chart-hover' CustomEvent, calls setLatLng() directly
+function HoverDot() {
+  const map = useMap();
+  const glowRef = useRef(null);
+  const dotRef = useRef(null);
+
+  useEffect(() => {
+    const glow = L.circleMarker([0, 0], {
+      radius: 14, color: 'transparent', fillColor: '#f97316', fillOpacity: 0.25, weight: 0, interactive: false,
+    });
+    const dot = L.circleMarker([0, 0], {
+      radius: 6, color: '#fff', weight: 2.5, fillColor: '#f97316', fillOpacity: 1, interactive: false,
+    });
+    glowRef.current = glow;
+    dotRef.current = dot;
+
+    const handler = (e) => {
+      const coord = e.detail;
+      if (coord) {
+        const latlng = [coord.lat, coord.lng];
+        glow.setLatLng(latlng).addTo(map);
+        dot.setLatLng(latlng).addTo(map);
+      } else {
+        glow.remove();
+        dot.remove();
+      }
+    };
+
+    window.addEventListener('chart-hover', handler);
+    return () => {
+      window.removeEventListener('chart-hover', handler);
+      glow.remove();
+      dot.remove();
+    };
+  }, [map]);
+
+  return null;
 }
