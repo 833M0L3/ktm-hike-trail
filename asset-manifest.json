@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ktm-hike-trail/static/css/main.b09edda3.css",
+    "main.js": "/ktm-hike-trail/static/js/main.a929bef6.js",
+    "index.html": "/ktm-hike-trail/index.html",
+    "main.b09edda3.css.map": "/ktm-hike-trail/static/css/main.b09edda3.css.map",
+    "main.a929bef6.js.map": "/ktm-hike-trail/static/js/main.a929bef6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b09edda3.css",
+    "static/js/main.a929bef6.js"
+  ]
+}
