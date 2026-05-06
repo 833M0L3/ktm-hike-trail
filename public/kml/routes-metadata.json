@@ -1,0 +1,2844 @@
+{
+  "001_WNW_1.Kathmandu_Valley_circuit.kml": {
+    "name": "WNW_1.Kathmandu Valley circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 30.74,
+      "elevationGain": 1837,
+      "elevationLoss": 2297,
+      "minElevation": 1432,
+      "maxElevation": 2725,
+      "estimatedHours": 9.2
+    },
+    "bounds": [
+      [
+        27.757735,
+        85.31814
+      ],
+      [
+        27.825161,
+        85.458774
+      ]
+    ],
+    "startPos": {
+      "lat": 27.813927,
+      "lng": 85.31814
+    }
+  },
+  "002_WNW_2.Tindhare_Jharana.kml": {
+    "name": "WNW_2.Tindhare Jharana",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 17.03,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 3.4
+    },
+    "bounds": [
+      [
+        27.4906071,
+        85.5713002
+      ],
+      [
+        27.552494,
+        85.61103
+      ]
+    ],
+    "startPos": {
+      "lat": 27.4906071,
+      "lng": 85.5713002
+    }
+  },
+  "003_WNW_3.Fungfung_waterfall_Nuwakot.kml": {
+    "name": "WNW_3.Fungfung waterfall Nuwakot",
+    "description": "Balaju, Kathmandu 44600, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 10.17,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2
+    },
+    "bounds": [
+      [
+        27.776569,
+        85.24758
+      ],
+      [
+        27.814977,
+        85.27856
+      ]
+    ],
+    "startPos": {
+      "lat": 27.814977,
+      "lng": 85.24758
+    }
+  },
+  "004_WNW_4.Kakani_circuit_trail.kml": {
+    "name": "WNW_4.Kakani circuit trail",
+    "description": "Balaju Roundabout, Kathmandu 44600, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 9.05,
+      "elevationGain": 1186,
+      "elevationLoss": 1389,
+      "minElevation": 1679,
+      "maxElevation": 2241,
+      "estimatedHours": 3.8
+    },
+    "bounds": [
+      [
+        27.789128,
+        85.279014
+      ],
+      [
+        27.819085,
+        85.313746
+      ]
+    ],
+    "startPos": {
+      "lat": 27.812964,
+      "lng": 85.313637
+    }
+  },
+  "005_WNW_5.Jhyampal_fall.kml": {
+    "name": "WNW_5.Jhyampal fall",
+    "description": "Swana Gaun Restaurant, Q68X+FP, Chhatre Deurali 45100, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 10.71,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.1
+    },
+    "bounds": [
+      [
+        27.73668,
+        85.242109
+      ],
+      [
+        27.767535,
+        85.3021866
+      ]
+    ],
+    "startPos": {
+      "lat": 27.7367795,
+      "lng": 85.3021866
+    }
+  },
+  "006_WNW_6.Sisneri.kml": {
+    "name": "WNW_6.Sisneri",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 21.5,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 4.3
+    },
+    "bounds": [
+      [
+        27.539737,
+        85.210754
+      ],
+      [
+        27.612889,
+        85.268151
+      ]
+    ],
+    "startPos": {
+      "lat": 27.6128413,
+      "lng": 85.2651468
+    }
+  },
+  "007_WNW_7.Saga_to_Jarsingpauwa_via_Nagarkot.kml": {
+    "name": "wnw_7.Saga to Jarsingpauwa via Nagarkot",
+    "description": "Chabahil, Kathmandu 44600, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 22.96,
+      "elevationGain": 804,
+      "elevationLoss": 1046,
+      "minElevation": 1470,
+      "maxElevation": 2119,
+      "estimatedHours": 5.9
+    },
+    "bounds": [
+      [
+        27.641452,
+        85.477093
+      ],
+      [
+        27.74885,
+        85.525825
+      ]
+    ],
+    "startPos": {
+      "lat": 27.74885,
+      "lng": 85.498292
+    }
+  },
+  "008_WNW_8.Thankot-Mudkhu_Bhanjyang-Gurje_Bhanjyang.kml": {
+    "name": "wnw_8.Thankot-Mudkhu Bhanjyang-Gurje Bhanjyang",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 29.06,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 5.8
+    },
+    "bounds": [
+      [
+        27.7070244,
+        85.20558
+      ],
+      [
+        27.813561,
+        85.315655
+      ]
+    ],
+    "startPos": {
+      "lat": 27.7070244,
+      "lng": 85.2063735
+    }
+  },
+  "009_WNW_9.Saangaa_to_Panauti.kml": {
+    "name": "WNW_9.Saangaa to Panauti",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 15.02,
+      "elevationGain": 833,
+      "elevationLoss": 885,
+      "minElevation": 1475,
+      "maxElevation": 1855,
+      "estimatedHours": 4.4
+    },
+    "bounds": [
+      [
+        27.589649,
+        85.466507
+      ],
+      [
+        27.64155,
+        85.506614
+      ]
+    ],
+    "startPos": {
+      "lat": 27.64155,
+      "lng": 85.477803
+    }
+  },
+  "010_WNW_10.Lauke_Jharna.kml": {
+    "name": "WNW_10.Lauke Jharna",
+    "description": "Gurje Bhanjyang, Bidur-Tokha Road, 44900, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 11.68,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.3
+    },
+    "bounds": [
+      [
+        27.801495,
+        85.284579
+      ],
+      [
+        27.842403,
+        85.319468
+      ]
+    ],
+    "startPos": {
+      "lat": 27.801495,
+      "lng": 85.318077
+    }
+  },
+  "011_WNW_11.Jhor_waterfall.kml": {
+    "name": "WNW_11.Jhor waterfall",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 10.7,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.1
+    },
+    "bounds": [
+      [
+        27.72725,
+        85.31671
+      ],
+      [
+        27.80102,
+        85.3306
+      ]
+    ],
+    "startPos": {
+      "lat": 27.72725,
+      "lng": 85.31747
+    }
+  },
+  "012_WNW_12.Jarsingpauwa_Nagarkot_Saangaa.kml": {
+    "name": "WNW_12.Jarsingpauwa Nagarkot Saangaa",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 22.96,
+      "elevationGain": 804,
+      "elevationLoss": 1046,
+      "minElevation": 1470,
+      "maxElevation": 2119,
+      "estimatedHours": 5.9
+    },
+    "bounds": [
+      [
+        27.641452,
+        85.477093
+      ],
+      [
+        27.74885,
+        85.525825
+      ]
+    ],
+    "startPos": {
+      "lat": 27.74885,
+      "lng": 85.498292
+    }
+  },
+  "013_WNW_13.Saangaa-Raanikot-Godawari.kml": {
+    "name": "wnw_13.Saangaa-Raanikot-Godawari",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 19.33,
+      "elevationGain": 925,
+      "elevationLoss": 905,
+      "minElevation": 1545,
+      "maxElevation": 2128,
+      "estimatedHours": 5.4
+    },
+    "bounds": [
+      [
+        27.592697,
+        85.378101
+      ],
+      [
+        27.641528,
+        85.478538
+      ]
+    ],
+    "startPos": {
+      "lat": 27.64148,
+      "lng": 85.478538
+    }
+  },
+  "014_WNW_14.Godaawari-Phulchoki-Lele.kml": {
+    "name": "WNW_14.Godaawari-Phulchoki-Lele",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 18.93,
+      "elevationGain": 1759,
+      "elevationLoss": 1752,
+      "minElevation": 1528,
+      "maxElevation": 2765,
+      "estimatedHours": 6.7
+    },
+    "bounds": [
+      [
+        27.554437,
+        85.340582
+      ],
+      [
+        27.602345,
+        85.40738
+      ]
+    ],
+    "startPos": {
+      "lat": 27.594318,
+      "lng": 85.378232
+    }
+  },
+  "015_WNW_15.Tikabhairav-Pharping-Taudaha.kml": {
+    "name": "wnw_15.Tikabhairav-Pharping-Taudaha",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 13.68,
+      "elevationGain": 664,
+      "elevationLoss": 449,
+      "minElevation": 1252,
+      "maxElevation": 1540,
+      "estimatedHours": 3.8
+    },
+    "bounds": [
+      [
+        27.573748,
+        85.277212
+      ],
+      [
+        27.649608,
+        85.31389
+      ]
+    ],
+    "startPos": {
+      "lat": 27.6496,
+      "lng": 85.280413
+    }
+  },
+  "016_WNW_16.Pharping-Champadevi-Bhasmasur-Chandragiri-Thankot.kml": {
+    "name": "wnw_16.Pharping-Champadevi-Bhasmasur-Chandragiri-Thankot",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 19.64,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 3.9
+    },
+    "bounds": [
+      [
+        27.615484,
+        85.18644
+      ],
+      [
+        27.699452,
+        85.280744
+      ]
+    ],
+    "startPos": {
+      "lat": 27.615484,
+      "lng": 85.280744
+    }
+  },
+  "017_WNW_17.GurjeBhanjyang-Shivapuri-DhapDam-Sundarijal.kml": {
+    "name": "WNW_17.GurjeBhanjyang-Shivapuri-DhapDam-Sundarijal",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 30.74,
+      "elevationGain": 1837,
+      "elevationLoss": 2297,
+      "minElevation": 1432,
+      "maxElevation": 2725,
+      "estimatedHours": 9.2
+    },
+    "bounds": [
+      [
+        27.757735,
+        85.31814
+      ],
+      [
+        27.825161,
+        85.458774
+      ]
+    ],
+    "startPos": {
+      "lat": 27.813927,
+      "lng": 85.31814
+    }
+  },
+  "018_WNW_18.Sundarijal-Manichud-Jarsingpauwa.kml": {
+    "name": "WNW_18.Sundarijal-Manichud-Jarsingpauwa",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 19,
+      "elevationGain": 985,
+      "elevationLoss": 583,
+      "minElevation": 1342,
+      "maxElevation": 2078,
+      "estimatedHours": 5.4
+    },
+    "bounds": [
+      [
+        27.749364,
+        85.420571
+      ],
+      [
+        27.779961,
+        85.500151
+      ]
+    ],
+    "startPos": {
+      "lat": 27.759403,
+      "lng": 85.420605
+    }
+  },
+  "019_WNW_19.Muhanpokhari_only.kml": {
+    "name": "WNW_19.Muhanpokhari only",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 6.29,
+      "elevationGain": 395,
+      "elevationLoss": 429,
+      "minElevation": 1429,
+      "maxElevation": 1703,
+      "estimatedHours": 1.9
+    },
+    "bounds": [
+      [
+        27.704765,
+        85.477731
+      ],
+      [
+        27.711302,
+        85.492339
+      ]
+    ],
+    "startPos": {
+      "lat": 27.704897,
+      "lng": 85.481462
+    }
+  },
+  "020_WNW_20.Konjyoson_Jharna_RoshiJharna.kml": {
+    "name": "WNW_20.Konjyoson Jharna RoshiJharna",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 10.23,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2
+    },
+    "bounds": [
+      [
+        27.557087,
+        85.4092647
+      ],
+      [
+        27.566889,
+        85.467239
+      ]
+    ],
+    "startPos": {
+      "lat": 27.5578902,
+      "lng": 85.4092647
+    }
+  },
+  "021_WNW_21.Budhanilkantha-Gurje-Kakani.kml": {
+    "name": "WNW_21.Budhanilkantha-Gurje-Kakani",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 27.26,
+      "elevationGain": 770,
+      "elevationLoss": 593,
+      "minElevation": 1334,
+      "maxElevation": 1952,
+      "estimatedHours": 6.7
+    },
+    "bounds": [
+      [
+        27.781665,
+        85.271794
+      ],
+      [
+        27.819094,
+        85.371744
+      ]
+    ],
+    "startPos": {
+      "lat": 27.781665,
+      "lng": 85.363543
+    }
+  },
+  "022_WNW_22.Muhanpokhari_Nagarkot_loop.kml": {
+    "name": "WNW_22.Muhanpokhari Nagarkot loop",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 17.03,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 3.4
+    },
+    "bounds": [
+      [
+        27.691581,
+        85.481589
+      ],
+      [
+        27.711126,
+        85.517694
+      ]
+    ],
+    "startPos": {
+      "lat": 27.7051241,
+      "lng": 85.481863
+    }
+  },
+  "023_WNW_23.Bagdwar_Bishnudwar_loop.kml": {
+    "name": "WNW_23.Bagdwar Bishnudwar loop",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 23.44,
+      "elevationGain": 1757,
+      "elevationLoss": 1763,
+      "minElevation": 1445,
+      "maxElevation": 2725,
+      "estimatedHours": 7.6
+    },
+    "bounds": [
+      [
+        27.777774,
+        85.354989
+      ],
+      [
+        27.812659,
+        85.391562
+      ]
+    ],
+    "startPos": {
+      "lat": 27.777975,
+      "lng": 85.362788
+    }
+  },
+  "024_WNW_24.Shivapuri_Muhanpokhari_loop.kml": {
+    "name": "WNW_24.Shivapuri Muhanpokhari loop",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 11.92,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.4
+    },
+    "bounds": [
+      [
+        27.7924169,
+        85.3679606
+      ],
+      [
+        27.8186349,
+        85.391852
+      ]
+    ],
+    "startPos": {
+      "lat": 27.7976794,
+      "lng": 85.3720029
+    }
+  },
+  "025_WNW_25.Bishankhunaryan_Kotdada.kml": {
+    "name": "WNW_25.Bishankhunaryan Kotdada",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 6.13,
+      "elevationGain": 421,
+      "elevationLoss": 403,
+      "minElevation": 1459,
+      "maxElevation": 1753,
+      "estimatedHours": 1.9
+    },
+    "bounds": [
+      [
+        27.608054,
+        85.367861
+      ],
+      [
+        27.627707,
+        85.396479
+      ]
+    ],
+    "startPos": {
+      "lat": 27.608445,
+      "lng": 85.367861
+    }
+  },
+  "026_WNW_26.Bhundol.kml": {
+    "name": "WNW_26.Bhundol",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 8.1,
+      "elevationGain": 646,
+      "elevationLoss": 1041,
+      "minElevation": 1575,
+      "maxElevation": 2507,
+      "estimatedHours": 2.7
+    },
+    "bounds": [
+      [
+        27.637451,
+        85.228492
+      ],
+      [
+        27.666382,
+        85.250476
+      ]
+    ],
+    "startPos": {
+      "lat": 27.637451,
+      "lng": 85.249549
+    }
+  },
+  "027_WNW_27.Bhuwaneswar_Paanchmaane_Tarkeswar.kml": {
+    "name": "WNW_27.Bhuwaneswar Paanchmaane Tarkeswar",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 8.06,
+      "elevationGain": 403,
+      "elevationLoss": 395,
+      "minElevation": 1496,
+      "maxElevation": 1838,
+      "estimatedHours": 2.3
+    },
+    "bounds": [
+      [
+        27.777407,
+        85.277929
+      ],
+      [
+        27.796795,
+        85.290819
+      ]
+    ],
+    "startPos": {
+      "lat": 27.777407,
+      "lng": 85.278425
+    }
+  },
+  "028_WNW_28.Pilot_Baba_Ghyampe_Dada.kml": {
+    "name": "WNW_28.Pilot Baba Ghyampe Dada",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 5.24,
+      "elevationGain": 375,
+      "elevationLoss": 280,
+      "minElevation": 1270,
+      "maxElevation": 1571,
+      "estimatedHours": 1.7
+    },
+    "bounds": [
+      [
+        27.639755,
+        85.415612
+      ],
+      [
+        27.665967,
+        85.428005
+      ]
+    ],
+    "startPos": {
+      "lat": 27.66596,
+      "lng": 85.424808
+    }
+  },
+  "029_WNW_29.Tarebhir.kml": {
+    "name": "WNW_29.Tarebhir",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 11.32,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.3
+    },
+    "bounds": [
+      [
+        27.773254,
+        85.362676
+      ],
+      [
+        27.79155,
+        85.394942
+      ]
+    ],
+    "startPos": {
+      "lat": 27.791346,
+      "lng": 85.371313
+    }
+  },
+  "030_WNW_30.Champadevi_trail_options.kml": {
+    "name": "WNW_30.Champadevi trail options",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 6.39,
+      "elevationGain": 782,
+      "elevationLoss": 2362,
+      "minElevation": 0,
+      "maxElevation": 2261,
+      "estimatedHours": 2.6
+    },
+    "bounds": [
+      [
+        27.612275,
+        85.248578
+      ],
+      [
+        27.64611,
+        85.263393
+      ]
+    ],
+    "startPos": {
+      "lat": 27.612698,
+      "lng": 85.263393
+    }
+  },
+  "031_WNW_31.Phulchoki_trail_options.kml": {
+    "name": "WNW_31.Phulchoki trail options",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 11.41,
+      "elevationGain": 1198,
+      "elevationLoss": 155,
+      "minElevation": 1484,
+      "maxElevation": 2529,
+      "estimatedHours": 4.3
+    },
+    "bounds": [
+      [
+        27.570583,
+        85.3782
+      ],
+      [
+        27.602404,
+        85.4075
+      ]
+    ],
+    "startPos": {
+      "lat": 27.59432,
+      "lng": 85.378235
+    }
+  },
+  "032_WNW_32.Phulchoki_trails_from_Bhaktapur.kml": {
+    "name": "WNW_32.Phulchoki trails from Bhaktapur",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 13.21,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.6
+    },
+    "bounds": [
+      [
+        27.570583,
+        85.395626
+      ],
+      [
+        27.627728,
+        85.412176
+      ]
+    ],
+    "startPos": {
+      "lat": 27.627728,
+      "lng": 85.395626
+    }
+  },
+  "033_WNW_33.Bhasmasur_trail_options.kml": {
+    "name": "WNW_33.Bhasmasur trail options",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 9.13,
+      "elevationGain": 1433,
+      "elevationLoss": 609,
+      "minElevation": 1591,
+      "maxElevation": 2527,
+      "estimatedHours": 4.2
+    },
+    "bounds": [
+      [
+        27.612268,
+        85.220081
+      ],
+      [
+        27.650061,
+        85.261167
+      ]
+    ],
+    "startPos": {
+      "lat": 27.612288,
+      "lng": 85.261167
+    }
+  },
+  "034_WNW_34.Chandragiri_trail.kml": {
+    "name": "WNW_34.Chandragiri trail",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 3.66,
+      "elevationGain": 888,
+      "elevationLoss": 30,
+      "minElevation": 1530,
+      "maxElevation": 2402,
+      "estimatedHours": 2.2
+    },
+    "bounds": [
+      [
+        27.667119,
+        85.2044
+      ],
+      [
+        27.687123,
+        85.214954
+      ]
+    ],
+    "startPos": {
+      "lat": 27.687017,
+      "lng": 85.213267
+    }
+  },
+  "035_WNW_35.Jamacho.kml": {
+    "name": "WNW_35.Jamacho",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 12.71,
+      "elevationGain": 722,
+      "elevationLoss": 668,
+      "minElevation": 1321,
+      "maxElevation": 2024,
+      "estimatedHours": 3.7
+    },
+    "bounds": [
+      [
+        27.734535,
+        85.26683
+      ],
+      [
+        27.748909,
+        85.30559
+      ]
+    ],
+    "startPos": {
+      "lat": 27.734535,
+      "lng": 85.30531
+    }
+  },
+  "036_WNW_36.Budhanilkantha_circuit.kml": {
+    "name": "WNW_36.Budhanilkantha circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 21.41,
+      "elevationGain": 1061,
+      "elevationLoss": 1033,
+      "minElevation": 1415,
+      "maxElevation": 2043,
+      "estimatedHours": 6.1
+    },
+    "bounds": [
+      [
+        27.773254,
+        85.354556
+      ],
+      [
+        27.798723,
+        85.394942
+      ]
+    ],
+    "startPos": {
+      "lat": 27.777957,
+      "lng": 85.362533
+    }
+  },
+  "037_WNW_37.Kulekhani_circuit_Mahabhir_Bheda_farm.kml": {
+    "name": "WNW_37.Kulekhani circuit Mahabhir Bheda farm",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 16.22,
+      "elevationGain": 2880,
+      "elevationLoss": 2871,
+      "minElevation": 0,
+      "maxElevation": 1723,
+      "estimatedHours": 8
+    },
+    "bounds": [
+      [
+        27.589189,
+        85.144543
+      ],
+      [
+        27.62141,
+        85.16688
+      ]
+    ],
+    "startPos": {
+      "lat": 27.59246,
+      "lng": 85.164433
+    }
+  },
+  "038_WNW_38.Bethanchok_circuit.kml": {
+    "name": "WNW_38.Bethanchok circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 16.07,
+      "elevationGain": 2552,
+      "elevationLoss": 2581,
+      "minElevation": 1882,
+      "maxElevation": 2930,
+      "estimatedHours": 7.5
+    },
+    "bounds": [
+      [
+        27.483743,
+        85.474903
+      ],
+      [
+        27.524426,
+        85.491004
+      ]
+    ],
+    "startPos": {
+      "lat": 27.522925,
+      "lng": 85.481368
+    }
+  },
+  "039_WNW_39.Bhasmaasur_range.kml": {
+    "name": "WNW_39.Bhasmaasur range",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 13.33,
+      "elevationGain": 1449,
+      "elevationLoss": 1613,
+      "minElevation": 1433,
+      "maxElevation": 2527,
+      "estimatedHours": 5.1
+    },
+    "bounds": [
+      [
+        27.612268,
+        85.220081
+      ],
+      [
+        27.673632,
+        85.261167
+      ]
+    ],
+    "startPos": {
+      "lat": 27.612288,
+      "lng": 85.261167
+    }
+  },
+  "040_WNW_40.Gosaainkunda.kml": {
+    "name": "WNW_40.Gosaainkunda",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 24.19,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 4.8
+    },
+    "bounds": [
+      [
+        28.078588,
+        85.299484
+      ],
+      [
+        28.11139,
+        85.421205
+      ]
+    ],
+    "startPos": {
+      "lat": 28.11139,
+      "lng": 85.299493
+    }
+  },
+  "041_WNW_41.GodamToplang_Khanikhola.kml": {
+    "name": "WNW_41.GodamToplang Khanikhola",
+    "description": "Saturday, April 17, 2021, 8:53 AM NPTElevation: 6143 feet",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 17.24,
+      "elevationGain": 1553,
+      "elevationLoss": 2409,
+      "minElevation": 1016,
+      "maxElevation": 2409,
+      "estimatedHours": 6
+    },
+    "bounds": [
+      [
+        27.677742,
+        85.161392
+      ],
+      [
+        27.717745,
+        85.202613
+      ]
+    ],
+    "startPos": {
+      "lat": 27.688103,
+      "lng": 85.202613
+    }
+  },
+  "042_WNW_42.JhorBIshnudwar.kml": {
+    "name": "WNW_42.JhorBIshnudwar",
+    "description": "Saturday, December 8, 2018, 7:28 AM NPTElevation: 4220 feet",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 44.96,
+      "elevationGain": 1328,
+      "elevationLoss": 1269,
+      "minElevation": 1281,
+      "maxElevation": 2276,
+      "estimatedHours": 11.2
+    },
+    "bounds": [
+      [
+        27.693007,
+        85.304673
+      ],
+      [
+        27.815867,
+        85.371561
+      ]
+    ],
+    "startPos": {
+      "lat": 27.70348,
+      "lng": 85.31372
+    }
+  },
+  "043_WNW_43.HumaneBhanjyang_to_Machhegau.kml": {
+    "name": "WNW_43.HumaneBhanjyang to Machhegau",
+    "description": "Saturday, December 22, 2018, 9:00 AM NPTElevation: 5937 feet",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 12.37,
+      "elevationGain": 934,
+      "elevationLoss": 1206,
+      "minElevation": 1538,
+      "maxElevation": 2392,
+      "estimatedHours": 4
+    },
+    "bounds": [
+      [
+        27.599355,
+        85.221816
+      ],
+      [
+        27.65961,
+        85.251994
+      ]
+    ],
+    "startPos": {
+      "lat": 27.599485,
+      "lng": 85.240294
+    }
+  },
+  "044_WNW_44.DhapDam_trail_options.kml": {
+    "name": "WNW_44.DhapDam trail options",
+    "description": "Statistics computed from imported dataDistance: 14.0 miles",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 22.56,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 4.5
+    },
+    "bounds": [
+      [
+        27.76939,
+        85.3692198
+      ],
+      [
+        27.81093,
+        85.47011
+      ]
+    ],
+    "startPos": {
+      "lat": 27.7912489,
+      "lng": 85.3702701
+    }
+  },
+  "045_WNW_45.Latarambheswar_trail.kml": {
+    "name": "WNW_45.Latarambheswar trail",
+    "description": "Monday, December 12, 2022, 1:51 PM NPTElevation: 3564 feet",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 5.77,
+      "elevationGain": 1320,
+      "elevationLoss": 1330,
+      "minElevation": 1076,
+      "maxElevation": 1867,
+      "estimatedHours": 3.4
+    },
+    "bounds": [
+      [
+        27.468126,
+        85.221056
+      ],
+      [
+        27.480119,
+        85.233026
+      ]
+    ],
+    "startPos": {
+      "lat": 27.478737,
+      "lng": 85.231948
+    }
+  },
+  "046_WNW_46.Tin_Chhange_Rani_jharna.kml": {
+    "name": "WNW_46.Tin Chhange Rani jharna",
+    "description": "Mahadevbesi Bazar, Q328+HV6, Prithvi Hwy, Thakre 45100, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 5.19,
+      "elevationGain": 867,
+      "elevationLoss": 473,
+      "minElevation": 952,
+      "maxElevation": 1362,
+      "estimatedHours": 2.5
+    },
+    "bounds": [
+      [
+        27.695315,
+        85.143835
+      ],
+      [
+        27.71557,
+        85.151859
+      ]
+    ],
+    "startPos": {
+      "lat": 27.715551,
+      "lng": 85.151376
+    }
+  },
+  "047_WNW_47.Lakhinswari_waterfall.kml": {
+    "name": "WNW_47.Lakhinswari waterfall",
+    "description": "Lakenshwory jharana, Sikre, sivapuri-4, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 10.1,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2
+    },
+    "bounds": [
+      [
+        27.735505,
+        85.318414
+      ],
+      [
+        27.80357,
+        85.3306
+      ]
+    ],
+    "startPos": {
+      "lat": 27.735505,
+      "lng": 85.318414
+    }
+  },
+  "048_WNW_48.Sundarijal_Tarebhir_Gokarna.kml": {
+    "name": "WNW_48. Sundarijal Tarebhir Gokarna",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 7.74,
+      "elevationGain": 279,
+      "elevationLoss": 25,
+      "minElevation": 1582,
+      "maxElevation": 1840,
+      "estimatedHours": 2
+    },
+    "bounds": [
+      [
+        27.769471,
+        85.394038
+      ],
+      [
+        27.77947,
+        85.424647
+      ]
+    ],
+    "startPos": {
+      "lat": 27.779469,
+      "lng": 85.424647
+    }
+  },
+  "049_WNW_49.Gadhi_Gang_View_Tower.kml": {
+    "name": "WNW_49.Gadhi Gang View Tower",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 7.94,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 1.6
+    },
+    "bounds": [
+      [
+        27.61838,
+        85.43934
+      ],
+      [
+        27.641683,
+        85.47799
+      ]
+    ],
+    "startPos": {
+      "lat": 27.641683,
+      "lng": 85.477774
+    }
+  },
+  "050_WNW_50.Bishnudwar_loop.kml": {
+    "name": "WNW_50.Bishnudwar loop",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 5.71,
+      "elevationGain": 602,
+      "elevationLoss": 115,
+      "minElevation": 1415,
+      "maxElevation": 1927,
+      "estimatedHours": 2.1
+    },
+    "bounds": [
+      [
+        27.777837,
+        85.354556
+      ],
+      [
+        27.798512,
+        85.364
+      ]
+    ],
+    "startPos": {
+      "lat": 27.777957,
+      "lng": 85.362533
+    }
+  },
+  "051_WNW_51.Lauke_Jharana_2080_updated.kml": {
+    "name": "WNW_51.Lauke Jharana 2080 updated",
+    "description": "Gurje Bhanjyang, Bidur-Tokha Road, 44900, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 11.68,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.3
+    },
+    "bounds": [
+      [
+        27.801495,
+        85.284579
+      ],
+      [
+        27.842403,
+        85.319468
+      ]
+    ],
+    "startPos": {
+      "lat": 27.801495,
+      "lng": 85.318077
+    }
+  },
+  "052_WNW_52.Simba_waterfall_Asoj_2080_24.kml": {
+    "name": "WNW_52.Simba waterfall Asoj 2080",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 36.14,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 7.2
+    },
+    "bounds": [
+      [
+        27.488456,
+        85.337849
+      ],
+      [
+        27.571608,
+        85.407816
+      ]
+    ],
+    "startPos": {
+      "lat": 27.571608,
+      "lng": 85.337911
+    }
+  },
+  "053_WNW_53.Nagarkot_Dhulikhel_Panauti.kml": {
+    "name": "WNW_53.Nagarkot Dhulikhel Panauti",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 5.69,
+      "elevationGain": 194,
+      "elevationLoss": 211,
+      "minElevation": 1604,
+      "maxElevation": 1780,
+      "estimatedHours": 1.5
+    },
+    "bounds": [
+      [
+        27.61029,
+        85.540451
+      ],
+      [
+        27.634144,
+        85.569095
+      ]
+    ],
+    "startPos": {
+      "lat": 27.634129,
+      "lng": 85.540451
+    }
+  },
+  "054_WNW_54.Kulekhani_2080_Dashain.kml": {
+    "name": "WNW_54.Kulekhani 2080 Dashain",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Extreme",
+    "stats": {
+      "distance": 5.43,
+      "elevationGain": 4314,
+      "elevationLoss": 4324,
+      "minElevation": 0,
+      "maxElevation": 1691,
+      "estimatedHours": 8.3
+    },
+    "bounds": [
+      [
+        27.602742,
+        85.146126
+      ],
+      [
+        27.623644,
+        85.153276
+      ]
+    ],
+    "startPos": {
+      "lat": 27.623644,
+      "lng": 85.150081
+    }
+  },
+  "055_WNW_55.Pachpokhari_Sindhupalchok.kml": {
+    "name": "WNW_55. Pachpokhari Sindhupalchok",
+    "description": "Drawn on OSM",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 66.34,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 13.3
+    },
+    "bounds": [
+      [
+        27.71892,
+        85.379426
+      ],
+      [
+        27.98006,
+        85.66059
+      ]
+    ],
+    "startPos": {
+      "lat": 27.720438,
+      "lng": 85.379426
+    }
+  },
+  "056_WNW_56.Dhauleswar_from_JitpurPhedi_bus_park_Mangsir_2080.kml": {
+    "name": "WNW_56. Dhauleswar from JitpurPhedi bus park Mangsir 2080",
+    "description": "You will go through small ditch and reach to a clear trail",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 3.47,
+      "elevationGain": 640,
+      "elevationLoss": 30,
+      "minElevation": 1476,
+      "maxElevation": 2086,
+      "estimatedHours": 1.8
+    },
+    "bounds": [
+      [
+        27.787072,
+        85.287281
+      ],
+      [
+        27.801227,
+        85.292467
+      ]
+    ],
+    "startPos": {
+      "lat": 27.78709,
+      "lng": 85.289623
+    }
+  },
+  "057_WNW_57.Mardi_trek_trail.kml": {
+    "name": "WNW_57. Mardi trek trail",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 25.54,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 5.1
+    },
+    "bounds": [
+      [
+        28.292365,
+        83.82073
+      ],
+      [
+        28.459998,
+        83.895124
+      ]
+    ],
+    "startPos": {
+      "lat": 28.292365,
+      "lng": 83.824096
+    }
+  },
+  "058_WNW_58.Ladkeswar_Namobuddha_circuit.kml": {
+    "name": "WNW_58. Ladkeswar Namobuddha circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 17.67,
+      "elevationGain": 1162,
+      "elevationLoss": 1162,
+      "minElevation": 1315,
+      "maxElevation": 1764,
+      "estimatedHours": 5.5
+    },
+    "bounds": [
+      [
+        27.548111,
+        85.536676
+      ],
+      [
+        27.57466,
+        85.58268
+      ]
+    ],
+    "startPos": {
+      "lat": 27.564213,
+      "lng": 85.537548
+    }
+  },
+  "059_WNW_59.Bhasmasur_Gupteswar_Hike.kml": {
+    "name": "WNW_59. Bhasmasur Gupteswar Hike",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 15.8,
+      "elevationGain": 2039,
+      "elevationLoss": 2093,
+      "minElevation": 1384,
+      "maxElevation": 2507,
+      "estimatedHours": 6.6
+    },
+    "bounds": [
+      [
+        27.649319,
+        85.214575
+      ],
+      [
+        27.687955,
+        85.249632
+      ]
+    ],
+    "startPos": {
+      "lat": 27.670677,
+      "lng": 85.248283
+    }
+  },
+  "060_WNW_60.Dhunkharka_Bhardeu.kml": {
+    "name": "WNW_60. Dhunkharka Bhardeu",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 16.52,
+      "elevationGain": 1885,
+      "elevationLoss": 1913,
+      "minElevation": 1875,
+      "maxElevation": 2673,
+      "estimatedHours": 6.4
+    },
+    "bounds": [
+      [
+        27.52477,
+        85.382807
+      ],
+      [
+        27.549879,
+        85.479765
+      ]
+    ],
+    "startPos": {
+      "lat": 27.525003,
+      "lng": 85.479697
+    }
+  },
+  "061_WNW_61.Bhasmasur_range_circuit.kml": {
+    "name": "WNW_61. Bhasmasur range circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 9.11,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 1.8
+    },
+    "bounds": [
+      [
+        27.612268,
+        85.220081
+      ],
+      [
+        27.649508,
+        85.261172
+      ]
+    ],
+    "startPos": {
+      "lat": 27.649508,
+      "lng": 85.233608
+    }
+  },
+  "062_WNW_62.Phulchoki_Neck_Circuit.kml": {
+    "name": "WNW_62.Phulchoki Neck Circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 19.85,
+      "elevationGain": 1685,
+      "elevationLoss": 1652,
+      "minElevation": 1492,
+      "maxElevation": 2468,
+      "estimatedHours": 6.8
+    },
+    "bounds": [
+      [
+        27.559792,
+        85.374115
+      ],
+      [
+        27.59443,
+        85.417749
+      ]
+    ],
+    "startPos": {
+      "lat": 27.59443,
+      "lng": 85.37835
+    }
+  },
+  "063_WNW_63.Tarkeswar_exploration.kml": {
+    "name": "WNW_63.Tarkeswar exploration",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 22.88,
+      "elevationGain": 1627,
+      "elevationLoss": 1672,
+      "minElevation": 1445,
+      "maxElevation": 2257,
+      "estimatedHours": 7.3
+    },
+    "bounds": [
+      [
+        27.759095,
+        85.27019
+      ],
+      [
+        27.814248,
+        85.355957
+      ]
+    ],
+    "startPos": {
+      "lat": 27.759095,
+      "lng": 85.27019
+    }
+  },
+  "064_WNW_64.Dhulikhel-_namobuddha-_Puranogaun.kml": {
+    "name": "Dhulikhel- namobuddha- Puranogaun",
+    "description": "Dhulikhel-Devithan-Kavre Bhanjyang-Faskot-Thapagaun-Fulbari chowk-Kami Gaun-Ghahate ko Bhir-Namobuddha-Shyampati-Sutkeridhunga-Puranagaun(Viral old Newari Village)-Kotdevi Mandir-Aiseluchaur-Dapchekhola-Kashikhanda-Pipalchaur(300+years Newari Village)-Lakayena-Patale Gaun...And back to KTM",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 18.6,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 3.7
+    },
+    "bounds": [
+      [
+        27.550056,
+        85.553805
+      ],
+      [
+        27.618566,
+        85.619303
+      ]
+    ],
+    "startPos": {
+      "lat": 27.618566,
+      "lng": 85.553805
+    }
+  },
+  "065_WNW_65.Sali_Nadi.kml": {
+    "name": "WNW_65.Sali Nadi",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 21.92,
+      "elevationGain": 1327,
+      "elevationLoss": 919,
+      "minElevation": 1372,
+      "maxElevation": 2220,
+      "estimatedHours": 6.6
+    },
+    "bounds": [
+      [
+        27.727498,
+        85.460224
+      ],
+      [
+        27.779929,
+        85.500159
+      ]
+    ],
+    "startPos": {
+      "lat": 27.730295,
+      "lng": 85.465874
+    }
+  },
+  "066_WNW_66.Latarambeswar.kml": {
+    "name": "WNW_66.Latarambeswar",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 7.37,
+      "elevationGain": 1469,
+      "elevationLoss": 1469,
+      "minElevation": 1085,
+      "maxElevation": 1903,
+      "estimatedHours": 3.9
+    },
+    "bounds": [
+      [
+        27.466356,
+        85.220855
+      ],
+      [
+        27.479974,
+        85.233037
+      ]
+    ],
+    "startPos": {
+      "lat": 27.479969,
+      "lng": 85.232775
+    }
+  },
+  "067_WNW_67.Guras_Trail.kml": {
+    "name": "WNW_67.Guras Trail",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 19.85,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 4
+    },
+    "bounds": [
+      [
+        27.559792,
+        85.374115
+      ],
+      [
+        27.59443,
+        85.417749
+      ]
+    ],
+    "startPos": {
+      "lat": 27.59443,
+      "lng": 85.37835
+    }
+  },
+  "068_WNW_71.Dhap_Dam_circuit.kml": {
+    "name": "WNW_71. Dhap Dam circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 24.54,
+      "elevationGain": 1118,
+      "elevationLoss": 1161,
+      "minElevation": 1388,
+      "maxElevation": 2269,
+      "estimatedHours": 6.8
+    },
+    "bounds": [
+      [
+        27.75903,
+        85.42068
+      ],
+      [
+        27.8245,
+        85.458725
+      ]
+    ],
+    "startPos": {
+      "lat": 27.763908,
+      "lng": 85.42314
+    }
+  },
+  "069_WNW_73.Phulchoki_trail_variation.kml": {
+    "name": "WNW_73. Phulchoki trail variation",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 22.57,
+      "elevationGain": 1522,
+      "elevationLoss": 1343,
+      "minElevation": 1499,
+      "maxElevation": 2706,
+      "estimatedHours": 7
+    },
+    "bounds": [
+      [
+        27.563093,
+        85.374146
+      ],
+      [
+        27.602413,
+        85.41472
+      ]
+    ],
+    "startPos": {
+      "lat": 27.594418,
+      "lng": 85.38019
+    }
+  },
+  "070_WNW_74.Godawari_to_Lele.kml": {
+    "name": "WNW_74. Godawari to Lele",
+    "description": "Track no. 1",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 15.19,
+      "elevationGain": 891,
+      "elevationLoss": 827,
+      "minElevation": 1473,
+      "maxElevation": 1898,
+      "estimatedHours": 4.5
+    },
+    "bounds": [
+      [
+        27.573002,
+        85.320045
+      ],
+      [
+        27.59575,
+        85.37585
+      ]
+    ],
+    "startPos": {
+      "lat": 27.59575,
+      "lng": 85.37564
+    }
+  },
+  "071_WNW_75.Muhanpokhari_loop.kml": {
+    "name": "WNW_75. Muhanpokhari loop, extreme off trail warning",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 13.86,
+      "elevationGain": 616,
+      "elevationLoss": 506,
+      "minElevation": 1541,
+      "maxElevation": 1993,
+      "estimatedHours": 3.8
+    },
+    "bounds": [
+      [
+        27.692497,
+        85.48402
+      ],
+      [
+        27.712551,
+        85.517654
+      ]
+    ],
+    "startPos": {
+      "lat": 27.7056,
+      "lng": 85.48402
+    }
+  },
+  "072_WNW_76.Jamacho_circuit.kml": {
+    "name": "WNW_76. Jamacho circuit",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 31.71,
+      "elevationGain": 1025,
+      "elevationLoss": 1080,
+      "minElevation": 1304,
+      "maxElevation": 2022,
+      "estimatedHours": 8.1
+    },
+    "bounds": [
+      [
+        27.735403,
+        85.23343
+      ],
+      [
+        27.767586,
+        85.30621
+      ]
+    ],
+    "startPos": {
+      "lat": 27.744709,
+      "lng": 85.29477
+    }
+  },
+  "073_WNW_78.Lele_to_Godawari_cottage.kml": {
+    "name": "WNW_78. Lele to Godawari cottage",
+    "description": "Second section of the trail is hidden for safety purposes.",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 7.76,
+      "elevationGain": 960,
+      "elevationLoss": 564,
+      "minElevation": 1543,
+      "maxElevation": 2351,
+      "estimatedHours": 3.2
+    },
+    "bounds": [
+      [
+        27.554414,
+        85.342587
+      ],
+      [
+        27.573625,
+        85.379087
+      ]
+    ],
+    "startPos": {
+      "lat": 27.566667,
+      "lng": 85.342587
+    }
+  },
+  "074_WNW_79.Taudaha.kml": {
+    "name": "WNW_79.Taudaha",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 9.51,
+      "elevationGain": 610,
+      "elevationLoss": 885,
+      "minElevation": 1292,
+      "maxElevation": 1997,
+      "estimatedHours": 2.9
+    },
+    "bounds": [
+      [
+        27.612405,
+        85.2574
+      ],
+      [
+        27.649922,
+        85.28058
+      ]
+    ],
+    "startPos": {
+      "lat": 27.613097,
+      "lng": 85.264917
+    }
+  },
+  "075_WNW_80.KÃ¡kani_to_Fungfung_trail_Ropai_Hike.kml": {
+    "name": "WNW_80.Kakani to Fungfung trail Ropai Hike",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 16.37,
+      "elevationGain": 1270,
+      "elevationLoss": 1126,
+      "minElevation": 1268,
+      "maxElevation": 2119,
+      "estimatedHours": 5.4
+    },
+    "bounds": [
+      [
+        27.807614,
+        85.218689
+      ],
+      [
+        27.832877,
+        85.26217
+      ]
+    ],
+    "startPos": {
+      "lat": 27.807618,
+      "lng": 85.26217
+    }
+  },
+  "076_WNW_82.Sundarijal_to_Sankhu.kml": {
+    "name": "WNW_82.Sundarijal to Sankhu",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 23.59,
+      "elevationGain": 943,
+      "elevationLoss": 988,
+      "minElevation": 1389,
+      "maxElevation": 2078,
+      "estimatedHours": 6.3
+    },
+    "bounds": [
+      [
+        27.727583,
+        85.423164
+      ],
+      [
+        27.77334,
+        85.4702
+      ]
+    ],
+    "startPos": {
+      "lat": 27.76551,
+      "lng": 85.42348
+    }
+  },
+  "077_WNW_84.Lauke_Jharana_via_jungle_temple.kml": {
+    "name": "WNW_84.Lauke Jharana via jungle temple",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 13.62,
+      "elevationGain": 841,
+      "elevationLoss": 1793,
+      "minElevation": 947,
+      "maxElevation": 1987,
+      "estimatedHours": 4.1
+    },
+    "bounds": [
+      [
+        27.814211,
+        85.285089
+      ],
+      [
+        27.849681,
+        85.314446
+      ]
+    ],
+    "startPos": {
+      "lat": 27.814211,
+      "lng": 85.314446
+    }
+  },
+  "078_WNW_84.Lauke_jharna.kml": {
+    "name": "WNW_84.Lauke jharna",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 13.62,
+      "elevationGain": 841,
+      "elevationLoss": 1793,
+      "minElevation": 947,
+      "maxElevation": 1987,
+      "estimatedHours": 4.1
+    },
+    "bounds": [
+      [
+        27.814211,
+        85.285089
+      ],
+      [
+        27.849681,
+        85.314446
+      ]
+    ],
+    "startPos": {
+      "lat": 27.814211,
+      "lng": 85.314446
+    }
+  },
+  "079_WNW_87.Sailung.kml": {
+    "name": "WNW_87.Sailung",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 5.42,
+      "elevationGain": 271,
+      "elevationLoss": 408,
+      "minElevation": 2833,
+      "maxElevation": 3137,
+      "estimatedHours": 1.5
+    },
+    "bounds": [
+      [
+        27.559484,
+        85.972896
+      ],
+      [
+        27.580245,
+        85.978174
+      ]
+    ],
+    "startPos": {
+      "lat": 27.570871,
+      "lng": 85.978174
+    }
+  },
+  "080_WNW_90.Bagdwar_to_Dhap_Dam.kml": {
+    "name": "WNW_90.Bagdwar to Dhap Dam",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 30.63,
+      "elevationGain": 2388,
+      "elevationLoss": 2453,
+      "minElevation": 1385,
+      "maxElevation": 2621,
+      "estimatedHours": 10.1
+    },
+    "bounds": [
+      [
+        27.759332,
+        85.362555
+      ],
+      [
+        27.824507,
+        85.458427
+      ]
+    ],
+    "startPos": {
+      "lat": 27.777987,
+      "lng": 85.362555
+    }
+  },
+  "081_WNW_91.Takhel_to_GOdawari_exploration.kml": {
+    "name": "WNW_91.Takhel to GOdawari exploration",
+    "description": "Off trail warning.",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 15.07,
+      "elevationGain": 1371,
+      "elevationLoss": 1395,
+      "minElevation": 1497,
+      "maxElevation": 1998,
+      "estimatedHours": 5.3
+    },
+    "bounds": [
+      [
+        27.573091,
+        85.320353
+      ],
+      [
+        27.596962,
+        85.379028
+      ]
+    ],
+    "startPos": {
+      "lat": 27.588042,
+      "lng": 85.322118
+    }
+  },
+  "082_WNW_93.North_ABC_trail_projection.kml": {
+    "name": "WNW_93. North ABC trail projection",
+    "description": "just plan",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 28.43,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 5.7
+    },
+    "bounds": [
+      [
+        28.348587,
+        83.56496
+      ],
+      [
+        28.5379,
+        83.67405
+      ]
+    ],
+    "startPos": {
+      "lat": 28.348587,
+      "lng": 83.567333
+    }
+  },
+  "083_WNW_94.South_ABC_trail_projection_4.kml": {
+    "name": "WNW_94.South ABC trail projection",
+    "description": "projection only",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 40.74,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 8.1
+    },
+    "bounds": [
+      [
+        28.292381,
+        83.81707
+      ],
+      [
+        28.53134,
+        83.90835
+      ]
+    ],
+    "startPos": {
+      "lat": 28.292407,
+      "lng": 83.82416
+    }
+  },
+  "084_WNW_95.Mundum_trail_projection.kml": {
+    "name": "WNW_95.Mundum trail projection",
+    "description": "Projection only",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 23.21,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 4.6
+    },
+    "bounds": [
+      [
+        27.299505,
+        86.907338
+      ],
+      [
+        27.440788,
+        86.985422
+      ]
+    ],
+    "startPos": {
+      "lat": 27.299505,
+      "lng": 86.979994
+    }
+  },
+  "085_WNW_96.Godawari_Phulchoki_circuit_via_Marble_Dada.kml": {
+    "name": "WNW_96.Godawari Phulchoki circuit via Marble Dada",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 17.1,
+      "elevationGain": 1967,
+      "elevationLoss": 1968,
+      "minElevation": 1512,
+      "maxElevation": 2762,
+      "estimatedHours": 6.7
+    },
+    "bounds": [
+      [
+        27.563054,
+        85.370952
+      ],
+      [
+        27.595645,
+        85.407582
+      ]
+    ],
+    "startPos": {
+      "lat": 27.594482,
+      "lng": 85.378238
+    }
+  },
+  "086_WNW_99.Pharping.kml": {
+    "name": "WNW_99.Pharping",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 10.39,
+      "elevationGain": 1464,
+      "elevationLoss": 1542,
+      "minElevation": 1475,
+      "maxElevation": 1994,
+      "estimatedHours": 4.5
+    },
+    "bounds": [
+      [
+        27.614929,
+        85.25844
+      ],
+      [
+        27.640183,
+        85.284678
+      ]
+    ],
+    "startPos": {
+      "lat": 27.616367,
+      "lng": 85.264421
+    }
+  },
+  "087_WNW_111.Namobuddha_to_Khopasi.kml": {
+    "name": "WNW_111.Namobuddha to Khopasi",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 8.82,
+      "elevationGain": 900,
+      "elevationLoss": 965,
+      "minElevation": 1476,
+      "maxElevation": 1781,
+      "estimatedHours": 3.3
+    },
+    "bounds": [
+      [
+        27.570481,
+        85.570746
+      ],
+      [
+        27.598948,
+        85.590295
+      ]
+    ],
+    "startPos": {
+      "lat": 27.598948,
+      "lng": 85.5767
+    }
+  },
+  "088_WNW_112.Dalchoki_Pathivara.kml": {
+    "name": "WNW_112.Dalchoki Pathivara",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 10.2,
+      "elevationGain": 1058,
+      "elevationLoss": 1184,
+      "minElevation": 1651,
+      "maxElevation": 2247,
+      "estimatedHours": 3.8
+    },
+    "bounds": [
+      [
+        27.537525,
+        85.322142
+      ],
+      [
+        27.555062,
+        85.350037
+      ]
+    ],
+    "startPos": {
+      "lat": 27.555062,
+      "lng": 85.350037
+    }
+  },
+  "089_WNW_113.Khumai_4.kml": {
+    "name": "WNW_113.Khumai",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 8.49,
+      "elevationGain": 1532,
+      "elevationLoss": 134,
+      "minElevation": 1827,
+      "maxElevation": 3225,
+      "estimatedHours": 4.3
+    },
+    "bounds": [
+      [
+        28.339861,
+        83.920702
+      ],
+      [
+        28.389757,
+        83.946642
+      ]
+    ],
+    "startPos": {
+      "lat": 28.341313,
+      "lng": 83.946642
+    }
+  },
+  "090_WNW_113.Kakani_Strawberry.kml": {
+    "name": "WNW_113.Kakani Strawberry",
+    "description": "Sundhara ticket counter, P827+55C, Shundara marg, Kathmandu 44600, Nepal",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 13.33,
+      "elevationGain": 1142,
+      "elevationLoss": 1293,
+      "minElevation": 1734,
+      "maxElevation": 2244,
+      "estimatedHours": 4.6
+    },
+    "bounds": [
+      [
+        27.806134,
+        85.263892
+      ],
+      [
+        27.823638,
+        85.315765
+      ]
+    ],
+    "startPos": {
+      "lat": 27.813658,
+      "lng": 85.315765
+    }
+  },
+  "091_WNW_114.Godawari_to_Deurali_cottage_new_trail.kml": {
+    "name": "WNW_114.Godawari to Deurali cottage new trail",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 10.97,
+      "elevationGain": 701,
+      "elevationLoss": 750,
+      "minElevation": 1459,
+      "maxElevation": 1999,
+      "estimatedHours": 3.4
+    },
+    "bounds": [
+      [
+        27.57909,
+        85.351718
+      ],
+      [
+        27.602233,
+        85.377975
+      ]
+    ],
+    "startPos": {
+      "lat": 27.594168,
+      "lng": 85.377975
+    }
+  },
+  "092_WNW_115.Gosaikunda.kml": {
+    "name": "WNW_115.Gosaikunda",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 19.02,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 3.8
+    },
+    "bounds": [
+      [
+        28.083779,
+        85.299484
+      ],
+      [
+        28.11139,
+        85.409673
+      ]
+    ],
+    "startPos": {
+      "lat": 28.11139,
+      "lng": 85.299493
+    }
+  },
+  "093_WNW_116._Godawari_Badikhel.kml": {
+    "name": "WNW_116. Godawari Badikhel",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 8.93,
+      "elevationGain": 675,
+      "elevationLoss": 700,
+      "minElevation": 1497,
+      "maxElevation": 2000,
+      "estimatedHours": 2.9
+    },
+    "bounds": [
+      [
+        27.578969,
+        85.348721
+      ],
+      [
+        27.595533,
+        85.378148
+      ]
+    ],
+    "startPos": {
+      "lat": 27.594533,
+      "lng": 85.378148
+    }
+  },
+  "094_WNW_117.Konjyosom_Waterfall_via_Bhardeu.kml": {
+    "name": "WNW_117.Konjyosom waterfall via Bhardeu",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 7.46,
+      "elevationGain": 390,
+      "elevationLoss": 346,
+      "minElevation": 1945,
+      "maxElevation": 2296,
+      "estimatedHours": 2.1
+    },
+    "bounds": [
+      [
+        27.551743,
+        85.386129
+      ],
+      [
+        27.56085,
+        85.424095
+      ]
+    ],
+    "startPos": {
+      "lat": 27.552303,
+      "lng": 85.386191
+    }
+  },
+  "095_WNW_118.Gufa_Dada.kml": {
+    "name": "WNW_118.Gufa Dada Sindhupalchok",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Moderate",
+    "stats": {
+      "distance": 9.62,
+      "elevationGain": 503,
+      "elevationLoss": 490,
+      "minElevation": 1860,
+      "maxElevation": 2205,
+      "estimatedHours": 2.8
+    },
+    "bounds": [
+      [
+        27.826376,
+        85.620825
+      ],
+      [
+        27.844877,
+        85.64149
+      ]
+    ],
+    "startPos": {
+      "lat": 27.827298,
+      "lng": 85.62684
+    }
+  },
+  "096_WNW_119._Bhairavkunda_Sindhupalchok.kml": {
+    "name": "WNW_119. Bhairavkunda Sindhupalchok",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 12.67,
+      "elevationGain": 0,
+      "elevationLoss": 0,
+      "minElevation": 0,
+      "maxElevation": 0,
+      "estimatedHours": 2.5
+    },
+    "bounds": [
+      [
+        27.919218,
+        85.864075
+      ],
+      [
+        27.990412,
+        85.881468
+      ]
+    ],
+    "startPos": {
+      "lat": 27.919274,
+      "lng": 85.87095
+    }
+  },
+  "097_WNW_120._Mardi_trek.kml": {
+    "name": "WNW_120. Mardi Trek",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Extreme",
+    "stats": {
+      "distance": 30.3,
+      "elevationGain": 3067,
+      "elevationLoss": 4795,
+      "minElevation": 0,
+      "maxElevation": 4021,
+      "estimatedHours": 11.2
+    },
+    "bounds": [
+      [
+        28.292446,
+        83.820734
+      ],
+      [
+        28.460005,
+        83.895025
+      ]
+    ],
+    "startPos": {
+      "lat": 28.29248,
+      "lng": 83.823962
+    }
+  },
+  "098_WNW_121._Danger_section_Mardi_trek.kml": {
+    "name": "WNW_121. Danger section Mardi Trek",
+    "description": "This is newly constructed trail. It is much safer and better trail. It is longer but advised to use only this trail at the moment.",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Easy",
+    "stats": {
+      "distance": 1.43,
+      "elevationGain": 181,
+      "elevationLoss": 25,
+      "minElevation": 3529,
+      "maxElevation": 3686,
+      "estimatedHours": 0.6
+    },
+    "bounds": [
+      [
+        28.433837,
+        83.86875
+      ],
+      [
+        28.439134,
+        83.874994
+      ]
+    ],
+    "startPos": {
+      "lat": 28.433863,
+      "lng": 83.86875
+    }
+  }
+}
