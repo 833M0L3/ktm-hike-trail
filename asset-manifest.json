@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/ktm-hike-trail/static/css/main.b09edda3.css",
-    "main.js": "/ktm-hike-trail/static/js/main.f8842a51.js",
+    "main.js": "/ktm-hike-trail/static/js/main.61686b2f.js",
     "index.html": "/ktm-hike-trail/index.html",
     "main.b09edda3.css.map": "/ktm-hike-trail/static/css/main.b09edda3.css.map",
-    "main.f8842a51.js.map": "/ktm-hike-trail/static/js/main.f8842a51.js.map"
+    "main.61686b2f.js.map": "/ktm-hike-trail/static/js/main.61686b2f.js.map"
   },
   "entrypoints": [
     "static/css/main.b09edda3.css",
-    "static/js/main.f8842a51.js"
+    "static/js/main.61686b2f.js"
   ]
 }
