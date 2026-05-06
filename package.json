@@ -2,7 +2,7 @@
   "name": "nepal-hikes",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://833m0l3.github.io/ktm-hike-trail",
+  "homepage": "https://833M0L3.github.io/ktm-hike-trail",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
