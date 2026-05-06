@@ -21,6 +21,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterDifficulty, setFilterDifficulty] = useState('All');
+  const [filterLocation, setFilterLocation] = useState('All');
   const [sortBy, setSortBy] = useState('name');
   const [showFilters, setShowFilters] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('ht-theme') || 'day');
@@ -73,6 +74,10 @@ export default function App() {
              ...meta.stats,
              estimatedHours: meta.hoursOverride !== "Auto" ? meta.hoursOverride : meta.stats?.estimatedHours
           },
+          province: meta.province || '',
+          district: meta.district || '',
+          nearbyCity: meta.nearbyCity || '',
+          highlights: meta.highlights || '',
           bounds: meta.bounds,
           coordinates: meta.startPos ? [meta.startPos, meta.startPos] : [], 
           isLazyLoaded: false
@@ -107,6 +112,10 @@ export default function App() {
             name: route.name,
             description: route.description,
             difficulty: route.difficulty,
+            province: route.province,
+            district: route.district,
+            nearbyCity: route.nearbyCity,
+            highlights: route.highlights,
             isLazyLoaded: true
           };
           updatedRoute.stats.estimatedHours = route.stats.estimatedHours;
@@ -130,9 +139,13 @@ export default function App() {
 
   const filteredRoutes = routes
     .filter(r => {
-      const matchSearch = r.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchSearch = r.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          (r.district && r.district.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                          (r.province && r.province.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                          (r.highlights && r.highlights.toLowerCase().includes(searchQuery.toLowerCase()));
       const matchDiff = filterDifficulty === 'All' || r.difficulty === filterDifficulty;
-      return matchSearch && matchDiff;
+      const matchLoc = filterLocation === 'All' || r.district === filterLocation;
+      return matchSearch && matchDiff && matchLoc;
     })
     .sort((a, b) => {
       if (sortBy === 'distance') return b.stats.distance - a.stats.distance;
@@ -252,15 +265,30 @@ export default function App() {
                 </select>
               </div>
               {showFilters && (
-                <div style={{ marginTop:8, display:'flex', gap:5, flexWrap:'wrap' }}>
-                  {['All','Easy','Moderate','Hard','Extreme'].map(d => (
-                    <button key={d} onClick={() => setFilterDifficulty(d)} style={{
-                      padding:'3px 10px', borderRadius:20, fontSize:10, fontWeight:600, cursor:'pointer',
-                      background: filterDifficulty===d ? 'var(--accent-primary)' : 'rgba(249,115,22,0.08)',
-                      color: filterDifficulty===d ? 'white' : 'var(--text-secondary)',
-                      border:`1px solid ${filterDifficulty===d ? 'var(--accent-primary)' : 'var(--border)'}`,
-                    }}>{d}</button>
-                  ))}
+                <div style={{ marginTop:8, display:'flex', flexDirection:'column', gap:8 }}>
+                  <div style={{ display:'flex', gap:5, flexWrap:'wrap' }}>
+                    {['All','Easy','Moderate','Hard','Extreme'].map(d => (
+                      <button key={d} onClick={() => setFilterDifficulty(d)} style={{
+                        padding:'3px 10px', borderRadius:20, fontSize:10, fontWeight:600, cursor:'pointer',
+                        background: filterDifficulty===d ? 'var(--accent-primary)' : 'rgba(249,115,22,0.08)',
+                        color: filterDifficulty===d ? 'white' : 'var(--text-secondary)',
+                        border:`1px solid ${filterDifficulty===d ? 'var(--accent-primary)' : 'var(--border)'}`,
+                      }}>{d}</button>
+                    ))}
+                  </div>
+                  <select
+                    value={filterLocation}
+                    onChange={e => setFilterLocation(e.target.value)}
+                    style={{
+                      background:'var(--bg-card)', border:`1px solid var(--border)`,
+                      borderRadius:6, padding:'5px 8px', color:'var(--text-secondary)',
+                      fontSize:11, outline:'none', cursor:'pointer',
+                    }}>
+                    <option value="All">All Districts</option>
+                    {[...new Set(routes.map(r => r.district).filter(Boolean))].sort().map(dist => (
+                      <option key={dist} value={dist}>{dist}</option>
+                    ))}
+                  </select>
                 </div>
               )}
             </div>

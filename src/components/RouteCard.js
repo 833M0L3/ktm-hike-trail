@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, Download } from 'lucide-react';
+import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, Download, MapPin, Star } from 'lucide-react';
 
 const ROUTE_COLORS = [
   '#f97316', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa',
@@ -39,10 +39,28 @@ const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onD
           <div style={{ flex: 1, minWidth: 0 }}>
             <div
               className="truncate"
-              style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4, lineHeight: 1.3 }}
+              style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2, lineHeight: 1.3 }}
             >
               {route.name}
             </div>
+            
+            {(route.district || route.highlights) && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 6 }}>
+                {route.district && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--text-secondary)', fontSize: 10 }}>
+                    <MapPin size={10} />
+                    <span className="truncate">{route.district}{route.province ? `, ${route.province}` : ''}</span>
+                  </div>
+                )}
+                {route.highlights && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--text-secondary)', fontSize: 10 }}>
+                    <Star size={10} />
+                    <span className="truncate">{route.highlights}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span
                 className={DIFFICULTY_CLASS[route.difficulty]}

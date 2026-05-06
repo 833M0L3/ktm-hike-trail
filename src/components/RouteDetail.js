@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download, MapPin, Flag } from 'lucide-react';
+import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download, MapPin, Flag, Star } from 'lucide-react';
 import ElevationChart from './ElevationChart';
 
 const ROUTE_COLORS = [
@@ -169,6 +169,24 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
             }}>
               {route.name}
             </h2>
+            
+            {(route.district || route.highlights) && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 10 }}>
+                {route.district && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
+                    <MapPin size={11} />
+                    <span className="truncate">{route.district}{route.province ? `, ${route.province}` : ''}</span>
+                  </div>
+                )}
+                {route.highlights && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
+                    <Star size={11} />
+                    <span className="truncate">{route.highlights}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{
                 fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
