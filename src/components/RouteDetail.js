@@ -23,6 +23,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   const panelRef = useRef(null);
   const handleBarRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [animationDone, setAnimationDone] = useState(false);
   const [showChartDeferred, setShowChartDeferred] = useState(false);
 
   const defaultHeightVh = isMobile ? 40 : 65;
@@ -33,6 +34,8 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
       setIsMounted(true);
       // Defer heavy chart rendering to avoid jank during entrance
       setTimeout(() => setShowChartDeferred(true), 150);
+      // Remove transform after animation completes to fix blurry text
+      setTimeout(() => setAnimationDone(true), 400);
     });
   }, []);
 
@@ -121,11 +124,10 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           flexDirection: 'column',
           height: panelHeight != null ? `${panelHeight}px` : `${defaultHeightVh}vh`,
           overflow: 'hidden',
-          transform: isMounted ? 'translateY(0)' : 'translateY(100%)',
-          transition: 'height 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)',
+          transform: animationDone ? 'none' : (isMounted ? 'translateY(0)' : 'translateY(100%)'),
+          transition: animationDone ? 'height 0.25s ease' : 'height 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)',
           pointerEvents: 'auto',
           boxShadow: '0 -4px 32px rgba(0,0,0,0.15)',
-          willChange: 'transform, height',
         }}
       >
         {/* Drag Handle */}
@@ -226,6 +228,51 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
               <MiniStat label="End"   value={`${route.stats.endElevation}m`} />
             </div>
           )}
+
+          {/* Start / End Google Maps links */}
+          {showMiniStats && route.waypoints && route.waypoints.length >= 2 && (() => {
+            const start = route.waypoints.find(w => w.type === 'start') || route.waypoints[0];
+            const end = route.waypoints.find(w => w.type === 'end') || route.waypoints[route.waypoints.length - 1];
+            const gmapsUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
+            return (
+              <div style={{ padding: '6px 20px 0', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, flexShrink: 0 }}>
+                <a
+                  href={gmapsUrl(start.lat, start.lng)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '6px 10px', borderRadius: 8,
+                    background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.25)',
+                    textDecoration: 'none', transition: 'background 0.2s',
+                    fontSize: 11, color: '#34d399', fontWeight: 600,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.18)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.08)'; }}
+                  title={`Open start point in Google Maps (${start.lat.toFixed(4)}, ${start.lng.toFixed(4)})`}
+                >
+                  <span style={{ fontSize: 13 }}>📍</span> Start Point
+                </a>
+                <a
+                  href={gmapsUrl(end.lat, end.lng)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 6,
+                    padding: '6px 10px', borderRadius: 8,
+                    background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
+                    textDecoration: 'none', transition: 'background 0.2s',
+                    fontSize: 11, color: '#ef4444', fontWeight: 600,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.18)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; }}
+                  title={`Open end point in Google Maps (${end.lat.toFixed(4)}, ${end.lng.toFixed(4)})`}
+                >
+                  <span style={{ fontSize: 13 }}>🏁</span> End Point
+                </a>
+              </div>
+            );
+          })()}
 
           {/* Elevation chart — fills remaining space */}
           {showChart && (
