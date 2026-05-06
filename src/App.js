@@ -45,7 +45,7 @@ export default function App() {
     setRoutes([]);
 
     try {
-      const manifestRes = await fetch('/kml/routes-metadata.json?t=' + Date.now());
+      const manifestRes = await fetch(`${process.env.PUBLIC_URL}/kml/routes-metadata.json?t=` + Date.now());
       if (!manifestRes.ok) throw new Error('routes-metadata.json not found in /public/kml/');
       const metadataMap = await manifestRes.json();
       const fileNames = Object.keys(metadataMap);
@@ -90,7 +90,7 @@ export default function App() {
     if (!route.isLazyLoaded) {
       setIsLoading(true);
       try {
-        const res = await fetch(`/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
+        const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
         const text = await res.text();
         const fullParsed = parseKML(text, route.fileName);
         
