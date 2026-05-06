@@ -50,15 +50,26 @@ When you run the command above, the app generates a block in `public/kml/routes-
 "your_new_hike.kml": {
   "name": "Your New Hike",
   "description": "",
-  "difficulty": "Auto",
-  "estimatedHours": "Auto"
+  "difficultyOverride": "Auto",
+  "hoursOverride": "Auto",
+  "calculatedDifficulty": "Moderate",
+  "stats": {
+    "distance": 12.34,
+    "elevationGain": 650,
+    "elevationLoss": 640,
+    "minElevation": 1450,
+    "maxElevation": 2120,
+    "estimatedHours": 3.8
+  },
+  "bounds": [[27.6, 85.2], [27.8, 85.5]],
+  "startPos": { "lat": 27.7, "lng": 85.3 }
 }
 ```
 
 You can open `routes-metadata.json` and edit it manually! 
 - **`name` & `description`**: Replace these with whatever text you want to appear in the app.
-- **`difficulty`**: By default, the app calculates this using math (`Auto`). You can override it by typing `"Easy"`, `"Moderate"`, `"Hard"`, or `"Extreme"`.
-- **`estimatedHours`**: By default, this uses Naismith's hiking rule (`Auto`). You can override it by typing a number (like `4.5`).
+- **`difficultyOverride`**: Keep as `"Auto"` to use calculated difficulty, or set `"Easy"`, `"Moderate"`, `"Hard"`, or `"Extreme"`.
+- **`hoursOverride`**: Keep as `"Auto"` to use the calculated value, or set a number (like `4.5`).
 
 *Note: The `npm run manifest` script will **never** overwrite changes you've manually made to this file! Your edits are safe.*
 
@@ -67,13 +78,42 @@ Once you've run the manifest command and made your optional edits, just go to yo
 
 ---
 
-## Deployment
-Because this is a standard React app without a backend server, you can host it entirely for free on platforms like Vercel, Netlify, or GitHub Pages.
+## Deployment (GitHub Pages + GitHub Actions)
 
-To build the app for production:
+This project is configured to auto-deploy to GitHub Pages whenever code is pushed to the `main` branch.
+
+### Current setup
+- `package.json` includes:
+  - `"homepage": "https://833M0L3.github.io/ktm-hike-trail"`
+  - `predeploy` and `deploy` scripts (optional/manual deploy path)
+- GitHub Actions workflow: `.github/workflows/deploy.yml`
+  - Installs dependencies with `npm ci`
+  - Builds with `npm run build`
+  - Publishes `./build` to the `gh-pages` branch
+
+### One-time GitHub Pages settings
+1. Open repository settings: `https://github.com/833M0L3/ktm-hike-trail/settings/pages`
+2. Under **Source**, choose **Deploy from a branch**
+3. Select branch `gh-pages` and folder `/ (root)`
+4. Save
+
+Your site URL is:
+`https://833M0L3.github.io/ktm-hike-trail`
+
+### How deployments work
+- Push to `main` -> workflow runs -> `gh-pages` branch is updated.
+- You can monitor deployments in the **Actions** tab.
+
+### Manual deploy (optional)
+If you ever want to deploy manually from local machine:
 ```bash
-npm run build
+npm run deploy
 ```
-This will compile all your files into a highly optimized `build/` folder. You can upload the contents of this folder directly to your web host.
 
-**Important:** Before you run the build command, make sure you have run `npm run manifest` so that your latest KML files are included in the build!
+### Important note for route loading on GitHub Pages
+The app fetches route files using `process.env.PUBLIC_URL` (for example, `.../kml/routes-metadata.json`) so assets load correctly under the GitHub Pages subpath (`/ktm-hike-trail`).
+
+Before building/deploying, make sure route metadata is up to date:
+```bash
+npm run manifest
+```
