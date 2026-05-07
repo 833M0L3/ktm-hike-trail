@@ -9,41 +9,16 @@ export function parseKML(kmlText, fileName) {
   const descEl = xmlDoc.querySelector('description');
   const description = descEl?.textContent?.trim() || '';
 
-  let coordinates = [];
-
-  const lineStringEl = xmlDoc.querySelector('LineString coordinates');
-  if (lineStringEl) coordinates = parseCoordinateString(lineStringEl.textContent);
-
-  if (coordinates.length === 0) {
-    const trackCoords = xmlDoc.querySelectorAll('gx\\:coord, coord');
-    if (trackCoords.length > 0) {
-      coordinates = Array.from(trackCoords).map(el => {
-        const parts = el.textContent.trim().split(' ');
-        return { lng: parseFloat(parts[0]), lat: parseFloat(parts[1]), ele: parseFloat(parts[2]) || 0 };
-      });
-    }
-  }
-
-  if (coordinates.length === 0) {
-    const allCoords = xmlDoc.querySelectorAll('coordinates');
-    allCoords.forEach(el => {
-      const parsed = parseCoordinateString(el.textContent);
-      if (parsed.length > coordinates.length) coordinates = parsed;
-    });
-  }
+  const lineSegments = extractLineSegments(xmlDoc);
+  const coordinates = lineSegments.flat();
 
   if (coordinates.length === 0) return null;
 
-  const stats = calculateStats(coordinates);
+  const stats = calculateStats(lineSegments);
   const difficulty = getDifficulty(stats);
 
-  const sampled = sampleArray(coordinates, 300);
-  const elevationProfile = sampled.map((c, i, arr) => ({
-    distance: parseFloat(cumulativeDistance(arr, i).toFixed(2)),
-    elevation: Math.round(c.ele),
-    index: i,  // keep index for hover sync
-  }));
-  const sampledCoords = sampled; // GPS coords aligned 1:1 with elevationProfile
+  const { elevationProfile, sampledCoords } = buildElevationProfile(lineSegments, 300);
+  const displayLineSegments = simplifyLineSegments(lineSegments, 12000);
 
   const waypoints = [
     { lat: coordinates[0].lat, lng: coordinates[0].lng, label: 'Start', type: 'start' },
@@ -51,16 +26,15 @@ export function parseKML(kmlText, fileName) {
     { lat: coordinates[coordinates.length - 1].lat, lng: coordinates[coordinates.length - 1].lng, label: 'End', type: 'end' },
   ];
 
-  // Bounding box
-  const lats = coordinates.map(c => c.lat);
-  const lngs = coordinates.map(c => c.lng);
-  const bounds = [[Math.min(...lats), Math.min(...lngs)], [Math.max(...lats), Math.max(...lngs)]];
+  const bounds = calculateBounds(coordinates);
 
   return {
     id: generateId(),
     name,
     description,
     coordinates,
+    lineSegments,
+    displayLineSegments,
     stats,
     difficulty,
     elevationProfile,
@@ -86,6 +60,49 @@ function parseCoordinateString(str) {
     .filter(Boolean);
 }
 
+function extractLineSegments(xmlDoc) {
+  const segments = [];
+
+  const lineStringCoords = xmlDoc.querySelectorAll('LineString > coordinates, LineString coordinates');
+  lineStringCoords.forEach(el => {
+    const parsed = parseCoordinateString(el.textContent || '');
+    if (parsed.length > 0) segments.push(parsed);
+  });
+
+  if (segments.length === 0) {
+    const trackEls = xmlDoc.querySelectorAll('gx\\:Track, Track');
+    trackEls.forEach(trackEl => {
+      const trackCoords = trackEl.querySelectorAll('gx\\:coord, coord');
+      const parsed = Array.from(trackCoords)
+        .map(el => {
+          const parts = (el.textContent || '').trim().split(' ');
+          if (parts.length < 2) return null;
+          const lng = parseFloat(parts[0]);
+          const lat = parseFloat(parts[1]);
+          const ele = parts[2] ? parseFloat(parts[2]) : 0;
+          if (isNaN(lat) || isNaN(lng)) return null;
+          return { lat, lng, ele: isNaN(ele) ? 0 : ele };
+        })
+        .filter(Boolean);
+
+      if (parsed.length > 0) segments.push(parsed);
+    });
+  }
+
+  if (segments.length === 0) {
+    // Fallback for unusual KMLs: keep previous behavior by selecting the longest coordinate set.
+    const allCoords = xmlDoc.querySelectorAll('coordinates');
+    let longest = [];
+    allCoords.forEach(el => {
+      const parsed = parseCoordinateString(el.textContent || '');
+      if (parsed.length > longest.length) longest = parsed;
+    });
+    if (longest.length > 0) segments.push(longest);
+  }
+
+  return segments;
+}
+
 function haversineDistance(p1, p2) {
   const R = 6371000;
   const φ1 = p1.lat * Math.PI / 180;
@@ -96,13 +113,8 @@ function haversineDistance(p1, p2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function cumulativeDistance(arr, idx) {
-  let dist = 0;
-  for (let i = 1; i <= idx; i++) dist += haversineDistance(arr[i - 1], arr[i]) / 1000;
-  return dist;
-}
-
-function calculateStats(coords) {
+function calculateStats(segments) {
+  const coords = segments.flat();
   let totalDist = 0, gain = 0, loss = 0;
   let minEle = Infinity, maxEle = -Infinity;
 
@@ -111,12 +123,14 @@ function calculateStats(coords) {
     if (coords[i].ele > maxEle) maxEle = coords[i].ele;
   }
 
-  for (let i = 1; i < coords.length; i++) {
-    totalDist += haversineDistance(coords[i - 1], coords[i]);
-    const eleDiff = coords[i].ele - coords[i - 1].ele;
-    if (eleDiff > 0) gain += eleDiff;
-    else loss += Math.abs(eleDiff);
-  }
+  segments.forEach(segment => {
+    for (let i = 1; i < segment.length; i++) {
+      totalDist += haversineDistance(segment[i - 1], segment[i]);
+      const eleDiff = segment[i].ele - segment[i - 1].ele;
+      if (eleDiff > 0) gain += eleDiff;
+      else loss += Math.abs(eleDiff);
+    }
+  });
 
   const distKm = totalDist / 1000;
   const estimatedHours = (distKm / 5) + (gain / 600);
@@ -132,6 +146,60 @@ function calculateStats(coords) {
     estimatedHours: parseFloat(estimatedHours.toFixed(1)),
     pointCount: coords.length,
   };
+}
+
+function buildElevationProfile(segments, maxPoints) {
+  const pointsWithDistance = [];
+  let runningDistanceKm = 0;
+
+  segments.forEach(segment => {
+    if (!segment.length) return;
+    pointsWithDistance.push({ coord: segment[0], distance: runningDistanceKm });
+    for (let i = 1; i < segment.length; i++) {
+      runningDistanceKm += haversineDistance(segment[i - 1], segment[i]) / 1000;
+      pointsWithDistance.push({ coord: segment[i], distance: runningDistanceKm });
+    }
+  });
+
+  const sampled = sampleArray(pointsWithDistance, maxPoints);
+  return {
+    elevationProfile: sampled.map((p, i) => ({
+      distance: parseFloat(p.distance.toFixed(2)),
+      elevation: Math.round(p.coord.ele),
+      index: i,
+    })),
+    sampledCoords: sampled.map(p => p.coord),
+  };
+}
+
+function simplifyLineSegments(segments, maxTotalPoints) {
+  const totalPoints = segments.reduce((sum, seg) => sum + seg.length, 0);
+  if (totalPoints <= maxTotalPoints) return segments;
+
+  const ratio = maxTotalPoints / totalPoints;
+  return segments.map(segment => {
+    if (segment.length <= 2) return segment;
+    const targetCount = Math.max(2, Math.floor(segment.length * ratio));
+    return sampleSegmentPreserveEnds(segment, targetCount);
+  });
+}
+
+function sampleSegmentPreserveEnds(segment, targetCount) {
+  if (segment.length <= targetCount) return segment;
+  if (targetCount <= 2) return [segment[0], segment[segment.length - 1]];
+
+  const sampled = [segment[0]];
+  const interiorCount = targetCount - 2;
+  const interiorLength = segment.length - 2;
+  const step = interiorLength / interiorCount;
+
+  for (let i = 0; i < interiorCount; i++) {
+    const idx = 1 + Math.floor(i * step);
+    sampled.push(segment[idx]);
+  }
+
+  sampled.push(segment[segment.length - 1]);
+  return sampled;
 }
 
 function getDifficulty(stats) {
@@ -150,4 +218,21 @@ function sampleArray(arr, maxPoints) {
 
 function generateId() {
   return Math.random().toString(36).substr(2, 9);
+}
+
+function calculateBounds(coords) {
+  let minLat = Infinity;
+  let minLng = Infinity;
+  let maxLat = -Infinity;
+  let maxLng = -Infinity;
+
+  for (let i = 0; i < coords.length; i++) {
+    const c = coords[i];
+    if (c.lat < minLat) minLat = c.lat;
+    if (c.lng < minLng) minLng = c.lng;
+    if (c.lat > maxLat) maxLat = c.lat;
+    if (c.lng > maxLng) maxLng = c.lng;
+  }
+
+  return [[minLat, minLng], [maxLat, maxLng]];
 }

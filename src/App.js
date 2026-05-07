@@ -102,11 +102,14 @@ export default function App() {
     if (isMobile) { setSidebarOpen(false); fireSidebarToggle(); }
 
     // IMMEDIATE FEEDBACK: Highlight card and open panel instantly
-    setActiveRoute(route);
+    const routeWithLoadingState = { ...route, loadError: null };
+    setActiveRoute(routeWithLoadingState);
+    setRoutes(prev => prev.map(r => r.id === route.id ? routeWithLoadingState : r));
 
     if (!route.isLazyLoaded) {
       try {
         const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status} while loading ${route.fileName}`);
         const text = await res.text();
         
         // Yield to the browser to let the UI slide-up animation run smoothly
@@ -114,6 +117,7 @@ export default function App() {
         await new Promise(resolve => setTimeout(resolve, 350));
         
         const fullParsed = parseKML(text, route.fileName);
+        if (!fullParsed) throw new Error('KML has no valid route geometry');
         if (fullParsed) {
           const updatedRoute = {
             ...fullParsed,
@@ -125,7 +129,8 @@ export default function App() {
             district: route.district,
             nearbyCity: route.nearbyCity,
             highlights: route.highlights,
-            isLazyLoaded: true
+            isLazyLoaded: true,
+            loadError: null,
           };
           updatedRoute.stats.estimatedHours = route.stats.estimatedHours;
           setRoutes(prev => prev.map(r => r.id === route.id ? updatedRoute : r));
@@ -133,6 +138,12 @@ export default function App() {
         }
       } catch (err) {
         console.error('Failed to load KML', err);
+        const failedRoute = {
+          ...route,
+          loadError: err?.message || 'Failed to parse KML file',
+        };
+        setRoutes(prev => prev.map(r => r.id === route.id ? failedRoute : r));
+        setActiveRoute(failedRoute);
       }
     }
   }, [isMobile]);
@@ -315,6 +326,7 @@ export default function App() {
                       <option key={dist} value={dist}>{dist}</option>
                     ))}
                   </select>
+
                 </div>
               )}
             </div>

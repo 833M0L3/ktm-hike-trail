@@ -137,6 +137,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   if (!route) return null;
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
   const resolvedHeight = panelHeight != null ? panelHeight : window.innerHeight * defaultHeightVh / 100;
+  const segmentCount = route.lineSegments?.length || 0;
 
   const showStats      = resolvedHeight > (isMobile ? 130 : 160);
   const showMiniStats  = resolvedHeight > (isMobile ? 180 : 220);
@@ -229,6 +230,16 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
               }}>
                 {route.difficulty}
               </span>
+              {segmentCount > 1 && (
+                <span style={{
+                  fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
+                  background: 'rgba(14,165,233,0.1)',
+                  color: '#0ea5e9',
+                  border: '1px solid rgba(14,165,233,0.3)',
+                }}>
+                  {segmentCount} segments
+                </span>
+              )}
               <a
                 href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
                 download
@@ -348,7 +359,12 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
             <div style={{ flex: 1, minHeight: 60, padding: '8px 20px 0', display: 'flex', flexDirection: 'column' }}>
               <div className="section-label" style={{ marginBottom: 6, flexShrink: 0 }}>Elevation Profile</div>
               <div style={{ flex: 1, minHeight: 0, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease', position: 'relative' }}>
-                {!route.isLazyLoaded ? (
+                {route.loadError ? (
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ef4444', textAlign: 'center', padding: '0 12px' }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Failed to load route details</span>
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{route.loadError}</span>
+                  </div>
+                ) : !route.isLazyLoaded ? (
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
                     <div style={{ width:24, height:24, border:`2px solid var(--accent-primary)`, borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.8s linear infinite', marginBottom: 8 }} />
                     <span style={{ fontSize: 11 }}>Loading route details...</span>

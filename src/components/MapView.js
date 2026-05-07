@@ -136,33 +136,41 @@ export default function MapView({ routes, activeRoute, onRouteClick, theme, deta
       <ZoomControl position="bottomright" />
 
       {routes.map((route, idx) => {
-        if (!route.coordinates || route.coordinates.length === 0) return null;
+        const renderSegments = route.displayLineSegments?.length
+          ? route.displayLineSegments
+          : (route.lineSegments?.length ? route.lineSegments : (route.coordinates?.length ? [route.coordinates] : []));
+        const flatCoordinates = renderSegments.flat();
+        if (flatCoordinates.length === 0) return null;
 
         const color = ROUTE_COLORS[idx % ROUTE_COLORS.length];
         const isActive = activeRoute?.id === route.id;
-        const startPos = [route.coordinates[0].lat, route.coordinates[0].lng];
+        const startPos = [flatCoordinates[0].lat, flatCoordinates[0].lng];
 
         if (isActive) {
-          const positions = route.coordinates.map(c => [c.lat, c.lng]);
+          const segmentPositions = renderSegments.map(seg => seg.map(c => [c.lat, c.lng]));
           return (
             <div key={route.id}>
-              {/* Shadow/glow line */}
-              <Polyline
-                positions={positions}
-                pathOptions={{ color: color, weight: 10, opacity: 0.15 }}
-                eventHandlers={{ click: () => onRouteClick(route) }}
-              />
-              {/* Main line */}
-              <Polyline
-                positions={positions}
-                pathOptions={{ color: color, weight: 4, opacity: 1, lineCap: 'round', lineJoin: 'round' }}
-                eventHandlers={{ click: () => onRouteClick(route) }}
-              >
-                <Tooltip sticky>
-                  <div style={{ fontSize: 13, fontWeight: 700, margin: '2px 4px' }}>{route.name}</div>
-                  <div style={{ fontSize: 10, color: '#666', margin: '0 4px 2px' }}>{route.stats.distance}km • {route.difficulty}</div>
-                </Tooltip>
-              </Polyline>
+              {segmentPositions.map((positions, segmentIdx) => (
+                <div key={`${route.id}-seg-${segmentIdx}`}>
+                  {/* Shadow/glow line */}
+                  <Polyline
+                    positions={positions}
+                    pathOptions={{ color: color, weight: 10, opacity: 0.15 }}
+                    eventHandlers={{ click: () => onRouteClick(route) }}
+                  />
+                  {/* Main line */}
+                  <Polyline
+                    positions={positions}
+                    pathOptions={{ color: color, weight: 4, opacity: 1, lineCap: 'round', lineJoin: 'round' }}
+                    eventHandlers={{ click: () => onRouteClick(route) }}
+                  >
+                    <Tooltip sticky>
+                      <div style={{ fontSize: 13, fontWeight: 700, margin: '2px 4px' }}>{route.name}</div>
+                      <div style={{ fontSize: 10, color: '#666', margin: '0 4px 2px' }}>{route.stats.distance}km • {route.difficulty}</div>
+                    </Tooltip>
+                  </Polyline>
+                </div>
+              ))}
 
               {/* Start marker */}
               <CircleMarker
@@ -191,7 +199,7 @@ export default function MapView({ routes, activeRoute, onRouteClick, theme, deta
 
               {/* End marker */}
               <CircleMarker
-                center={[route.coordinates[route.coordinates.length - 1].lat, route.coordinates[route.coordinates.length - 1].lng]}
+                center={[flatCoordinates[flatCoordinates.length - 1].lat, flatCoordinates[flatCoordinates.length - 1].lng]}
                 radius={6}
                 pathOptions={{ color: '#fff', weight: 2, fillColor: '#1e293b', fillOpacity: 1 }}
                 eventHandlers={{ click: () => onRouteClick(route) }}
