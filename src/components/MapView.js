@@ -136,6 +136,8 @@ export default function MapView({ routes, activeRoute, onRouteClick, theme, deta
       <ZoomControl position="bottomright" />
 
       {routes.map((route, idx) => {
+        if (!route.coordinates || route.coordinates.length === 0) return null;
+
         const color = ROUTE_COLORS[idx % ROUTE_COLORS.length];
         const isActive = activeRoute?.id === route.id;
         const startPos = [route.coordinates[0].lat, route.coordinates[0].lng];

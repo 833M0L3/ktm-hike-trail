@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download, MapPin, Flag, Star } from 'lucide-react';
+import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download, MapPin, Flag, Star, Share2, Check } from 'lucide-react';
 import ElevationChart from './ElevationChart';
 
 const ROUTE_COLORS = [
@@ -25,6 +25,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   const [isMounted, setIsMounted] = useState(false);
   const [animationDone, setAnimationDone] = useState(false);
   const [showChartDeferred, setShowChartDeferred] = useState(false);
+  const [shareToast, setShareToast] = useState(false);
 
   const defaultHeightVh = isMobile ? 40 : 65;
 
@@ -100,6 +101,38 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
     window.addEventListener('touchmove', handleMove, { passive: true });
     window.addEventListener('touchend', handleUp);
   }, [defaultHeightVh]);
+
+  const handleShare = useCallback(async () => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?route=${encodeURIComponent(route?.fileName || '')}`;
+    const shareData = {
+      title: route?.name || 'Hiking Route',
+      text: `Check out this hike: ${route?.name} — ${route?.stats?.distance}km, +${route?.stats?.elevationGain}m gain`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareToast(true);
+        setTimeout(() => setShareToast(false), 2200);
+      }
+    } catch (err) {
+      // User cancelled share dialog, or clipboard failed — try fallback
+      if (err.name !== 'AbortError') {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          setShareToast(true);
+          setTimeout(() => setShareToast(false), 2200);
+        } catch {
+          // Last resort: prompt
+          window.prompt('Copy this link to share:', shareUrl);
+        }
+      }
+    }
+  }, [route]);
 
   if (!route) return null;
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
@@ -212,6 +245,24 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
               >
                 <Download size={11} /> KML
               </a>
+              <button
+                onClick={handleShare}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  fontSize: 11, fontWeight: 600,
+                  color: shareToast ? '#34d399' : '#a78bfa',
+                  padding: '2px 10px', borderRadius: 20,
+                  background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
+                  border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
+                  cursor: 'pointer', transition: 'all 0.25s ease',
+                }}
+                onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
+                onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
+                title="Share this route"
+              >
+                {shareToast ? <Check size={11} /> : <Share2 size={11} />}
+                {shareToast ? 'Copied!' : 'Share'}
+              </button>
             </div>
           </div>
           <button
@@ -241,14 +292,14 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           {/* Mini elevation stats */}
           {showMiniStats && (
             <div style={{ padding: '8px 20px 0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, flexShrink: 0 }}>
-              <MiniStat label="Start" value={`${route.stats.startElevation}m`} />
+              <MiniStat label="Start" value={route.stats.startElevation != null ? `${route.stats.startElevation}m` : '-'} />
               <MiniStat label="Max"   value={`${route.stats.maxElevation}m`}   highlight={color} />
-              <MiniStat label="End"   value={`${route.stats.endElevation}m`} />
+              <MiniStat label="End"   value={route.stats.endElevation != null ? `${route.stats.endElevation}m` : '-'} />
             </div>
           )}
 
           {/* Start / End Google Maps links */}
-          {showMiniStats && route.waypoints && route.waypoints.length >= 2 && (() => {
+          {showMiniStats && route.isLazyLoaded && route.waypoints && route.waypoints.length >= 2 && (() => {
             const start = route.waypoints.find(w => w.type === 'start') || route.waypoints[0];
             const end = route.waypoints.find(w => w.type === 'end') || route.waypoints[route.waypoints.length - 1];
             const gmapsUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
@@ -296,8 +347,15 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           {showChart && (
             <div style={{ flex: 1, minHeight: 60, padding: '8px 20px 0', display: 'flex', flexDirection: 'column' }}>
               <div className="section-label" style={{ marginBottom: 6, flexShrink: 0 }}>Elevation Profile</div>
-              <div style={{ flex: 1, minHeight: 0, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease' }}>
-                {showChartDeferred && <ElevationChart route={route} color={color} />}
+              <div style={{ flex: 1, minHeight: 0, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease', position: 'relative' }}>
+                {!route.isLazyLoaded ? (
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                    <div style={{ width:24, height:24, border:`2px solid var(--accent-primary)`, borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.8s linear infinite', marginBottom: 8 }} />
+                    <span style={{ fontSize: 11 }}>Loading route details...</span>
+                  </div>
+                ) : (
+                  showChartDeferred && <ElevationChart route={route} color={color} />
+                )}
               </div>
             </div>
           )}
@@ -317,7 +375,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           )}
 
           {/* GPS point count */}
-          {showDataPoints && (
+          {showDataPoints && route.isLazyLoaded && route.stats.pointCount && (
             <div style={{ padding: '8px 20px 0', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
               <Layers size={12} style={{ color: 'var(--text-muted)' }} />
               <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>

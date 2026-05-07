@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Search, Compass, X, Filter, Sun, Moon, RefreshCw, Menu, Trees, AlertTriangle } from 'lucide-react';
 import MapView from './components/MapView';
 import RouteCard from './components/RouteCard';
@@ -32,6 +32,8 @@ export default function App() {
 
   // When a route is activated, pre-calculate the default panel height
   const handleDetailPanelHeightChange = (h) => setDetailPanelHeight(h);
+  
+  const hasAutoLoadedRoute = useRef(false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -99,11 +101,18 @@ export default function App() {
     // On mobile, hide the sidebar so the map + elevation card are visible
     if (isMobile) { setSidebarOpen(false); fireSidebarToggle(); }
 
+    // IMMEDIATE FEEDBACK: Highlight card and open panel instantly
+    setActiveRoute(route);
+
     if (!route.isLazyLoaded) {
-      setIsLoading(true);
       try {
         const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
         const text = await res.text();
+        
+        // Yield to the browser to let the UI slide-up animation run smoothly
+        // before blocking the main thread with heavy KML parsing
+        await new Promise(resolve => setTimeout(resolve, 350));
+        
         const fullParsed = parseKML(text, route.fileName);
         if (fullParsed) {
           const updatedRoute = {
@@ -124,13 +133,30 @@ export default function App() {
         }
       } catch (err) {
         console.error('Failed to load KML', err);
-      } finally {
-        setIsLoading(false);
       }
-    } else {
-      setActiveRoute(route);
     }
   }, [isMobile]);
+
+  // Handle URL route sharing parameter
+  useEffect(() => {
+    if (loadingState.status === 'done' && !hasAutoLoadedRoute.current && routes.length > 0) {
+      hasAutoLoadedRoute.current = true;
+      const params = new URLSearchParams(window.location.search);
+      const sharedRouteFile = params.get('route');
+      
+      if (sharedRouteFile) {
+        const routeToLoad = routes.find(r => r.fileName === sharedRouteFile);
+        if (routeToLoad) {
+          handleRouteClick(routeToLoad);
+          
+          // Clear the parameter from the URL so reloading doesn't re-trigger it
+          // while keeping the page state
+          const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+          window.history.replaceState({ path: newUrl }, '', newUrl);
+        }
+      }
+    }
+  }, [loadingState.status, routes, handleRouteClick]);
 
   const handleDeleteRoute = useCallback((id) => {
     setRoutes(prev => prev.filter(r => r.id !== id));

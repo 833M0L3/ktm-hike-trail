@@ -1,5 +1,5 @@
-import { memo } from 'react';
-import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, Download, MapPin, Star } from 'lucide-react';
+import { memo, useState, useCallback } from 'react';
+import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, Download, MapPin, Star, Share2, Check } from 'lucide-react';
 
 const ROUTE_COLORS = [
   '#f97316', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa',
@@ -15,9 +15,41 @@ const DIFFICULTY_CLASS = {
 
 const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onDelete }) {
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
+  const [shareToast, setShareToast] = useState(false);
 
   const handleClick = () => onClick(route);
   const handleDelete = (e) => { e.stopPropagation(); onDelete(route.id); };
+
+  const handleShare = useCallback(async (e) => {
+    e.stopPropagation();
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?route=${encodeURIComponent(route?.fileName || '')}`;
+    const shareData = {
+      title: route?.name || 'Hiking Route',
+      text: `Check out this hike: ${route?.name} — ${route?.stats?.distance}km, +${route?.stats?.elevationGain}m gain`,
+      url: shareUrl,
+    };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareToast(true);
+        setTimeout(() => setShareToast(false), 2200);
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          setShareToast(true);
+          setTimeout(() => setShareToast(false), 2200);
+        } catch {
+          window.prompt('Copy this link to share:', shareUrl);
+        }
+      }
+    }
+  }, [route]);
 
   return (
     <div
@@ -85,6 +117,26 @@ const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onD
               >
                 <Download size={10} /> KML
               </a>
+              {isActive && (
+                <button
+                  onClick={handleShare}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 4,
+                    fontSize: 10, fontWeight: 600,
+                    color: shareToast ? '#34d399' : '#a78bfa',
+                    padding: '2px 8px', borderRadius: 20,
+                    background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
+                    border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
+                    cursor: 'pointer', transition: 'all 0.25s ease',
+                  }}
+                  onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
+                  onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
+                  title="Share this route"
+                >
+                  {shareToast ? <Check size={10} /> : <Share2 size={10} />}
+                  {shareToast ? 'Copied' : 'Share'}
+                </button>
+              )}
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
