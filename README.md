@@ -85,10 +85,10 @@ This project is configured to auto-deploy to GitHub Pages whenever code is pushe
 ### Current setup
 - `package.json` includes:
   - `"homepage": "https://833M0L3.github.io/ktm-hike-trail"`
-  - `predeploy` and `deploy` scripts (optional/manual deploy path)
+  - `prebuild`, `predeploy`, and `deploy` scripts
 - GitHub Actions workflow: `.github/workflows/deploy.yml`
   - Installs dependencies with `npm ci`
-  - Builds with `npm run build`
+  - Builds with `npm run build` which now runs `npm run manifest` first via `prebuild`
   - Publishes `./build` to the `gh-pages` branch
 
 ### One-time GitHub Pages settings
@@ -113,7 +113,9 @@ npm run deploy
 ### Important note for route loading on GitHub Pages
 The app fetches route files using `process.env.PUBLIC_URL` (for example, `.../kml/routes-metadata.json`) so assets load correctly under the GitHub Pages subpath (`/ktm-hike-trail`).
 
-Before building/deploying, make sure route metadata is up to date:
+Before building/deploying, route metadata is refreshed automatically as part of `npm run build`.
+
+If you want to regenerate metadata without building, you can still run:
 ```bash
 npm run manifest
 ```
