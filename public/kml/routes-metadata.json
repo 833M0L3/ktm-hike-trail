@@ -4,28 +4,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Hard",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 30.74,
-      "elevationGain": 1837,
-      "elevationLoss": 2297,
-      "minElevation": 1432,
-      "maxElevation": 2725,
-      "estimatedHours": 9.2
+      "distance": 173.34,
+      "elevationGain": 8546,
+      "elevationLoss": 8259,
+      "minElevation": 0,
+      "maxElevation": 2765,
+      "estimatedHours": 48.9
     },
     "bounds": [
       [
-        27.757735,
-        85.31814
+        27.554437,
+        85.18644
       ],
       [
         27.825161,
-        85.458774
+        85.525825
       ]
     ],
     "startPos": {
-      "lat": 27.813927,
-      "lng": 85.31814
+      "lat": 27.759403,
+      "lng": 85.420605
     }
   },
   "002_WNW_2.Tindhare_Jharana.kml": {
@@ -33,23 +33,23 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 17.03,
-      "elevationGain": 0,
-      "elevationLoss": 0,
+      "distance": 80.64,
+      "elevationGain": 404,
+      "elevationLoss": 667,
       "minElevation": 0,
-      "maxElevation": 0,
-      "estimatedHours": 3.4
+      "maxElevation": 1709,
+      "estimatedHours": 16.8
     },
     "bounds": [
       [
         27.4906071,
-        85.5713002
+        85.513489
       ],
       [
-        27.552494,
-        85.61103
+        27.586853,
+        85.629544
       ]
     ],
     "startPos": {
@@ -62,28 +62,28 @@
     "description": "Balaju, Kathmandu 44600, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 10.17,
+      "distance": 30.41,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 2
+      "estimatedHours": 6.1
     },
     "bounds": [
       [
-        27.776569,
-        85.24758
+        27.73268,
+        85.217569
       ],
       [
-        27.814977,
-        85.27856
+        27.840363,
+        85.30354
       ]
     ],
     "startPos": {
-      "lat": 27.814977,
-      "lng": 85.24758
+      "lat": 27.828289,
+      "lng": 85.220255
     }
   },
   "004_WNW_4.Kakani_circuit_trail.kml": {
@@ -91,28 +91,28 @@
     "description": "Balaju Roundabout, Kathmandu 44600, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 9.05,
-      "elevationGain": 1186,
-      "elevationLoss": 1389,
-      "minElevation": 1679,
+      "distance": 67.01,
+      "elevationGain": 1996,
+      "elevationLoss": 1993,
+      "minElevation": 0,
       "maxElevation": 2241,
-      "estimatedHours": 3.8
+      "estimatedHours": 16.7
     },
     "bounds": [
       [
-        27.789128,
-        85.279014
+        27.726999,
+        85.26797
       ],
       [
-        27.819085,
-        85.313746
+        27.823364,
+        85.37161
       ]
     ],
     "startPos": {
-      "lat": 27.812964,
-      "lng": 85.313637
+      "lat": 27.792277,
+      "lng": 85.369194
     }
   },
   "005_WNW_5.Jhyampal_fall.kml": {
@@ -178,22 +178,22 @@
     "description": "Chabahil, Kathmandu 44600, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 22.96,
+      "distance": 58.47,
       "elevationGain": 804,
       "elevationLoss": 1046,
-      "minElevation": 1470,
+      "minElevation": 0,
       "maxElevation": 2119,
-      "estimatedHours": 5.9
+      "estimatedHours": 13
     },
     "bounds": [
       [
-        27.641452,
-        85.477093
+        27.640728,
+        85.345676
       ],
       [
-        27.74885,
+        27.75039,
         85.525825
       ]
     ],
@@ -267,12 +267,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Easy",
     "stats": {
-      "distance": 11.68,
+      "distance": 15.82,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 2.3
+      "estimatedHours": 3.2
     },
     "bounds": [
       [
@@ -280,7 +280,7 @@
         85.284579
       ],
       [
-        27.842403,
+        27.849661,
         85.319468
       ]
     ],
@@ -555,22 +555,22 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 10.23,
-      "elevationGain": 0,
-      "elevationLoss": 0,
+      "distance": 24.93,
+      "elevationGain": 436,
+      "elevationLoss": 1026,
       "minElevation": 0,
-      "maxElevation": 0,
-      "estimatedHours": 2
+      "maxElevation": 2300,
+      "estimatedHours": 5.7
     },
     "bounds": [
       [
-        27.557087,
-        85.4092647
+        27.548095,
+        85.3394
       ],
       [
-        27.566889,
+        27.568854,
         85.467239
       ]
     ],
@@ -700,19 +700,19 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 6.13,
+      "distance": 19.7,
       "elevationGain": 421,
       "elevationLoss": 403,
-      "minElevation": 1459,
+      "minElevation": 0,
       "maxElevation": 1753,
-      "estimatedHours": 1.9
+      "estimatedHours": 4.6
     },
     "bounds": [
       [
-        27.608054,
-        85.367861
+        27.593962,
+        85.35462
       ],
       [
         27.627707,
@@ -720,8 +720,8 @@
       ]
     ],
     "startPos": {
-      "lat": 27.608445,
-      "lng": 85.367861
+      "lat": 27.613698,
+      "lng": 85.357032
     }
   },
   "026_WNW_26.Bhundol.kml": {
@@ -731,21 +731,21 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 8.1,
-      "elevationGain": 646,
-      "elevationLoss": 1041,
+      "distance": 12.77,
+      "elevationGain": 1123,
+      "elevationLoss": 1128,
       "minElevation": 1575,
       "maxElevation": 2507,
-      "estimatedHours": 2.7
+      "estimatedHours": 4.4
     },
     "bounds": [
       [
-        27.637451,
+        27.612275,
         85.228492
       ],
       [
         27.666382,
-        85.250476
+        85.263393
       ]
     ],
     "startPos": {
@@ -847,12 +847,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 6.39,
+      "distance": 20.15,
       "elevationGain": 782,
       "elevationLoss": 2362,
       "minElevation": 0,
       "maxElevation": 2261,
-      "estimatedHours": 2.6
+      "estimatedHours": 5.3
     },
     "bounds": [
       [
@@ -860,13 +860,13 @@
         85.248578
       ],
       [
-        27.64611,
-        85.263393
+        27.649662,
+        85.2855
       ]
     ],
     "startPos": {
-      "lat": 27.612698,
-      "lng": 85.263393
+      "lat": 27.618448,
+      "lng": 85.274956
     }
   },
   "031_WNW_31.Phulchoki_trail_options.kml": {
@@ -874,28 +874,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 11.41,
-      "elevationGain": 1198,
-      "elevationLoss": 155,
-      "minElevation": 1484,
+      "distance": 87.63,
+      "elevationGain": 1353,
+      "elevationLoss": 1343,
+      "minElevation": 0,
       "maxElevation": 2529,
-      "estimatedHours": 4.3
+      "estimatedHours": 19.8
     },
     "bounds": [
       [
-        27.570583,
-        85.3782
+        27.554388,
+        85.319519
       ],
       [
         27.602404,
-        85.4075
+        85.464571
       ]
     ],
     "startPos": {
-      "lat": 27.59432,
-      "lng": 85.378235
+      "lat": 27.570679,
+      "lng": 85.406642
     }
   },
   "032_WNW_32.Phulchoki_trails_from_Bhaktapur.kml": {
@@ -903,14 +903,14 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 13.21,
-      "elevationGain": 0,
-      "elevationLoss": 0,
+      "distance": 44.94,
+      "elevationGain": 1543,
+      "elevationLoss": 559,
       "minElevation": 0,
-      "maxElevation": 0,
-      "estimatedHours": 2.6
+      "maxElevation": 2529,
+      "estimatedHours": 11.6
     },
     "bounds": [
       [
@@ -918,13 +918,13 @@
         85.395626
       ],
       [
-        27.627728,
-        85.412176
+        27.665967,
+        85.478538
       ]
     ],
     "startPos": {
-      "lat": 27.627728,
-      "lng": 85.395626
+      "lat": 27.615353,
+      "lng": 85.411791
     }
   },
   "033_WNW_33.Bhasmasur_trail_options.kml": {
@@ -932,28 +932,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 9.13,
-      "elevationGain": 1433,
-      "elevationLoss": 609,
-      "minElevation": 1591,
+      "distance": 46.57,
+      "elevationGain": 2541,
+      "elevationLoss": 1781,
+      "minElevation": 0,
       "maxElevation": 2527,
-      "estimatedHours": 4.2
+      "estimatedHours": 13.5
     },
     "bounds": [
       [
         27.612268,
-        85.220081
+        85.18644
       ],
       [
-        27.650061,
-        85.261167
+        27.699452,
+        85.280514
       ]
     ],
     "startPos": {
-      "lat": 27.612288,
-      "lng": 85.261167
+      "lat": 27.665858,
+      "lng": 85.205237
     }
   },
   "034_WNW_34.Chandragiri_trail.kml": {
@@ -1050,12 +1050,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 16.22,
+      "distance": 16.78,
       "elevationGain": 2880,
       "elevationLoss": 2871,
       "minElevation": 0,
       "maxElevation": 1723,
-      "estimatedHours": 8
+      "estimatedHours": 8.2
     },
     "bounds": [
       [
@@ -1063,13 +1063,13 @@
         85.144543
       ],
       [
-        27.62141,
+        27.621597,
         85.16688
       ]
     ],
     "startPos": {
-      "lat": 27.59246,
-      "lng": 85.164433
+      "lat": 27.616824,
+      "lng": 85.152969
     }
   },
   "038_WNW_38.Bethanchok_circuit.kml": {
@@ -1137,12 +1137,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 24.19,
-      "elevationGain": 0,
-      "elevationLoss": 0,
+      "distance": 27.56,
+      "elevationGain": 214,
+      "elevationLoss": 205,
       "minElevation": 0,
-      "maxElevation": 0,
-      "estimatedHours": 4.8
+      "maxElevation": 4569,
+      "estimatedHours": 5.9
     },
     "bounds": [
       [
@@ -1155,8 +1155,8 @@
       ]
     ],
     "startPos": {
-      "lat": 28.11139,
-      "lng": 85.299493
+      "lat": 28.08387,
+      "lng": 85.409928
     }
   },
   "041_WNW_41.GodamToplang_Khanikhola.kml": {
@@ -1251,23 +1251,23 @@
     "description": "Statistics computed from imported dataDistance: 14.0 miles",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 22.56,
+      "distance": 119.36,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 4.5
+      "estimatedHours": 23.9
     },
     "bounds": [
       [
-        27.76939,
+        27.7278104285416,
         85.3692198
       ],
       [
-        27.81093,
-        85.47011
+        27.8230000000063,
+        85.4996
       ]
     ],
     "startPos": {
@@ -1309,28 +1309,28 @@
     "description": "Mahadevbesi Bazar, Q328+HV6, Prithvi Hwy, Thakre 45100, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 5.19,
-      "elevationGain": 867,
-      "elevationLoss": 473,
-      "minElevation": 952,
+      "distance": 48.55,
+      "elevationGain": 1891,
+      "elevationLoss": 1123,
+      "minElevation": 0,
       "maxElevation": 1362,
-      "estimatedHours": 2.5
+      "estimatedHours": 12.9
     },
     "bounds": [
       [
-        27.695315,
-        85.143835
+        27.68609,
+        85.06176
       ],
       [
-        27.71557,
-        85.151859
+        27.752074,
+        85.28113
       ]
     ],
     "startPos": {
-      "lat": 27.715551,
-      "lng": 85.151376
+      "lat": 27.69317,
+      "lng": 85.28113
     }
   },
   "047_WNW_47.Lakhinswari_waterfall.kml": {
@@ -1338,23 +1338,23 @@
     "description": "Lakenshwory jharana, Sikre, sivapuri-4, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 10.1,
+      "distance": 26.54,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 2
+      "estimatedHours": 5.3
     },
     "bounds": [
       [
         27.735505,
-        85.318414
+        85.31521
       ],
       [
-        27.80357,
-        85.3306
+        27.84232,
+        85.387795
       ]
     ],
     "startPos": {
@@ -1367,28 +1367,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 7.74,
-      "elevationGain": 279,
-      "elevationLoss": 25,
-      "minElevation": 1582,
-      "maxElevation": 1840,
-      "estimatedHours": 2
+      "distance": 23.39,
+      "elevationGain": 769,
+      "elevationLoss": 824,
+      "minElevation": 0,
+      "maxElevation": 2037,
+      "estimatedHours": 6
     },
     "bounds": [
       [
-        27.769471,
-        85.394038
+        27.737762,
+        85.376776
       ],
       [
-        27.77947,
-        85.424647
+        27.783331,
+        85.42724
       ]
     ],
     "startPos": {
-      "lat": 27.779469,
-      "lng": 85.424647
+      "lat": 27.770686,
+      "lng": 85.380527
     }
   },
   "049_WNW_49.Gadhi_Gang_View_Tower.kml": {
@@ -1396,28 +1396,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 7.94,
+      "distance": 34.41,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 1.6
+      "estimatedHours": 6.9
     },
     "bounds": [
       [
-        27.61838,
-        85.43934
+        27.61543,
+        85.396787
       ],
       [
-        27.641683,
+        27.665969,
         85.47799
       ]
     ],
     "startPos": {
-      "lat": 27.641683,
-      "lng": 85.477774
+      "lat": 27.665969,
+      "lng": 85.425739
     }
   },
   "050_WNW_50.Bishnudwar_loop.kml": {
@@ -1427,21 +1427,21 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 5.71,
-      "elevationGain": 602,
-      "elevationLoss": 115,
-      "minElevation": 1415,
+      "distance": 21.38,
+      "elevationGain": 634,
+      "elevationLoss": 381,
+      "minElevation": 0,
       "maxElevation": 1927,
-      "estimatedHours": 2.1
+      "estimatedHours": 5.3
     },
     "bounds": [
       [
-        27.777837,
-        85.354556
+        27.777714,
+        85.34154
       ],
       [
-        27.798512,
-        85.364
+        27.798723,
+        85.375461
       ]
     ],
     "startPos": {
@@ -1454,28 +1454,28 @@
     "description": "Gurje Bhanjyang, Bidur-Tokha Road, 44900, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 11.68,
-      "elevationGain": 0,
-      "elevationLoss": 0,
+      "distance": 44.55,
+      "elevationGain": 347,
+      "elevationLoss": 394,
       "minElevation": 0,
-      "maxElevation": 0,
-      "estimatedHours": 2.3
+      "maxElevation": 1172,
+      "estimatedHours": 9.5
     },
     "bounds": [
       [
-        27.801495,
+        27.7355189,
         85.284579
       ],
       [
-        27.842403,
-        85.319468
+        27.849661,
+        85.3306
       ]
     ],
     "startPos": {
-      "lat": 27.801495,
-      "lng": 85.318077
+      "lat": 27.838515,
+      "lng": 85.28515
     }
   },
   "052_WNW_52.Simba_waterfall_Asoj_2080_24.kml": {
@@ -1483,28 +1483,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 36.14,
+      "distance": 40.88,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 7.2
+      "estimatedHours": 8.2
     },
     "bounds": [
       [
-        27.488456,
+        27.485464,
         85.337849
       ],
       [
-        27.571608,
+        27.79108,
         85.407816
       ]
     ],
     "startPos": {
-      "lat": 27.571608,
-      "lng": 85.337911
+      "lat": 27.490291,
+      "lng": 85.374294
     }
   },
   "053_WNW_53.Nagarkot_Dhulikhel_Panauti.kml": {
@@ -1512,28 +1512,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 5.69,
-      "elevationGain": 194,
-      "elevationLoss": 211,
-      "minElevation": 1604,
-      "maxElevation": 1780,
-      "estimatedHours": 1.5
+      "distance": 30.99,
+      "elevationGain": 897,
+      "elevationLoss": 1489,
+      "minElevation": 0,
+      "maxElevation": 2143,
+      "estimatedHours": 7.7
     },
     "bounds": [
       [
-        27.61029,
-        85.540451
+        27.586629,
+        85.513353
       ],
       [
-        27.634144,
-        85.569095
+        27.693221,
+        85.569134
       ]
     ],
     "startPos": {
-      "lat": 27.634129,
-      "lng": 85.540451
+      "lat": 27.645037,
+      "lng": 85.544048
     }
   },
   "054_WNW_54.Kulekhani_2080_Dashain.kml": {
@@ -1543,26 +1543,26 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 5.43,
-      "elevationGain": 4314,
-      "elevationLoss": 4324,
+      "distance": 23.46,
+      "elevationGain": 5733,
+      "elevationLoss": 5684,
       "minElevation": 0,
-      "maxElevation": 1691,
-      "estimatedHours": 8.3
+      "maxElevation": 1723,
+      "estimatedHours": 14.2
     },
     "bounds": [
       [
-        27.602742,
-        85.146126
+        27.589189,
+        85.145509
       ],
       [
-        27.623644,
-        85.153276
+        27.624753,
+        85.16688
       ]
     ],
     "startPos": {
-      "lat": 27.623644,
-      "lng": 85.150081
+      "lat": 27.602705,
+      "lng": 85.146175
     }
   },
   "055_WNW_55.Pachpokhari_Sindhupalchok.kml": {
@@ -1570,14 +1570,14 @@
     "description": "Drawn on OSM",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Hard",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 66.34,
+      "distance": 99.31,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 13.3
+      "estimatedHours": 19.9
     },
     "bounds": [
       [
@@ -1585,13 +1585,13 @@
         85.379426
       ],
       [
-        27.98006,
-        85.66059
+        28.0427,
+        85.73018
       ]
     ],
     "startPos": {
-      "lat": 27.720438,
-      "lng": 85.379426
+      "lat": 27.979527,
+      "lng": 85.656662
     }
   },
   "056_WNW_56.Dhauleswar_from_JitpurPhedi_bus_park_Mangsir_2080.kml": {
@@ -1601,16 +1601,16 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 3.47,
-      "elevationGain": 640,
-      "elevationLoss": 30,
-      "minElevation": 1476,
+      "distance": 6.2,
+      "elevationGain": 659,
+      "elevationLoss": 662,
+      "minElevation": 1473,
       "maxElevation": 2086,
-      "estimatedHours": 1.8
+      "estimatedHours": 2.3
     },
     "bounds": [
       [
-        27.787072,
+        27.785892,
         85.287281
       ],
       [
@@ -1630,12 +1630,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 25.54,
+      "distance": 29.05,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 5.1
+      "estimatedHours": 5.8
     },
     "bounds": [
       [
@@ -1744,14 +1744,14 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 9.11,
+      "distance": 17.14,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 1.8
+      "estimatedHours": 3.4
     },
     "bounds": [
       [
@@ -1759,8 +1759,8 @@
         85.220081
       ],
       [
-        27.649508,
-        85.261172
+        27.650752,
+        85.263393
       ]
     ],
     "startPos": {
@@ -1804,12 +1804,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 22.88,
+      "distance": 31.3,
       "elevationGain": 1627,
       "elevationLoss": 1672,
-      "minElevation": 1445,
+      "minElevation": 0,
       "maxElevation": 2257,
-      "estimatedHours": 7.3
+      "estimatedHours": 9
     },
     "bounds": [
       [
@@ -1817,7 +1817,7 @@
         85.27019
       ],
       [
-        27.814248,
+        27.815375,
         85.355957
       ]
     ],
@@ -1889,14 +1889,14 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 7.37,
+      "distance": 58.73,
       "elevationGain": 1469,
       "elevationLoss": 1469,
-      "minElevation": 1085,
+      "minElevation": 0,
       "maxElevation": 1903,
-      "estimatedHours": 3.9
+      "estimatedHours": 14.2
     },
     "bounds": [
       [
@@ -1904,13 +1904,13 @@
         85.220855
       ],
       [
-        27.479974,
-        85.233037
+        27.66728,
+        85.324778
       ]
     ],
     "startPos": {
-      "lat": 27.479969,
-      "lng": 85.232775
+      "lat": 27.66728,
+      "lng": 85.322878
     }
   },
   "067_WNW_67.Guras_Trail.kml": {
@@ -1918,19 +1918,19 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 19.85,
+      "distance": 41.91,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 4
+      "estimatedHours": 8.4
     },
     "bounds": [
       [
-        27.559792,
-        85.374115
+        27.554438,
+        85.340733
       ],
       [
         27.59443,
@@ -2266,23 +2266,23 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 5.42,
+      "distance": 16.61,
       "elevationGain": 271,
       "elevationLoss": 408,
-      "minElevation": 2833,
+      "minElevation": 0,
       "maxElevation": 3137,
-      "estimatedHours": 1.5
+      "estimatedHours": 3.8
     },
     "bounds": [
       [
         27.559484,
-        85.972896
+        85.95545
       ],
       [
-        27.580245,
-        85.978174
+        27.639371,
+        85.978747
       ]
     ],
     "startPos": {
@@ -2353,14 +2353,14 @@
     "description": "just plan",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 28.43,
+      "distance": 50.6,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 5.7
+      "estimatedHours": 10.1
     },
     "bounds": [
       [
@@ -2368,8 +2368,8 @@
         83.56496
       ],
       [
-        28.5379,
-        83.67405
+        28.648458,
+        83.790557
       ]
     ],
     "startPos": {
@@ -2411,28 +2411,28 @@
     "description": "Projection only",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 23.21,
+      "distance": 151.89,
       "elevationGain": 0,
       "elevationLoss": 0,
       "minElevation": 0,
       "maxElevation": 0,
-      "estimatedHours": 4.6
+      "estimatedHours": 30.4
     },
     "bounds": [
       [
-        27.299505,
-        86.907338
+        27.168819,
+        86.89776
       ],
       [
-        27.440788,
-        86.985422
+        27.46056,
+        87.060096
       ]
     ],
     "startPos": {
-      "lat": 27.299505,
-      "lng": 86.979994
+      "lat": 27.199427,
+      "lng": 86.928533
     }
   },
   "085_WNW_96.Godawari_Phulchoki_circuit_via_Marble_Dada.kml": {
@@ -2556,28 +2556,28 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 8.49,
-      "elevationGain": 1532,
-      "elevationLoss": 134,
-      "minElevation": 1827,
-      "maxElevation": 3225,
-      "estimatedHours": 4.3
+      "distance": 20.53,
+      "elevationGain": 1993,
+      "elevationLoss": 179,
+      "minElevation": 0,
+      "maxElevation": 3677,
+      "estimatedHours": 7.4
     },
     "bounds": [
       [
-        28.339861,
+        28.277613,
         83.920702
       ],
       [
-        28.389757,
-        83.946642
+        28.404476,
+        83.95499
       ]
     ],
     "startPos": {
-      "lat": 28.341313,
-      "lng": 83.946642
+      "lat": 28.277613,
+      "lng": 83.936405
     }
   },
   "090_WNW_113.Kakani_Strawberry.kml": {
@@ -2585,23 +2585,23 @@
     "description": "Sundhara ticket counter, P827+55C, Shundara marg, Kathmandu 44600, Nepal",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Hard",
     "stats": {
-      "distance": 13.33,
+      "distance": 47.28,
       "elevationGain": 1142,
       "elevationLoss": 1293,
-      "minElevation": 1734,
+      "minElevation": 0,
       "maxElevation": 2244,
-      "estimatedHours": 4.6
+      "estimatedHours": 11.4
     },
     "bounds": [
       [
-        27.806134,
+        27.69998,
         85.263892
       ],
       [
         27.823638,
-        85.315765
+        85.3306
       ]
     ],
     "startPos": {
@@ -2616,16 +2616,16 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 10.97,
-      "elevationGain": 701,
-      "elevationLoss": 750,
+      "distance": 15.88,
+      "elevationGain": 1182,
+      "elevationLoss": 863,
       "minElevation": 1459,
       "maxElevation": 1999,
-      "estimatedHours": 3.4
+      "estimatedHours": 5.1
     },
     "bounds": [
       [
-        27.57909,
+        27.573564,
         85.351718
       ],
       [
@@ -2634,8 +2634,8 @@
       ]
     ],
     "startPos": {
-      "lat": 27.594168,
-      "lng": 85.377975
+      "lat": 27.59575,
+      "lng": 85.37564
     }
   },
   "092_WNW_115.Gosaikunda.kml": {
@@ -2730,19 +2730,19 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Moderate",
+    "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 9.62,
+      "distance": 109.57,
       "elevationGain": 503,
       "elevationLoss": 490,
-      "minElevation": 1860,
+      "minElevation": 0,
       "maxElevation": 2205,
-      "estimatedHours": 2.8
+      "estimatedHours": 22.8
     },
     "bounds": [
       [
-        27.826376,
-        85.620825
+        27.61627,
+        85.34128
       ],
       [
         27.844877,
@@ -2750,8 +2750,8 @@
       ]
     ],
     "startPos": {
-      "lat": 27.827298,
-      "lng": 85.62684
+      "lat": 27.758358,
+      "lng": 85.581576
     }
   },
   "096_WNW_119._Bhairavkunda_Sindhupalchok.kml": {
@@ -2759,19 +2759,19 @@
     "description": "",
     "difficultyOverride": "Auto",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Moderate",
     "stats": {
-      "distance": 12.67,
-      "elevationGain": 0,
-      "elevationLoss": 0,
+      "distance": 25.19,
+      "elevationGain": 174,
+      "elevationLoss": 129,
       "minElevation": 0,
-      "maxElevation": 0,
-      "estimatedHours": 2.5
+      "maxElevation": 4094,
+      "estimatedHours": 5.3
     },
     "bounds": [
       [
         27.919218,
-        85.864075
+        85.86399
       ],
       [
         27.990412,
@@ -2779,8 +2779,8 @@
       ]
     ],
     "startPos": {
-      "lat": 27.919274,
-      "lng": 85.87095
+      "lat": 27.935418,
+      "lng": 85.879339
     }
   },
   "097_WNW_120._Mardi_trek.kml": {
@@ -2790,12 +2790,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Extreme",
     "stats": {
-      "distance": 30.3,
-      "elevationGain": 3067,
-      "elevationLoss": 4795,
+      "distance": 34.86,
+      "elevationGain": 3073,
+      "elevationLoss": 5874,
       "minElevation": 0,
       "maxElevation": 4021,
-      "estimatedHours": 11.2
+      "estimatedHours": 12.1
     },
     "bounds": [
       [
@@ -2819,12 +2819,12 @@
     "hoursOverride": "Auto",
     "calculatedDifficulty": "Easy",
     "stats": {
-      "distance": 1.43,
-      "elevationGain": 181,
-      "elevationLoss": 25,
+      "distance": 1.87,
+      "elevationGain": 189,
+      "elevationLoss": 141,
       "minElevation": 3529,
       "maxElevation": 3686,
-      "estimatedHours": 0.6
+      "estimatedHours": 0.7
     },
     "bounds": [
       [
@@ -2832,13 +2832,42 @@
         83.86875
       ],
       [
-        28.439134,
+        28.439228,
         83.874994
       ]
     ],
     "startPos": {
       "lat": 28.433863,
       "lng": 83.86875
+    }
+  },
+  "Muhan Pokhari - Gurje Bhanjyang.kml": {
+    "name": "Muhan Pokhari - Gurje Bhanjyang",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 12.74,
+      "elevationGain": 1846,
+      "elevationLoss": 1441,
+      "minElevation": 1442,
+      "maxElevation": 1891,
+      "estimatedHours": 5.6
+    },
+    "bounds": [
+      [
+        27.781544,
+        85.317869
+      ],
+      [
+        27.81412,
+        85.375381
+      ]
+    ],
+    "startPos": {
+      "lat": 27.781544,
+      "lng": 85.365097
     }
   }
 }

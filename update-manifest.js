@@ -21,6 +21,18 @@ function parseCoordinateString(str) {
     .filter(Boolean);
 }
 
+function parseTrackCoordinateString(str) {
+  const parts = str.trim().split(/\s+/);
+  if (parts.length < 2) return null;
+
+  const lng = parseFloat(parts[0]);
+  const lat = parseFloat(parts[1]);
+  const ele = parts[2] ? parseFloat(parts[2]) : 0;
+
+  if (isNaN(lat) || isNaN(lng)) return null;
+  return { lat, lng, ele: isNaN(ele) ? 0 : ele };
+}
+
 function haversineDistance(p1, p2) {
   const R = 6371000;
   const φ1 = p1.lat * Math.PI / 180;
@@ -31,7 +43,55 @@ function haversineDistance(p1, p2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function calculateStats(coords) {
+function extractLineSegments(xmlDoc) {
+  const segments = [];
+
+  const lineStrings = xmlDoc.getElementsByTagName('LineString');
+  for (let i = 0; i < lineStrings.length; i++) {
+    const coordEls = lineStrings[i].getElementsByTagName('coordinates');
+    for (let j = 0; j < coordEls.length; j++) {
+      const parsed = parseCoordinateString(coordEls[j].textContent || '');
+      if (parsed.length > 0) segments.push(parsed);
+    }
+  }
+
+  if (segments.length === 0) {
+    const trackEls = [
+      ...Array.from(xmlDoc.getElementsByTagName('gx:Track')),
+      ...Array.from(xmlDoc.getElementsByTagName('Track')),
+    ];
+
+    trackEls.forEach(trackEl => {
+      const trackCoords = [
+        ...Array.from(trackEl.getElementsByTagName('gx:coord')),
+        ...Array.from(trackEl.getElementsByTagName('coord')),
+      ];
+
+      const parsed = trackCoords
+        .map(el => parseTrackCoordinateString(el.textContent || ''))
+        .filter(Boolean);
+
+      if (parsed.length > 0) segments.push(parsed);
+    });
+  }
+
+  if (segments.length === 0) {
+    const allCoords = xmlDoc.getElementsByTagName('coordinates');
+    let longest = [];
+
+    for (let i = 0; i < allCoords.length; i++) {
+      const parsed = parseCoordinateString(allCoords[i].textContent || '');
+      if (parsed.length > longest.length) longest = parsed;
+    }
+
+    if (longest.length > 0) segments.push(longest);
+  }
+
+  return segments;
+}
+
+function calculateStats(segments) {
+  const coords = segments.flat();
   let totalDist = 0, gain = 0, loss = 0;
   let minEle = Infinity, maxEle = -Infinity;
 
@@ -40,12 +100,14 @@ function calculateStats(coords) {
     if (coords[i].ele > maxEle) maxEle = coords[i].ele;
   }
 
-  for (let i = 1; i < coords.length; i++) {
-    totalDist += haversineDistance(coords[i - 1], coords[i]);
-    const eleDiff = coords[i].ele - coords[i - 1].ele;
-    if (eleDiff > 0) gain += eleDiff;
-    else loss += Math.abs(eleDiff);
-  }
+  segments.forEach(segment => {
+    for (let i = 1; i < segment.length; i++) {
+      totalDist += haversineDistance(segment[i - 1], segment[i]);
+      const eleDiff = segment[i].ele - segment[i - 1].ele;
+      if (eleDiff > 0) gain += eleDiff;
+      else loss += Math.abs(eleDiff);
+    }
+  });
 
   const distKm = totalDist / 1000;
   const estimatedHours = (distKm / 5) + (gain / 600);
@@ -79,34 +141,27 @@ function parseKMLFile(filePath, fileName) {
   const descEl = xmlDoc.getElementsByTagName('description')[0];
   const description = descEl && descEl.textContent ? descEl.textContent.replace(/<[^>]*>?/gm, '').trim() : '';
 
-  let coordinates = [];
-
-  // Find LineString coordinates
-  const lineStrings = xmlDoc.getElementsByTagName('LineString');
-  for (let i = 0; i < lineStrings.length; i++) {
-    const coordEls = lineStrings[i].getElementsByTagName('coordinates');
-    if (coordEls.length > 0) {
-      const parsed = parseCoordinateString(coordEls[0].textContent);
-      if (parsed.length > coordinates.length) coordinates = parsed;
-    }
-  }
-
-  if (coordinates.length === 0) {
-    const allCoords = xmlDoc.getElementsByTagName('coordinates');
-    for (let i = 0; i < allCoords.length; i++) {
-      const parsed = parseCoordinateString(allCoords[i].textContent);
-      if (parsed.length > coordinates.length) coordinates = parsed;
-    }
-  }
+  const lineSegments = extractLineSegments(xmlDoc);
+  const coordinates = lineSegments.flat();
 
   if (coordinates.length === 0) return null;
 
-  const stats = calculateStats(coordinates);
+  const stats = calculateStats(lineSegments);
   const difficulty = getDifficulty(stats);
-  
-  const lats = coordinates.map(c => c.lat);
-  const lngs = coordinates.map(c => c.lng);
-  const bounds = [[Math.min(...lats), Math.min(...lngs)], [Math.max(...lats), Math.max(...lngs)]];
+
+  let minLat = Infinity;
+  let minLng = Infinity;
+  let maxLat = -Infinity;
+  let maxLng = -Infinity;
+
+  for (let i = 0; i < coordinates.length; i++) {
+    if (coordinates[i].lat < minLat) minLat = coordinates[i].lat;
+    if (coordinates[i].lng < minLng) minLng = coordinates[i].lng;
+    if (coordinates[i].lat > maxLat) maxLat = coordinates[i].lat;
+    if (coordinates[i].lng > maxLng) maxLng = coordinates[i].lng;
+  }
+
+  const bounds = [[minLat, minLng], [maxLat, maxLng]];
   const startPos = { lat: coordinates[0].lat, lng: coordinates[0].lng };
 
   return { name, description, stats, difficulty, bounds, startPos };
