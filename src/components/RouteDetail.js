@@ -71,8 +71,8 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   const [shareToast, setShareToast] = useState(false);
 
   const defaultHeightVh = currentPage === 0
-    ? (isMobile ? 38 : 34)
-    : (isMobile ? 40 : 65);
+    ? (isMobile ? 42 : 38)
+    : (isMobile ? 40 : 52);
 
   useEffect(() => {
     // Trigger entrance animation on mount
@@ -295,12 +295,13 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
         <div style={{ padding: '4px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="section-label" style={{ marginBottom: 2 }}>Active Route</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <h2 style={{
-                  fontSize: 18, fontWeight: 700, color: 'var(--text-primary)',
+                  fontSize: isMobile ? 16 : 18, fontWeight: 700, color: 'var(--text-primary)',
                   fontFamily: 'Playfair Display, serif', lineHeight: 1.2, marginBottom: 6,
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  whiteSpace: 'normal',
+                  overflowWrap: 'anywhere',
                 }}>
                   {route.name}
                 </h2>
@@ -314,13 +315,13 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                 </span>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
                 <a
                   href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
                   download
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontSize: 11, fontWeight: 600, color: '#0ea5e9',
+                    fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#0ea5e9',
                     padding: '6px 10px', borderRadius: 10,
                     background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
                     textDecoration: 'none', transition: 'background 0.2s',
@@ -335,7 +336,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                   onClick={handleShare}
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontSize: 11, fontWeight: 600,
+                    fontSize: isMobile ? 10 : 11, fontWeight: 600,
                     color: shareToast ? '#34d399' : '#a78bfa',
                     padding: '6px 10px', borderRadius: 10,
                     background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',

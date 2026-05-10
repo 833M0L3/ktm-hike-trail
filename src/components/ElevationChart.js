@@ -63,7 +63,7 @@ export default function ElevationChart({ route, color = '#f97316' }) {
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={data}
-          margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+          margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
           onMouseMove={handleMouseMove}
           onMouseLeave={dispatchClear}
         >
@@ -89,8 +89,7 @@ export default function ElevationChart({ route, color = '#f97316' }) {
             tickLine={false}
             axisLine={false}
             tickFormatter={(v) => `${(v / 1000).toFixed(1)}k`}
-            width={45}
-            label={{ value: 'Elevation (m)', angle: -90, position: 'insideLeft', fill: mutedColor, fontSize: 10, offset: -2 }}
+            width={56}
           />
           <Tooltip content={<CustomTooltip />} />
           <ReferenceLine
