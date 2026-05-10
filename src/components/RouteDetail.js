@@ -14,6 +14,8 @@ const DIFF_COLORS = {
 const MIN_HEIGHT = 80;
 const MAX_HEIGHT_VH = 85;
 
+const ACTIVE_ROUTE_FALLBACK_IMAGE = `${process.env.PUBLIC_URL}/images/20260509_123225.jpg`;
+
 function formatEstimatedTime(hours) {
   if (typeof hours !== 'number' || Number.isNaN(hours)) return '-';
   const totalMinutes = Math.max(0, Math.round(hours * 60));
@@ -69,6 +71,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   const [animationDone, setAnimationDone] = useState(false);
   const [showChartDeferred, setShowChartDeferred] = useState(false);
   const [shareToast, setShareToast] = useState(false);
+  const heroImage = route?.heroImage || route?.image || route?.photo || ACTIVE_ROUTE_FALLBACK_IMAGE;
   const hasAbout = Boolean(route?.description?.trim());
   const hasWaypointLinks = Boolean(route?.isLazyLoaded && route?.waypoints?.length >= 2);
 
@@ -311,24 +314,42 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           </div>
 
           {/* Header — always visible */}
-          <div style={{ padding: '4px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
+          <div
+            style={{
+              position: 'relative',
+              margin: '4px 12px 0',
+              borderRadius: 12,
+              overflow: 'hidden',
+              background: heroImage ? `url(${heroImage}) center / cover no-repeat` : 'var(--bg-card)',
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.22) 52%, rgba(0,0,0,0.58) 100%)',
+              }}
+            />
+            <div style={{ position: 'relative', padding: '8px 12px 10px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div className="section-label" style={{ marginBottom: 2 }}>Active Route</div>
+              <div className="section-label" style={{ marginBottom: 2, color: 'rgba(255,255,255,0.9)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>Active Route</div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <h2 style={{
-                    fontSize: isMobile ? 16 : 18, fontWeight: 700, color: 'var(--text-primary)',
+                    fontSize: isMobile ? 16 : 18, fontWeight: 700, color: '#f8fafc',
                     fontFamily: 'Playfair Display, serif', lineHeight: 1.2, marginBottom: 6,
                     whiteSpace: 'normal',
                     overflowWrap: 'anywhere',
+                    textShadow: '0 2px 8px rgba(0,0,0,0.65)',
                   }}>
                     {route.name}
                   </h2>
                   <span style={{
                     display: 'inline-flex', alignItems: 'center',
                     fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20,
-                    background: `${DIFF_COLORS[route.difficulty]}22`,
-                    color: DIFF_COLORS[route.difficulty],
+                    background: DIFF_COLORS[route.difficulty],
+                    color: '#ffffff',
+                    border: '1px solid rgba(255,255,255,0.24)',
                   }}>
                     {route.difficulty}
                   </span>
@@ -340,13 +361,13 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                     download
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 5,
-                      fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#0ea5e9',
+                      fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#ffffff',
                       padding: '6px 10px', borderRadius: 10,
-                      background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
+                      background: '#0ea5e9', border: '1px solid #0284c7',
                       textDecoration: 'none', transition: 'background 0.2s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#0284c7'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#0ea5e9'; }}
                     title={`Export GPS (${route.fileName})`}
                   >
                     <Download size={12} /> Export GPS
@@ -356,14 +377,14 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 5,
                       fontSize: isMobile ? 10 : 11, fontWeight: 600,
-                      color: shareToast ? '#34d399' : '#a78bfa',
+                      color: '#ffffff',
                       padding: '6px 10px', borderRadius: 10,
-                      background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
-                      border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
+                      background: shareToast ? '#16a34a' : '#7c3aed',
+                      border: `1px solid ${shareToast ? '#15803d' : '#6d28d9'}`,
                       cursor: 'pointer', transition: 'all 0.25s ease',
                     }}
-                    onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
-                    onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
+                    onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = '#6d28d9'; }}
+                    onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = '#7c3aed'; }}
                     title="Share this route"
                   >
                     {shareToast ? <Check size={12} /> : <Share2 size={12} />}
@@ -393,9 +414,9 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                 {segmentCount > 1 && (
                   <span style={{
                     fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
-                    background: 'rgba(14,165,233,0.1)',
-                    color: '#0ea5e9',
-                    border: '1px solid rgba(14,165,233,0.3)',
+                    background: '#2563eb',
+                    color: '#ffffff',
+                    border: '1px solid #1d4ed8',
                   }}>
                     {segmentCount} segments
                   </span>
@@ -405,12 +426,13 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
             <button
               onClick={onClose}
               style={{
-                background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8,
-                padding: '6px', cursor: 'pointer', color: 'var(--text-secondary)', marginLeft: 12, flexShrink: 0,
+                background: 'rgba(15,17,23,0.68)', border: '1px solid rgba(255,255,255,0.14)', borderRadius: 8,
+                padding: '6px', cursor: 'pointer', color: '#f0f0f5', marginLeft: 12, flexShrink: 0,
               }}
             >
               <X size={16} />
             </button>
+          </div>
           </div>
 
           {/* Clickable page titles */}
@@ -544,12 +566,12 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                       style={{
                         display: 'flex', alignItems: 'center', gap: 6,
                         padding: '6px 10px', borderRadius: 8,
-                        background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.25)',
+                        background: '#16a34a', border: '1px solid #15803d',
                         textDecoration: 'none', transition: 'background 0.2s',
-                        fontSize: 11, color: '#34d399', fontWeight: 600,
+                        fontSize: 11, color: '#ffffff', fontWeight: 600,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.18)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.08)'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#15803d'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; }}
                       title={`Open start point in Google Maps (${start.lat.toFixed(4)}, ${start.lng.toFixed(4)})`}
                     >
                       <MapPin size={13} /> Start Point
@@ -561,12 +583,12 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                       style={{
                         display: 'flex', alignItems: 'center', gap: 6,
                         padding: '6px 10px', borderRadius: 8,
-                        background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
+                        background: '#dc2626', border: '1px solid #b91c1c',
                         textDecoration: 'none', transition: 'background 0.2s',
-                        fontSize: 11, color: '#ef4444', fontWeight: 600,
+                        fontSize: 11, color: '#ffffff', fontWeight: 600,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.18)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#b91c1c'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#dc2626'; }}
                       title={`Open end point in Google Maps (${end.lat.toFixed(4)}, ${end.lng.toFixed(4)})`}
                     >
                       <Flag size={13} /> End Point
@@ -577,6 +599,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
 
               {route.description && (
                 <div style={{ paddingTop: 8 }}>
+                  <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 10, padding: '9px 10px' }}>
                   <div className="section-label" style={{ marginBottom: 4 }}>About</div>
                   {highlightChips.length > 0 && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
@@ -588,7 +611,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                             fontWeight: 600,
                             color: 'var(--text-secondary)',
                             border: '1px solid var(--border)',
-                            background: 'var(--bg-card)',
+                            background: 'var(--bg-secondary)',
                             borderRadius: 999,
                             padding: '3px 8px',
                           }}
@@ -611,6 +634,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                       {paragraph}
                     </p>
                   ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -641,22 +665,21 @@ function BigStat({ icon, value, label, color, compact = false, showRightDivider 
 function StartEndBar({ startValue, endValue }) {
   return (
     <div style={{
-      background: 'var(--bg-primary)',
+      background: 'var(--bg-card)',
       borderRadius: 10,
-      padding: '10px 14px',
+      padding: '8px',
       border: '1px solid var(--border)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: 10,
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 8,
     }}>
-      <div>
+      <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px' }}>
         <div className="section-label" style={{ marginBottom: 2 }}>Start</div>
-        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace' }}>{startValue}</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace' }}>{startValue}</div>
       </div>
-      <div>
+      <div style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 8, padding: '8px 10px' }}>
         <div className="section-label" style={{ marginBottom: 2, textAlign: 'right' }}>End</div>
-        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace', textAlign: 'right' }}>{endValue}</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace', textAlign: 'right' }}>{endValue}</div>
       </div>
     </div>
   );
