@@ -6,6 +6,22 @@ import RouteDetail from './components/RouteDetail';
 import { parseKML } from './utils/kmlParser';
 import './index.css';
 
+const GITHUB_REPO_URL = 'https://github.com/833M0L3/ktm-hike-trail';
+
+function GitHubMark({ size = 16 }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 .5C5.648.5.5 5.648.5 12a11.5 11.5 0 0 0 7.86 10.915c.575.106.785-.25.785-.556 0-.274-.01-1-.016-1.962-3.197.695-3.872-1.54-3.872-1.54-.523-1.328-1.278-1.682-1.278-1.682-1.045-.714.08-.7.08-.7 1.155.08 1.763 1.186 1.763 1.186 1.026 1.758 2.692 1.25 3.348.956.103-.743.402-1.25.73-1.538-2.552-.29-5.236-1.276-5.236-5.682 0-1.255.448-2.281 1.182-3.085-.118-.29-.512-1.458.112-3.04 0 0 .965-.309 3.162 1.178A10.97 10.97 0 0 1 12 6.035c.975.005 1.957.132 2.875.387 2.195-1.487 3.158-1.178 3.158-1.178.626 1.582.232 2.75.114 3.04.736.804 1.18 1.83 1.18 3.085 0 4.417-2.689 5.389-5.25 5.673.414.356.783 1.058.783 2.133 0 1.54-.014 2.782-.014 3.16 0 .31.207.668.79.555A11.503 11.503 0 0 0 23.5 12C23.5 5.648 18.352.5 12 .5Z" />
+    </svg>
+  );
+}
+
 // Notify the map whenever sidebar toggles
 const fireSidebarToggle = () => {
   setTimeout(() => window.dispatchEvent(new Event('sidebar-toggle')), 50);
@@ -240,9 +256,21 @@ export default function App() {
                 </a>
               </div>
               {/* Theme toggle */}
-              <button className="theme-toggle" onClick={toggleTheme} title={isDark ? 'Switch to Day Mode' : 'Switch to Dark Mode'}>
-                {isDark ? <Sun size={16} /> : <Moon size={16} />}
-              </button>
+              <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
+                <button className="theme-toggle" onClick={toggleTheme} title={isDark ? 'Switch to Day Mode' : 'Switch to Dark Mode'}>
+                  {isDark ? <Sun size={16} /> : <Moon size={16} />}
+                </button>
+                <a
+                  className="theme-toggle"
+                  href={GITHUB_REPO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Open project GitHub repository"
+                  aria-label="Open project GitHub repository"
+                >
+                  <GitHubMark size={16} />
+                </a>
+              </div>
             </div>
 
             {/* Stats bar */}
@@ -387,9 +415,21 @@ export default function App() {
               </div>
               <span style={{ fontSize:13, fontWeight:700, color:'var(--text-primary)', fontFamily:'Playfair Display, serif' }}>Kathmandu Valley Hikes</span>
               {!isMobile && <span style={{ fontSize:11, color:'var(--text-muted)' }}>• {routes.length} routes</span>}
-              <button className="theme-toggle" onClick={toggleTheme} title="Toggle theme" style={{ marginLeft:4 }}>
-                {isDark ? <Sun size={14}/> : <Moon size={14}/>}
-              </button>
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginLeft:4, flexShrink:0 }}>
+                <button className="theme-toggle" onClick={toggleTheme} title="Toggle theme">
+                  {isDark ? <Sun size={14}/> : <Moon size={14}/>}
+                </button>
+                <a
+                  className="theme-toggle"
+                  href={GITHUB_REPO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Open project GitHub repository"
+                  aria-label="Open project GitHub repository"
+                >
+                  <GitHubMark size={14} />
+                </a>
+              </div>
             </div>
           </div>
         )}

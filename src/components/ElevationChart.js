@@ -32,6 +32,7 @@ export default function ElevationChart({ route, color = '#f97316' }) {
   const style = getComputedStyle(document.documentElement);
   const borderColor = style.getPropertyValue('--border').trim() || '#1e2d3d';
   const mutedColor  = style.getPropertyValue('--text-muted').trim() || '#475569';
+  const peakColor = '#f59e0b';
 
   const data = route.elevationProfile;
   const minEle = Math.min(...data.map(d => d.elevation));
@@ -103,10 +104,9 @@ export default function ElevationChart({ route, color = '#f97316' }) {
             x={peakPoint.distance}
             y={peakPoint.elevation}
             r={3.5}
-            fill={color}
+            fill={peakColor}
             stroke="#fff"
             strokeWidth={1.5}
-            label={{ value: `Peak ${peakPoint.elevation}m`, fill: color, fontSize: 10, position: 'top' }}
           />
           <Area
             type="monotone"

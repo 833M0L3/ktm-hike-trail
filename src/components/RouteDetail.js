@@ -69,10 +69,18 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   const [animationDone, setAnimationDone] = useState(false);
   const [showChartDeferred, setShowChartDeferred] = useState(false);
   const [shareToast, setShareToast] = useState(false);
+  const hasAbout = Boolean(route?.description?.trim());
+  const hasWaypointLinks = Boolean(route?.isLazyLoaded && route?.waypoints?.length >= 2);
 
   const defaultHeightVh = currentPage === 0
     ? (isMobile ? 42 : 38)
-    : (isMobile ? 40 : 52);
+    : currentPage === 1
+      ? (isMobile ? 40 : 52)
+      : hasAbout
+        ? (isMobile ? 58 : 68)
+        : hasWaypointLinks
+          ? (isMobile ? 46 : 52)
+          : (isMobile ? 38 : 42);
 
   useEffect(() => {
     // Trigger entrance animation on mount
@@ -84,12 +92,6 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
       setTimeout(() => setAnimationDone(true), 400);
     });
   }, []);
-
-  // Report height to parent whenever committed height changes
-  useEffect(() => {
-    const h = panelHeight != null ? panelHeight : window.innerHeight * defaultHeightVh / 100;
-    onHeightChange?.(h);
-  }, [panelHeight, defaultHeightVh, onHeightChange]);
 
   useEffect(() => {
     setPanelHeight(null);
@@ -153,7 +155,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   }, []);
 
   const handleMouseDown = useCallback((e) => {
-    e.preventDefault();
+    if (e.cancelable) e.preventDefault();
     isDraggingRef.current = true;
     dragStartY.current = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
     dragStartHeight.current = panelRef.current?.offsetHeight ?? (window.innerHeight * defaultHeightVh / 100);
@@ -236,11 +238,21 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
     }
   }, [route]);
 
+  const shouldAutoSizePages = window.innerWidth >= 600;
+  const usesNaturalHeight = shouldAutoSizePages && currentPage !== 1 && panelHeight == null;
+  const resolvedPanelHeight = panelHeight ?? (window.innerHeight * defaultHeightVh / 100);
+
+  // Report the actual rendered panel height to the parent.
+  useEffect(() => {
+    onHeightChange?.(panelRef.current?.offsetHeight ?? resolvedPanelHeight);
+  }, [onHeightChange, resolvedPanelHeight, usesNaturalHeight, currentPage, route?.id, showChartDeferred]);
+
   if (!route) return null;
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
   const segmentCount = route.lineSegments?.length || 0;
   const aboutParagraphs = buildAboutParagraphs(route.description);
   const highlightChips = getHighlights(route);
+  const shouldAnimateHeight = isMobile || currentPage === 1 || panelHeight != null;
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 1000, pointerEvents: 'none' }}>
@@ -253,175 +265,181 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           borderRadius: '20px 20px 0 0',
           display: 'flex',
           flexDirection: 'column',
-          height: panelHeight != null ? `${panelHeight}px` : `${defaultHeightVh}vh`,
+          height: usesNaturalHeight ? 'auto' : `${resolvedPanelHeight}px`,
+          maxHeight: usesNaturalHeight ? `${window.innerHeight * MAX_HEIGHT_VH / 100}px` : 'none',
           width: isMobile ? '100%' : 'min(100%, 540px)',
           margin: '0 auto',
           overflow: 'hidden',
           transform: animationDone ? 'none' : (isMounted ? 'translateY(0)' : 'translateY(100%)'),
-          transition: animationDone ? 'height 0.25s ease' : 'height 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)',
+          transition: animationDone
+            ? (shouldAnimateHeight ? 'height 0.25s ease' : 'none')
+            : (shouldAnimateHeight
+              ? 'height 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)'
+              : 'transform 0.35s cubic-bezier(0.4,0,0.2,1)'),
           pointerEvents: 'auto',
           boxShadow: '0 -4px 32px rgba(0,0,0,0.15)',
         }}
       >
         {/* Drag Handle */}
-        <div
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleMouseDown}
-          onMouseEnter={() => setIsHandleHovered(true)}
-          onMouseLeave={() => setIsHandleHovered(false)}
-          style={{
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            padding: '10px 0 6px',
-            cursor: 'ns-resize',
-            userSelect: 'none',
-            WebkitUserSelect: 'none',
-            flexShrink: 0,
-          }}
-          title="Drag to resize"
-        >
+        <div style={{ flexShrink: 0 }}>
+          {/* Drag Handle */}
           <div
-            ref={handleBarRef}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
+            onMouseEnter={() => setIsHandleHovered(true)}
+            onMouseLeave={() => setIsHandleHovered(false)}
             style={{
-              width: isHandleHovered ? 48 : 36,
-              height: 4,
-              background: isHandleHovered ? 'var(--text-secondary)' : 'var(--border)',
-              borderRadius: 2,
-              transition: 'width 0.2s ease, background 0.2s ease',
+              display: 'flex', justifyContent: 'center', alignItems: 'center',
+              padding: '10px 0 6px',
+              cursor: 'ns-resize',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
+              flexShrink: 0,
             }}
-          />
-        </div>
-
-        {/* Header — always visible */}
-        <div style={{ padding: '4px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="section-label" style={{ marginBottom: 2 }}>Active Route</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <h2 style={{
-                  fontSize: isMobile ? 16 : 18, fontWeight: 700, color: 'var(--text-primary)',
-                  fontFamily: 'Playfair Display, serif', lineHeight: 1.2, marginBottom: 6,
-                  whiteSpace: 'normal',
-                  overflowWrap: 'anywhere',
-                }}>
-                  {route.name}
-                </h2>
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center',
-                  fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20,
-                  background: `${DIFF_COLORS[route.difficulty]}22`,
-                  color: DIFF_COLORS[route.difficulty],
-                }}>
-                  {route.difficulty}
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
-                <a
-                  href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
-                  download
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#0ea5e9',
-                    padding: '6px 10px', borderRadius: 10,
-                    background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
-                    textDecoration: 'none', transition: 'background 0.2s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
-                  title={`Export GPS (${route.fileName})`}
-                >
-                  <Download size={12} /> Export GPS
-                </a>
-                <button
-                  onClick={handleShare}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    fontSize: isMobile ? 10 : 11, fontWeight: 600,
-                    color: shareToast ? '#34d399' : '#a78bfa',
-                    padding: '6px 10px', borderRadius: 10,
-                    background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
-                    border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
-                    cursor: 'pointer', transition: 'all 0.25s ease',
-                  }}
-                  onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
-                  onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
-                  title="Share this route"
-                >
-                  {shareToast ? <Check size={12} /> : <Share2 size={12} />}
-                  {shareToast ? 'Copied!' : 'Share'}
-                </button>
-              </div>
-            </div>
-            
-            {(route.district || route.highlights) && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, marginBottom: 8 }}>
-                {route.district && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
-                    <MapPin size={11} />
-                    <span className="truncate">{route.district}{route.province ? `, ${route.province}` : ''}</span>
-                  </div>
-                )}
-                {route.highlights && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
-                    <Star size={11} />
-                    <span className="truncate">{route.highlights}</span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minHeight: 22 }}>
-              {segmentCount > 1 && (
-                <span style={{
-                  fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
-                  background: 'rgba(14,165,233,0.1)',
-                  color: '#0ea5e9',
-                  border: '1px solid rgba(14,165,233,0.3)',
-                }}>
-                  {segmentCount} segments
-                </span>
-              )}
-            </div>
-          </div>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8,
-              padding: '6px', cursor: 'pointer', color: 'var(--text-secondary)', marginLeft: 12, flexShrink: 0,
-            }}
+            title="Drag to resize"
           >
-            <X size={16} />
-          </button>
-        </div>
-
-        {/* Clickable page titles */}
-        <div style={{ padding: '6px 20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexShrink: 0 }}>
-          {['Summary', 'Profile', 'More'].map((label, idx) => (
-            <button
-              key={label}
-              onClick={() => goToPage(idx)}
+            <div
+              ref={handleBarRef}
               style={{
-                border: 'none',
-                background: 'transparent',
-                color: currentPage === idx ? 'var(--accent-primary)' : 'var(--text-muted)',
-                fontSize: 11,
-                fontWeight: currentPage === idx ? 700 : 600,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                padding: '2px 0',
-                borderBottom: currentPage === idx ? '2px solid var(--accent-primary)' : '2px solid transparent',
-                cursor: 'pointer',
+                width: isHandleHovered ? 48 : 36,
+                height: 4,
+                background: isHandleHovered ? 'var(--text-secondary)' : 'var(--border)',
+                borderRadius: 2,
+                transition: 'width 0.2s ease, background 0.2s ease',
               }}
-              aria-label={`Go to ${label} page`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+            />
+          </div>
 
-        {/* Swipeable pages */}
+          {/* Header — always visible */}
+          <div style={{ padding: '4px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div className="section-label" style={{ marginBottom: 2 }}>Active Route</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <h2 style={{
+                    fontSize: isMobile ? 16 : 18, fontWeight: 700, color: 'var(--text-primary)',
+                    fontFamily: 'Playfair Display, serif', lineHeight: 1.2, marginBottom: 6,
+                    whiteSpace: 'normal',
+                    overflowWrap: 'anywhere',
+                  }}>
+                    {route.name}
+                  </h2>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20,
+                    background: `${DIFF_COLORS[route.difficulty]}22`,
+                    color: DIFF_COLORS[route.difficulty],
+                  }}>
+                    {route.difficulty}
+                  </span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
+                  <a
+                    href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
+                    download
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 5,
+                      fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#0ea5e9',
+                      padding: '6px 10px', borderRadius: 10,
+                      background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
+                      textDecoration: 'none', transition: 'background 0.2s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
+                    title={`Export GPS (${route.fileName})`}
+                  >
+                    <Download size={12} /> Export GPS
+                  </a>
+                  <button
+                    onClick={handleShare}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 5,
+                      fontSize: isMobile ? 10 : 11, fontWeight: 600,
+                      color: shareToast ? '#34d399' : '#a78bfa',
+                      padding: '6px 10px', borderRadius: 10,
+                      background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
+                      border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
+                      cursor: 'pointer', transition: 'all 0.25s ease',
+                    }}
+                    onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
+                    onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
+                    title="Share this route"
+                  >
+                    {shareToast ? <Check size={12} /> : <Share2 size={12} />}
+                    {shareToast ? 'Copied!' : 'Share'}
+                  </button>
+                </div>
+              </div>
+              
+              {(route.district || route.highlights) && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, marginBottom: 8 }}>
+                  {route.district && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
+                      <MapPin size={11} />
+                      <span className="truncate">{route.district}{route.province ? `, ${route.province}` : ''}</span>
+                    </div>
+                  )}
+                  {route.highlights && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
+                      <Star size={11} />
+                      <span className="truncate">{route.highlights}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minHeight: 22 }}>
+                {segmentCount > 1 && (
+                  <span style={{
+                    fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
+                    background: 'rgba(14,165,233,0.1)',
+                    color: '#0ea5e9',
+                    border: '1px solid rgba(14,165,233,0.3)',
+                  }}>
+                    {segmentCount} segments
+                  </span>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              style={{
+                background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 8,
+                padding: '6px', cursor: 'pointer', color: 'var(--text-secondary)', marginLeft: 12, flexShrink: 0,
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
+
+          {/* Clickable page titles */}
+          <div style={{ padding: '6px 20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+            {['Summary', 'Profile', 'More'].map((label, idx) => (
+              <button
+                key={label}
+                onClick={() => goToPage(idx)}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  color: currentPage === idx ? 'var(--accent-primary)' : 'var(--text-muted)',
+                  fontSize: 11,
+                  fontWeight: currentPage === idx ? 700 : 600,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '2px 0',
+                  borderBottom: currentPage === idx ? '2px solid var(--accent-primary)' : '2px solid transparent',
+                  cursor: 'pointer',
+                }}
+                aria-label={`Go to ${label} page`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div
-          style={{ flex: 1, minHeight: 0, overflow: 'hidden', padding: currentPage === 0 ? '0 0 6px' : '0 0 12px' }}
+          style={{ flex: usesNaturalHeight ? '0 0 auto' : 1, minHeight: 0, overflow: 'hidden', padding: currentPage === 0 ? '0 0 6px' : '0 0 12px' }}
           onTouchStart={handleSwipeStart}
           onTouchEnd={handleSwipeEnd}
           onMouseDown={handleMouseSwipeStart}
@@ -431,14 +449,14 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           <div
             style={{
               display: 'flex',
-              width: '300%',
-              height: '100%',
-              transform: `translateX(-${currentPage * 33.3333}%)`,
-              transition: 'transform 0.28s ease',
+              width: usesNaturalHeight ? '100%' : '300%',
+              height: usesNaturalHeight ? 'auto' : '100%',
+              transform: usesNaturalHeight ? 'none' : `translateX(-${currentPage * 33.3333}%)`,
+              transition: usesNaturalHeight ? 'none' : 'transform 0.28s ease',
             }}
           >
             {/* Page 1: Summary */}
-            <div style={{ width: '33.3333%', minWidth: 0, padding: '6px 20px 0' }}>
+            <div style={{ width: usesNaturalHeight ? '100%' : '33.3333%', minWidth: 0, padding: '6px 20px 0', display: usesNaturalHeight && currentPage !== 0 ? 'none' : 'block' }}>
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
@@ -482,7 +500,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
             </div>
 
             {/* Page 2: Elevation profile */}
-            <div style={{ width: '33.3333%', minWidth: 0, padding: '8px 20px 0', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ width: usesNaturalHeight ? '100%' : '33.3333%', minWidth: 0, padding: '8px 20px 0', display: usesNaturalHeight ? 'none' : 'flex', flexDirection: 'column' }}>
               <div className="section-label" style={{ marginBottom: 6, flexShrink: 0 }}>Elevation Profile</div>
               <div style={{ flex: 1, minHeight: 80, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease', position: 'relative' }}>
                 {route.loadError ? (
@@ -496,7 +514,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                     <span style={{ fontSize: 11 }}>Loading route details...</span>
                   </div>
                 ) : (
-                  showChartDeferred && <ElevationChart route={route} color={color} />
+                  currentPage === 1 && showChartDeferred && <ElevationChart route={route} color={color} />
                 )}
               </div>
               {route.stats?.maxElevation != null && (
@@ -507,7 +525,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
             </div>
 
             {/* Page 3: Extra information */}
-            <div style={{ width: '33.3333%', minWidth: 0, padding: '8px 20px 0' }}>
+            <div style={{ width: usesNaturalHeight ? '100%' : '33.3333%', minWidth: 0, padding: '8px 20px 0', display: usesNaturalHeight && currentPage !== 2 ? 'none' : 'block' }}>
               <StartEndBar
                 startValue={route.stats.startElevation != null ? `${route.stats.startElevation}m` : '-'}
                 endValue={route.stats.endElevation != null ? `${route.stats.endElevation}m` : '-'}
@@ -593,14 +611,6 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                       {paragraph}
                     </p>
                   ))}
-                </div>
-              )}
-
-              {route.isLazyLoaded && route.stats.pointCount && (
-                <div style={{ paddingTop: 8 }}>
-                  <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-                    {route.stats.pointCount.toLocaleString()} GPS points
-                  </div>
                 </div>
               )}
             </div>
