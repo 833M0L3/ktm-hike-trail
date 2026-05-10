@@ -72,6 +72,7 @@ const TILE_LAYERS = {
 
 function TileLayerToggle({ theme }) {
   const [mode, setMode] = useState('street');
+  const [isCompact, setIsCompact] = useState(() => window.innerWidth <= 768);
   const tile = TILE_LAYERS[mode];
 
   // Toggle data-satellite on <html> so CSS can skip dark-mode filter for satellite
@@ -83,6 +84,12 @@ function TileLayerToggle({ theme }) {
     }
   }, [mode]);
 
+  useEffect(() => {
+    const handleResize = () => setIsCompact(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
       <TileLayer key={mode} url={tile.url} attribution={tile.attribution} />
@@ -92,8 +99,8 @@ function TileLayerToggle({ theme }) {
         <button
           onClick={() => setMode(m => m === 'street' ? 'satellite' : 'street')}
           style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '7px 12px', borderRadius: 8,
+            display: 'flex', alignItems: 'center', gap: isCompact ? 0 : 6,
+            padding: isCompact ? '8px' : '7px 12px', borderRadius: 8,
             background: 'var(--bg-card)', border: '1px solid var(--border)',
             color: 'var(--text-secondary)', fontSize: 11, fontWeight: 600,
             cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
@@ -113,7 +120,7 @@ function TileLayerToggle({ theme }) {
               <><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16"/><path d="M16 6v16"/></>
             )}
           </svg>
-          {mode === 'street' ? 'Satellite' : 'Map'}
+          {!isCompact && (mode === 'street' ? 'Satellite' : 'Map')}
         </button>
       </div>
     </>
