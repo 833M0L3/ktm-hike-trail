@@ -1,9 +1,11 @@
 import { useRef, useCallback } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceDot } from 'recharts';
 import { MapPin } from 'lucide-react';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
+    const distanceKm = Number(label).toFixed(2);
+    const elevationM = Number(payload[0].value).toLocaleString();
     return (
       <div style={{
         background: 'var(--bg-card)',
@@ -14,9 +16,9 @@ const CustomTooltip = ({ active, payload, label }) => {
         boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
       }}>
         <div style={{ color: 'var(--text-secondary)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <MapPin size={11} /> {label} km
+          <MapPin size={11} /> {distanceKm}km
         </div>
-        <div style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>{payload[0].value}m elevation</div>
+        <div style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>{elevationM}m elevation</div>
       </div>
     );
   }
@@ -35,6 +37,7 @@ export default function ElevationChart({ route, color = '#f97316' }) {
   const minEle = Math.min(...data.map(d => d.elevation));
   const maxEle = Math.max(...data.map(d => d.elevation));
   const domain = [Math.max(0, minEle - 200), maxEle + 200];
+  const peakPoint = data.reduce((peak, point) => (point.elevation > peak.elevation ? point : peak), data[0]);
 
   // Dispatch hover coordinate via DOM event (bypasses React for performance)
   const dispatchCoord = (index) => {
@@ -86,7 +89,8 @@ export default function ElevationChart({ route, color = '#f97316' }) {
             tickLine={false}
             axisLine={false}
             tickFormatter={(v) => `${(v / 1000).toFixed(1)}k`}
-            width={35}
+            width={45}
+            label={{ value: 'Elevation (m)', angle: -90, position: 'insideLeft', fill: mutedColor, fontSize: 10, offset: -2 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <ReferenceLine
@@ -95,6 +99,15 @@ export default function ElevationChart({ route, color = '#f97316' }) {
             strokeDasharray="4 4"
             strokeWidth={1}
             label={{ value: '5000m', fill: '#60a5fa', fontSize: 9, position: 'insideTopRight' }}
+          />
+          <ReferenceDot
+            x={peakPoint.distance}
+            y={peakPoint.elevation}
+            r={3.5}
+            fill={color}
+            stroke="#fff"
+            strokeWidth={1.5}
+            label={{ value: `Peak ${peakPoint.elevation}m`, fill: color, fontSize: 10, position: 'top' }}
           />
           <Area
             type="monotone"

@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Mountain, TrendingUp, TrendingDown, Clock, Layers, Download, MapPin, Flag, Star, Share2, Check } from 'lucide-react';
+import { X, Mountain, TrendingUp, TrendingDown, Clock, Download, MapPin, Flag, Star, Share2, Check } from 'lucide-react';
 import ElevationChart from './ElevationChart';
 
 const ROUTE_COLORS = [
@@ -14,10 +14,53 @@ const DIFF_COLORS = {
 const MIN_HEIGHT = 80;
 const MAX_HEIGHT_VH = 85;
 
+function formatEstimatedTime(hours) {
+  if (typeof hours !== 'number' || Number.isNaN(hours)) return '-';
+  const totalMinutes = Math.max(0, Math.round(hours * 60));
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  if (m === 0) return `~${h}h`;
+  return `~${h}h ${m}m`;
+}
+
+function buildAboutParagraphs(text) {
+  if (!text) return [];
+  const sentences = text
+    .replace(/\s+/g, ' ')
+    .trim()
+    .match(/[^.!?]+[.!?]?/g) || [text.trim()];
+
+  const paragraphs = [];
+  for (let i = 0; i < sentences.length && paragraphs.length < 3; i += 2) {
+    paragraphs.push(`${(sentences[i] || '').trim()} ${(sentences[i + 1] || '').trim()}`.trim());
+  }
+  return paragraphs.filter(Boolean);
+}
+
+function getHighlights(route) {
+  const chips = [];
+  const difficulty = String(route?.difficulty || '').toLowerCase();
+  const text = `${route?.description || ''} ${route?.highlights || ''}`.toLowerCase();
+
+  if (difficulty === 'easy' || difficulty === 'moderate') chips.push('Beginner Friendly');
+  if (text.includes('family') || text.includes('kids')) chips.push('Family Friendly');
+  if (text.includes('transport') || text.includes('bus') || text.includes('jeep') || text.includes('crowd')) {
+    chips.push('Transport wait at end');
+  }
+  if (chips.length === 0 && (route?.stats?.distance || 0) <= 15) chips.push('Great for Half-day Hike');
+
+  return chips.slice(0, 3);
+}
+
 export default function RouteDetail({ route, index, onClose, isMobile, onHeightChange }) {
   const [panelHeight, setPanelHeight] = useState(null);
   const [isHandleHovered, setIsHandleHovered] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
   const isDraggingRef = useRef(false);
+  const swipeStartXRef = useRef(null);
+  const swipeStartYRef = useRef(null);
+  const mouseSwipeStartXRef = useRef(null);
+  const mouseSwipeStartYRef = useRef(null);
   const dragStartY = useRef(0);
   const dragStartHeight = useRef(0);
   const panelRef = useRef(null);
@@ -27,7 +70,9 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
   const [showChartDeferred, setShowChartDeferred] = useState(false);
   const [shareToast, setShareToast] = useState(false);
 
-  const defaultHeightVh = isMobile ? 40 : 65;
+  const defaultHeightVh = currentPage === 0
+    ? (isMobile ? 38 : 34)
+    : (isMobile ? 40 : 65);
 
   useEffect(() => {
     // Trigger entrance animation on mount
@@ -48,7 +93,64 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
 
   useEffect(() => {
     setPanelHeight(null);
+    setCurrentPage(0);
   }, [route?.id]);
+
+  const goToPage = useCallback((page) => {
+    const clamped = Math.max(0, Math.min(2, page));
+    // Switching pages should always return to the page's default panel height.
+    setPanelHeight(null);
+    setCurrentPage(clamped);
+  }, []);
+
+  const handleSwipeStart = useCallback((e) => {
+    const t = e.touches?.[0];
+    if (!t) return;
+    swipeStartXRef.current = t.clientX;
+    swipeStartYRef.current = t.clientY;
+  }, []);
+
+  const handleSwipeEnd = useCallback((e) => {
+    const t = e.changedTouches?.[0];
+    if (!t || swipeStartXRef.current == null || swipeStartYRef.current == null) return;
+
+    const dx = t.clientX - swipeStartXRef.current;
+    const dy = t.clientY - swipeStartYRef.current;
+
+    swipeStartXRef.current = null;
+    swipeStartYRef.current = null;
+
+    // Only horizontal swipe should trigger page change.
+    if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy)) return;
+    if (dx < 0) goToPage(currentPage + 1);
+    else goToPage(currentPage - 1);
+  }, [currentPage, goToPage]);
+
+  const handleMouseSwipeStart = useCallback((e) => {
+    // Ignore interactions that start on actionable controls.
+    if (e.target instanceof Element && e.target.closest('button, a, input, select, textarea, summary')) return;
+    mouseSwipeStartXRef.current = e.clientX;
+    mouseSwipeStartYRef.current = e.clientY;
+  }, []);
+
+  const handleMouseSwipeEnd = useCallback((e) => {
+    if (mouseSwipeStartXRef.current == null || mouseSwipeStartYRef.current == null) return;
+
+    const dx = e.clientX - mouseSwipeStartXRef.current;
+    const dy = e.clientY - mouseSwipeStartYRef.current;
+
+    mouseSwipeStartXRef.current = null;
+    mouseSwipeStartYRef.current = null;
+
+    if (Math.abs(dx) < 70 || Math.abs(dx) <= Math.abs(dy)) return;
+    if (dx < 0) goToPage(currentPage + 1);
+    else goToPage(currentPage - 1);
+  }, [currentPage, goToPage]);
+
+  const clearMouseSwipe = useCallback(() => {
+    mouseSwipeStartXRef.current = null;
+    mouseSwipeStartYRef.current = null;
+  }, []);
 
   const handleMouseDown = useCallback((e) => {
     e.preventDefault();
@@ -136,14 +238,9 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
 
   if (!route) return null;
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
-  const resolvedHeight = panelHeight != null ? panelHeight : window.innerHeight * defaultHeightVh / 100;
   const segmentCount = route.lineSegments?.length || 0;
-
-  const showStats      = resolvedHeight > (isMobile ? 130 : 160);
-  const showMiniStats  = resolvedHeight > (isMobile ? 180 : 220);
-  const showChart      = resolvedHeight > (isMobile ? 160 : 200);
-  const showDescription = resolvedHeight > (isMobile ? 300 : 340);
-  const showDataPoints = resolvedHeight > (isMobile ? 260 : 300);
+  const aboutParagraphs = buildAboutParagraphs(route.description);
+  const highlightChips = getHighlights(route);
 
   return (
     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 1000, pointerEvents: 'none' }}>
@@ -157,6 +254,8 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           display: 'flex',
           flexDirection: 'column',
           height: panelHeight != null ? `${panelHeight}px` : `${defaultHeightVh}vh`,
+          width: isMobile ? '100%' : 'min(100%, 540px)',
+          margin: '0 auto',
           overflow: 'hidden',
           transform: animationDone ? 'none' : (isMounted ? 'translateY(0)' : 'translateY(100%)'),
           transition: animationDone ? 'height 0.25s ease' : 'height 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1)',
@@ -196,16 +295,65 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
         <div style={{ padding: '4px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexShrink: 0 }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div className="section-label" style={{ marginBottom: 2 }}>Active Route</div>
-            <h2 style={{
-              fontSize: 18, fontWeight: 700, color: 'var(--text-primary)',
-              fontFamily: 'Playfair Display, serif', lineHeight: 1.2, marginBottom: 4,
-              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            }}>
-              {route.name}
-            </h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <h2 style={{
+                  fontSize: 18, fontWeight: 700, color: 'var(--text-primary)',
+                  fontFamily: 'Playfair Display, serif', lineHeight: 1.2, marginBottom: 6,
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}>
+                  {route.name}
+                </h2>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center',
+                  fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 20,
+                  background: `${DIFF_COLORS[route.difficulty]}22`,
+                  color: DIFF_COLORS[route.difficulty],
+                }}>
+                  {route.difficulty}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                <a
+                  href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
+                  download
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    fontSize: 11, fontWeight: 600, color: '#0ea5e9',
+                    padding: '6px 10px', borderRadius: 10,
+                    background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
+                    textDecoration: 'none', transition: 'background 0.2s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
+                  title={`Export GPS (${route.fileName})`}
+                >
+                  <Download size={12} /> Export GPS
+                </a>
+                <button
+                  onClick={handleShare}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    fontSize: 11, fontWeight: 600,
+                    color: shareToast ? '#34d399' : '#a78bfa',
+                    padding: '6px 10px', borderRadius: 10,
+                    background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
+                    border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
+                    cursor: 'pointer', transition: 'all 0.25s ease',
+                  }}
+                  onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
+                  onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
+                  title="Share this route"
+                >
+                  {shareToast ? <Check size={12} /> : <Share2 size={12} />}
+                  {shareToast ? 'Copied!' : 'Share'}
+                </button>
+              </div>
+            </div>
             
             {(route.district || route.highlights) && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, marginBottom: 8 }}>
                 {route.district && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
                     <MapPin size={11} />
@@ -221,15 +369,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
               </div>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
-                background: `${DIFF_COLORS[route.difficulty]}22`,
-                color: DIFF_COLORS[route.difficulty],
-                border: `1px solid ${DIFF_COLORS[route.difficulty]}44`,
-              }}>
-                {route.difficulty}
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minHeight: 22 }}>
               {segmentCount > 1 && (
                 <span style={{
                   fontSize: 11, fontWeight: 600, padding: '2px 10px', borderRadius: 20,
@@ -240,40 +380,6 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                   {segmentCount} segments
                 </span>
               )}
-              <a
-                href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
-                download
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 4,
-                  fontSize: 11, fontWeight: 600, color: '#0ea5e9',
-                  padding: '2px 10px', borderRadius: 20,
-                  background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.3)',
-                  textDecoration: 'none', transition: 'background 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.2)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(14,165,233,0.1)'; }}
-                title={`Download ${route.fileName}`}
-              >
-                <Download size={11} /> KML
-              </a>
-              <button
-                onClick={handleShare}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 4,
-                  fontSize: 11, fontWeight: 600,
-                  color: shareToast ? '#34d399' : '#a78bfa',
-                  padding: '2px 10px', borderRadius: 20,
-                  background: shareToast ? 'rgba(52,211,153,0.1)' : 'rgba(167,139,250,0.1)',
-                  border: `1px solid ${shareToast ? 'rgba(52,211,153,0.3)' : 'rgba(167,139,250,0.3)'}`,
-                  cursor: 'pointer', transition: 'all 0.25s ease',
-                }}
-                onMouseEnter={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.2)'; }}
-                onMouseLeave={e => { if (!shareToast) e.currentTarget.style.background = 'rgba(167,139,250,0.1)'; }}
-                title="Share this route"
-              >
-                {shareToast ? <Check size={11} /> : <Share2 size={11} />}
-                {shareToast ? 'Copied!' : 'Share'}
-              </button>
             </div>
           </div>
           <button
@@ -287,78 +393,97 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
           </button>
         </div>
 
-        {/* Flex content area */}
-        <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: '0 0 12px' }}>
+        {/* Clickable page titles */}
+        <div style={{ padding: '6px 20px 0', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+          {['Summary', 'Profile', 'More'].map((label, idx) => (
+            <button
+              key={label}
+              onClick={() => goToPage(idx)}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                color: currentPage === idx ? 'var(--accent-primary)' : 'var(--text-muted)',
+                fontSize: 11,
+                fontWeight: currentPage === idx ? 700 : 600,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                padding: '2px 0',
+                borderBottom: currentPage === idx ? '2px solid var(--accent-primary)' : '2px solid transparent',
+                cursor: 'pointer',
+              }}
+              aria-label={`Go to ${label} page`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
 
-          {/* Big stats */}
-          {showStats && (
-            <div style={{ padding: '10px 20px 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, flexShrink: 0 }}>
-              <BigStat icon={<Mountain size={14} />} value={`${route.stats.distance}km`}         label="Distance" color={color} />
-              <BigStat icon={<TrendingUp size={14} />} value={`+${route.stats.elevationGain}m`}  label="Gain"     color={color} />
-              <BigStat icon={<TrendingDown size={14} />} value={`-${route.stats.elevationLoss}m`} label="Loss"     color="var(--accent-blue)" />
-              <BigStat icon={<Clock size={14} />} value={`~${route.stats.estimatedHours}h`}       label="Time"     color="var(--accent-green)" />
-            </div>
-          )}
-
-          {/* Mini elevation stats */}
-          {showMiniStats && (
-            <div style={{ padding: '8px 20px 0', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, flexShrink: 0 }}>
-              <MiniStat label="Start" value={route.stats.startElevation != null ? `${route.stats.startElevation}m` : '-'} />
-              <MiniStat label="Max"   value={`${route.stats.maxElevation}m`}   highlight={color} />
-              <MiniStat label="End"   value={route.stats.endElevation != null ? `${route.stats.endElevation}m` : '-'} />
-            </div>
-          )}
-
-          {/* Start / End Google Maps links */}
-          {showMiniStats && route.isLazyLoaded && route.waypoints && route.waypoints.length >= 2 && (() => {
-            const start = route.waypoints.find(w => w.type === 'start') || route.waypoints[0];
-            const end = route.waypoints.find(w => w.type === 'end') || route.waypoints[route.waypoints.length - 1];
-            const gmapsUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
-            return (
-              <div style={{ padding: '6px 20px 0', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, flexShrink: 0 }}>
-                <a
-                  href={gmapsUrl(start.lat, start.lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '6px 10px', borderRadius: 8,
-                    background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.25)',
-                    textDecoration: 'none', transition: 'background 0.2s',
-                    fontSize: 11, color: '#34d399', fontWeight: 600,
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.18)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.08)'; }}
-                  title={`Open start point in Google Maps (${start.lat.toFixed(4)}, ${start.lng.toFixed(4)})`}
-                >
-                  <MapPin size={13} /> Start Point
-                </a>
-                <a
-                  href={gmapsUrl(end.lat, end.lng)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 6,
-                    padding: '6px 10px', borderRadius: 8,
-                    background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
-                    textDecoration: 'none', transition: 'background 0.2s',
-                    fontSize: 11, color: '#ef4444', fontWeight: 600,
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.18)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; }}
-                  title={`Open end point in Google Maps (${end.lat.toFixed(4)}, ${end.lng.toFixed(4)})`}
-                >
-                  <Flag size={13} /> End Point
-                </a>
+        {/* Swipeable pages */}
+        <div
+          style={{ flex: 1, minHeight: 0, overflow: 'hidden', padding: currentPage === 0 ? '0 0 6px' : '0 0 12px' }}
+          onTouchStart={handleSwipeStart}
+          onTouchEnd={handleSwipeEnd}
+          onMouseDown={handleMouseSwipeStart}
+          onMouseUp={handleMouseSwipeEnd}
+          onMouseLeave={clearMouseSwipe}
+        >
+          <div
+            style={{
+              display: 'flex',
+              width: '300%',
+              height: '100%',
+              transform: `translateX(-${currentPage * 33.3333}%)`,
+              transition: 'transform 0.28s ease',
+            }}
+          >
+            {/* Page 1: Summary */}
+            <div style={{ width: '33.3333%', minWidth: 0, padding: '6px 20px 0' }}>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? 'repeat(2, minmax(0, 1fr))' : 'repeat(4, minmax(0, 1fr))',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border)',
+                borderRadius: 12,
+                overflow: 'hidden',
+              }}>
+                <BigStat
+                  icon={<Mountain size={14} />}
+                  value={`${route.stats.distance}km`}
+                  label="Distance"
+                  color={color}
+                  compact={isMobile}
+                  showRightDivider
+                />
+                <BigStat
+                  icon={<TrendingUp size={14} />}
+                  value={`+${route.stats.elevationGain}m`}
+                  label="Gain"
+                  color={color}
+                  compact={isMobile}
+                  showBottomDivider={isMobile}
+                />
+                <BigStat
+                  icon={<TrendingDown size={14} />}
+                  value={`-${route.stats.elevationLoss}m`}
+                  label="Loss"
+                  color="var(--accent-blue)"
+                  compact={isMobile}
+                  showRightDivider={isMobile}
+                />
+                <BigStat
+                  icon={<Clock size={14} />}
+                  value={formatEstimatedTime(route.stats.estimatedHours)}
+                  label="Time"
+                  color="var(--accent-green)"
+                  compact={isMobile}
+                />
               </div>
-            );
-          })()}
+            </div>
 
-          {/* Elevation chart — fills remaining space */}
-          {showChart && (
-            <div style={{ flex: 1, minHeight: 60, padding: '8px 20px 0', display: 'flex', flexDirection: 'column' }}>
+            {/* Page 2: Elevation profile */}
+            <div style={{ width: '33.3333%', minWidth: 0, padding: '8px 20px 0', display: 'flex', flexDirection: 'column' }}>
               <div className="section-label" style={{ marginBottom: 6, flexShrink: 0 }}>Elevation Profile</div>
-              <div style={{ flex: 1, minHeight: 0, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease', position: 'relative' }}>
+              <div style={{ flex: 1, minHeight: 80, opacity: showChartDeferred ? 1 : 0, transition: 'opacity 0.3s ease', position: 'relative' }}>
                 {route.loadError ? (
                   <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ef4444', textAlign: 'center', padding: '0 12px' }}>
                     <span style={{ fontSize: 11, fontWeight: 600, marginBottom: 4 }}>Failed to load route details</span>
@@ -373,58 +498,155 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                   showChartDeferred && <ElevationChart route={route} color={color} />
                 )}
               </div>
+              {route.stats?.maxElevation != null && (
+                <div style={{ marginTop: 4, fontSize: 10, color: color, fontWeight: 600 }}>
+                  Peak: {route.stats.maxElevation}m
+                </div>
+              )}
             </div>
-          )}
 
-          {/* Description */}
-          {showDescription && route.description && (
-            <div style={{ padding: '6px 20px 0', flexShrink: 0 }}>
-              <div className="section-label" style={{ marginBottom: 4 }}>About</div>
-              <p style={{
-                fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.5,
-                overflow: 'hidden', textOverflow: 'ellipsis',
-                display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-              }}>
-                {route.description}
-              </p>
-            </div>
-          )}
+            {/* Page 3: Extra information */}
+            <div style={{ width: '33.3333%', minWidth: 0, padding: '8px 20px 0' }}>
+              <StartEndBar
+                startValue={route.stats.startElevation != null ? `${route.stats.startElevation}m` : '-'}
+                endValue={route.stats.endElevation != null ? `${route.stats.endElevation}m` : '-'}
+              />
 
-          {/* GPS point count */}
-          {showDataPoints && route.isLazyLoaded && route.stats.pointCount && (
-            <div style={{ padding: '8px 20px 0', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-              <Layers size={12} style={{ color: 'var(--text-muted)' }} />
-              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-                {route.stats.pointCount.toLocaleString()} GPS data points recorded
-              </span>
+              {route.isLazyLoaded && route.waypoints && route.waypoints.length >= 2 && (() => {
+                const start = route.waypoints.find(w => w.type === 'start') || route.waypoints[0];
+                const end = route.waypoints.find(w => w.type === 'end') || route.waypoints[route.waypoints.length - 1];
+                const gmapsUrl = (lat, lng) => `https://www.google.com/maps?q=${lat},${lng}`;
+                return (
+                  <div style={{ paddingTop: 8, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    <a
+                      href={gmapsUrl(start.lat, start.lng)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 6,
+                        padding: '6px 10px', borderRadius: 8,
+                        background: 'rgba(52,211,153,0.08)', border: '1px solid rgba(52,211,153,0.25)',
+                        textDecoration: 'none', transition: 'background 0.2s',
+                        fontSize: 11, color: '#34d399', fontWeight: 600,
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.18)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(52,211,153,0.08)'; }}
+                      title={`Open start point in Google Maps (${start.lat.toFixed(4)}, ${start.lng.toFixed(4)})`}
+                    >
+                      <MapPin size={13} /> Start Point
+                    </a>
+                    <a
+                      href={gmapsUrl(end.lat, end.lng)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 6,
+                        padding: '6px 10px', borderRadius: 8,
+                        background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
+                        textDecoration: 'none', transition: 'background 0.2s',
+                        fontSize: 11, color: '#ef4444', fontWeight: 600,
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.18)'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.08)'; }}
+                      title={`Open end point in Google Maps (${end.lat.toFixed(4)}, ${end.lng.toFixed(4)})`}
+                    >
+                      <Flag size={13} /> End Point
+                    </a>
+                  </div>
+                );
+              })()}
+
+              {route.description && (
+                <div style={{ paddingTop: 8 }}>
+                  <div className="section-label" style={{ marginBottom: 4 }}>About</div>
+                  {highlightChips.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+                      {highlightChips.map(chip => (
+                        <span
+                          key={chip}
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            color: 'var(--text-secondary)',
+                            border: '1px solid var(--border)',
+                            background: 'var(--bg-card)',
+                            borderRadius: 999,
+                            padding: '3px 8px',
+                          }}
+                        >
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {(aboutParagraphs.length ? aboutParagraphs : [route.description]).map((paragraph, i) => (
+                    <p
+                      key={`about-${i}`}
+                      style={{
+                        fontSize: 11,
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.55,
+                        margin: i === 0 ? '0 0 6px' : '0',
+                      }}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              )}
+
+              {route.isLazyLoaded && route.stats.pointCount && (
+                <div style={{ paddingTop: 8 }}>
+                  <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                    {route.stats.pointCount.toLocaleString()} GPS points
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function BigStat({ icon, value, label, color }) {
+function BigStat({ icon, value, label, color, compact = false, showRightDivider = false, showBottomDivider = false }) {
   return (
-    <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 10px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 4, color: 'var(--text-muted)' }}>
-        {icon}
-        <span style={{ fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 600 }}>{label}</span>
+    <div style={{
+      padding: compact ? '7px 8px' : '10px 12px',
+      minHeight: compact ? 52 : 68,
+      borderRight: showRightDivider ? '1px solid var(--border)' : 'none',
+      borderBottom: showBottomDivider ? '1px solid var(--border)' : 'none',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--text-muted)', minWidth: 0 }}>
+        <span style={{ display: 'flex', flexShrink: 0, opacity: 0.9 }}>{icon}</span>
+        <span style={{ fontSize: compact ? 10 : 11, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>{label}</span>
       </div>
-      <div style={{ fontSize: 15, fontWeight: 700, color, fontFamily: 'JetBrains Mono, monospace' }}>{value}</div>
+      <div style={{ marginTop: compact ? 2 : 4, fontSize: compact ? 15 : 20, fontWeight: 700, color, fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap' }}>{value}</div>
     </div>
   );
 }
 
-function MiniStat({ label, value, highlight }) {
+function StartEndBar({ startValue, endValue }) {
   return (
     <div style={{
-      background: 'var(--bg-primary)', borderRadius: 8, padding: '8px 10px', textAlign: 'center',
-      border: `1px solid ${highlight ? highlight + '33' : 'var(--border)'}`,
+      background: 'var(--bg-primary)',
+      borderRadius: 10,
+      padding: '10px 14px',
+      border: '1px solid var(--border)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 10,
     }}>
-      <div className="section-label" style={{ marginBottom: 3 }}>{label}</div>
-      <div style={{ fontSize: 14, fontWeight: 600, color: highlight || 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace' }}>{value}</div>
+      <div>
+        <div className="section-label" style={{ marginBottom: 2 }}>Start</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace' }}>{startValue}</div>
+      </div>
+      <div>
+        <div className="section-label" style={{ marginBottom: 2, textAlign: 'right' }}>End</div>
+        <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'JetBrains Mono, monospace', textAlign: 'right' }}>{endValue}</div>
+      </div>
     </div>
   );
 }
