@@ -2841,6 +2841,35 @@
       "lng": 83.86875
     }
   },
+  "Muhan Pokhari - Bagdwar - Tinchule - Shivapuri Peak.kml": {
+    "name": "Muhan Pokhari - Bagdwar - Tinchule - Shivapuri Peak",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Extreme",
+    "stats": {
+      "distance": 16.19,
+      "elevationGain": 5350,
+      "elevationLoss": 5358,
+      "minElevation": 1420,
+      "maxElevation": 2689,
+      "estimatedHours": 12.2
+    },
+    "bounds": [
+      [
+        27.779077,
+        85.363574
+      ],
+      [
+        27.816886,
+        85.39154
+      ]
+    ],
+    "startPos": {
+      "lat": 27.779099,
+      "lng": 85.3636
+    }
+  },
   "Muhan Pokhari - Gurje Bhanjyang.kml": {
     "name": "Muhan Pokhari - Gurje Bhanjyang",
     "description": "This one is very easy trail. It is mostly flat and well maintained trail. It is a good option for beginners and families with kids. It is also a good option for those who want to enjoy the nature and the views without much effort. Only downside is at the end of the trail, you would have to wait for the bus/jeep at Gurje Bhanjyang which is very tedious as vehicles there come packed. hia",
