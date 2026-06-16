@@ -2898,5 +2898,34 @@
       "lat": 27.781544,
       "lng": 85.365097
     }
+  },
+  "Paanch Pokhari.kml": {
+    "name": "Paanch Pokhari",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Extreme",
+    "stats": {
+      "distance": 17.14,
+      "elevationGain": 6972,
+      "elevationLoss": 4783,
+      "minElevation": 1821,
+      "maxElevation": 4019,
+      "estimatedHours": 15
+    },
+    "bounds": [
+      [
+        27.979938,
+        85.657816
+      ],
+      [
+        28.040685,
+        85.730198
+      ]
+    ],
+    "startPos": {
+      "lat": 27.979943,
+      "lng": 85.657816
+    }
   }
 }
