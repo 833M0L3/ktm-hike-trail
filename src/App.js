@@ -3,7 +3,14 @@ import { Search, Compass, X, Filter, Sun, Moon, RefreshCw, Menu, Trees, AlertTri
 import MapView from './components/MapView';
 import RouteCard from './components/RouteCard';
 import RouteDetail from './components/RouteDetail';
+import UserNav from './components/UserNav';
+import AuthModal from './components/AuthModal';
+import UploadModal from './components/UploadModal';
+import MyUploadsModal from './components/MyUploadsModal';
+import AdminDashboard from './components/AdminDashboard';
+import EditTrailModal from './components/EditTrailModal';
 import { parseKML } from './utils/kmlParser';
+import { getCurrentUser, logoutUser, fetchPublicRoutes, fetchRouteDetail, deleteRoutePermanently } from './utils/api';
 import './index.css';
 
 const GITHUB_REPO_URL = 'https://github.com/833M0L3/ktm-hike-trail';
@@ -46,6 +53,14 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [detailPanelHeight, setDetailPanelHeight] = useState(0);
 
+  // User & Community Modals State
+  const [currentUser, setCurrentUser] = useState(null);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [myUploadsModalOpen, setMyUploadsModalOpen] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [editingRoute, setEditingRoute] = useState(null);
+
   // When a route is activated, pre-calculate the default panel height
   const handleDetailPanelHeightChange = (h) => setDetailPanelHeight(h);
   
@@ -57,6 +72,20 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Check auth session on startup
+  useEffect(() => {
+    getCurrentUser().then((user) => setCurrentUser(user));
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      setCurrentUser(null);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Apply theme to document
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme === 'day' ? 'day' : '');
@@ -65,11 +94,25 @@ export default function App() {
 
   const toggleTheme = () => setTheme(t => t === 'dark' ? 'day' : 'dark');
 
-  // Load KML files from /kml/manifest.json at startup
-  const loadKMLFolder = useCallback(async () => {
+  // Load trails: Try Cloudflare D1 API first, fallback to static metadata
+  const loadRoutesData = useCallback(async () => {
     setLoadingState({ status: 'loading', progress: 0, total: 0, loaded: 0, errors: [] });
     setRoutes([]);
 
+    // 1. Try Cloudflare D1 API
+    try {
+      const apiRes = await fetchPublicRoutes();
+      if (apiRes && apiRes.routes && apiRes.routes.length > 0) {
+        setRoutes(apiRes.routes);
+        setLoadingState({ status: 'done', progress: 100, total: apiRes.routes.length, loaded: apiRes.routes.length, errors: [] });
+        setIsLoading(false);
+        return;
+      }
+    } catch (apiErr) {
+      console.warn('Cloudflare D1 API routes fetch failed or unavailable, falling back to static metadata:', apiErr);
+    }
+
+    // 2. Fallback to local static routes-metadata.json
     try {
       const manifestRes = await fetch(`${process.env.PUBLIC_URL}/kml/routes-metadata.json?t=` + Date.now());
       if (!manifestRes.ok) throw new Error('routes-metadata.json not found in /public/kml/');
@@ -85,6 +128,7 @@ export default function App() {
         return {
           id: Math.random().toString(36).substr(2, 9),
           fileName: fileName,
+          fileFormat: 'kml',
           name: meta.name,
           description: meta.description,
           difficulty: meta.difficultyOverride !== "Auto" ? meta.difficultyOverride : meta.calculatedDifficulty,
@@ -98,6 +142,7 @@ export default function App() {
           highlights: meta.highlights || '',
           bounds: meta.bounds,
           coordinates: meta.startPos ? [meta.startPos, meta.startPos] : [], 
+          submitter: { name: 'WalkNepalWalk Community' },
           isLazyLoaded: false
         };
       });
@@ -111,7 +156,7 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => { loadKMLFolder(); }, [loadKMLFolder]);
+  useEffect(() => { loadRoutesData(); }, [loadRoutesData]);
 
   const handleRouteClick = useCallback(async (route) => {
     // On mobile, hide the sidebar so the map + elevation card are visible
@@ -124,18 +169,57 @@ export default function App() {
 
     if (!route.isLazyLoaded) {
       try {
-        const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
-        if (!res.ok) throw new Error(`HTTP ${res.status} while loading ${route.fileName}`);
-        const text = await res.text();
-        
-        // Yield to the browser to let the UI slide-up animation run smoothly
-        // before blocking the main thread with heavy KML parsing
-        await new Promise(resolve => setTimeout(resolve, 350));
-        
-        const fullParsed = parseKML(text, route.fileName);
-        if (!fullParsed) throw new Error('KML has no valid route geometry');
-        if (fullParsed) {
-          const updatedRoute = {
+        let updatedRoute = null;
+
+        // Try API route detail if route has an id
+        if (route.id && !route.id.startsWith('seed-local-')) {
+          try {
+            const apiDetail = await fetchRouteDetail(route.id);
+            if (apiDetail && apiDetail.elevationProfile && apiDetail.elevationProfile.length > 0) {
+              const coords = apiDetail.waypoints?.length
+                ? apiDetail.waypoints.map(w => ({ lat: w.lat, lng: w.lng, ele: w.elevation || 0 }))
+                : (route.coordinates || []);
+              updatedRoute = {
+                ...route,
+                ...apiDetail,
+                id: route.id,
+                name: route.name,
+                description: route.description,
+                difficulty: route.difficulty,
+                province: apiDetail?.province || route.province,
+                district: apiDetail?.district || route.district,
+                nearbyCity: apiDetail?.nearbyCity || route.nearbyCity,
+                highlights: apiDetail?.highlights || route.highlights,
+                submitter: apiDetail?.submitter?.name ? apiDetail.submitter : route.submitter,
+                fileFormat: apiDetail?.fileFormat || route.fileFormat || 'kml',
+                coordinates: coords,
+                lineSegments: [coords],
+                displayLineSegments: [coords],
+                elevationProfile: apiDetail.elevationProfile,
+                sampledCoords: apiDetail.waypoints || [],
+                waypoints: apiDetail.waypoints || [],
+                isLazyLoaded: true,
+                loadError: null,
+              };
+            }
+          } catch (apiErr) {
+            // fallback to KML fetch below
+          }
+        }
+
+        // If not loaded from API, fetch raw KML
+        if (!updatedRoute && route.fileName) {
+          const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status} while loading ${route.fileName}`);
+          const text = await res.text();
+          
+          await new Promise(resolve => setTimeout(resolve, 250));
+          
+          const fullParsed = parseKML(text, route.fileName);
+          if (!fullParsed) throw new Error('KML has no valid route geometry');
+          
+          updatedRoute = {
+            ...route,
             ...fullParsed,
             id: route.id,
             name: route.name,
@@ -145,18 +229,23 @@ export default function App() {
             district: route.district,
             nearbyCity: route.nearbyCity,
             highlights: route.highlights,
+            submitter: route.submitter,
+            fileFormat: route.fileFormat || 'kml',
             isLazyLoaded: true,
             loadError: null,
           };
           updatedRoute.stats.estimatedHours = route.stats.estimatedHours;
+        }
+
+        if (updatedRoute) {
           setRoutes(prev => prev.map(r => r.id === route.id ? updatedRoute : r));
           setActiveRoute(updatedRoute);
         }
       } catch (err) {
-        console.error('Failed to load KML', err);
+        console.error('Failed to load route track', err);
         const failedRoute = {
           ...route,
-          loadError: err?.message || 'Failed to parse KML file',
+          loadError: err?.message || 'Failed to parse route track file',
         };
         setRoutes(prev => prev.map(r => r.id === route.id ? failedRoute : r));
         setActiveRoute(failedRoute);
@@ -185,9 +274,26 @@ export default function App() {
     }
   }, [loadingState.status, routes, handleRouteClick]);
 
-  const handleDeleteRoute = useCallback((id) => {
+  const handleDeleteRoute = useCallback(async (routeOrId) => {
+    const id = typeof routeOrId === 'object' ? routeOrId.id : routeOrId;
+    const name = typeof routeOrId === 'object' ? routeOrId.name : 'this route';
+
+    if (currentUser?.role === 'admin') {
+      const confirmed = window.confirm(`Permanently delete "${name}" from Cloudflare database and storage?`);
+      if (!confirmed) return;
+      try {
+        await deleteRoutePermanently(id);
+      } catch (err) {
+        console.warn('Backend delete error, removing locally:', err);
+      }
+    }
     setRoutes(prev => prev.filter(r => r.id !== id));
     setActiveRoute(prev => (prev?.id === id ? null : prev));
+  }, [currentUser]);
+
+  const handleSaveEditedRoute = useCallback((updatedRoute) => {
+    setRoutes(prev => prev.map(r => r.id === updatedRoute.id ? updatedRoute : r));
+    setActiveRoute(prev => (prev?.id === updatedRoute.id ? updatedRoute : prev));
   }, []);
 
   const filteredRoutes = routes
@@ -273,6 +379,19 @@ export default function App() {
               </div>
             </div>
 
+          {/* User & Community Actions Bar */}
+          <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 8px', background: 'var(--bg-secondary)', borderRadius: 10, border: '1px solid var(--border)' }}>
+            <UserNav
+              currentUser={currentUser}
+              onOpenAuth={() => setAuthModalOpen(true)}
+              onOpenUpload={() => setUploadModalOpen(true)}
+              onOpenMyUploads={() => setMyUploadsModalOpen(true)}
+              onOpenAdmin={() => setAdminModalOpen(true)}
+              onLogout={handleLogout}
+              isMobile={isMobile}
+            />
+          </div>
+
             {/* Stats bar */}
             {routes.length > 0 && (
               <div style={{ marginTop:12, display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:8 }}>
@@ -283,7 +402,7 @@ export default function App() {
             )}
 
             {/* Loading state */}
-            <LoadingStatus state={loadingState} onReload={loadKMLFolder} />
+            <LoadingStatus state={loadingState} onReload={loadRoutesData} />
 
             {/* Search */}
             <div style={{ marginTop:12 }}>
@@ -392,6 +511,8 @@ export default function App() {
                     isActive={activeRoute?.id === route.id}
                     onClick={() => handleRouteClick(route)}
                     onDelete={handleDeleteRoute}
+                    onEdit={(r) => setEditingRoute(r)}
+                    isAdmin={currentUser?.role === 'admin'}
                   />
                 );
               })
@@ -429,6 +550,17 @@ export default function App() {
                 >
                   <GitHubMark size={14} />
                 </a>
+                <div style={{ marginLeft: 4 }}>
+                  <UserNav
+                    currentUser={currentUser}
+                    onOpenAuth={() => setAuthModalOpen(true)}
+                    onOpenUpload={() => setUploadModalOpen(true)}
+                    onOpenMyUploads={() => setMyUploadsModalOpen(true)}
+                    onOpenAdmin={() => setAdminModalOpen(true)}
+                    onLogout={handleLogout}
+                    isMobile={isMobile}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -452,9 +584,57 @@ export default function App() {
             onClick={() => handleRouteClick(activeRoute)}
             isMobile={isMobile}
             onHeightChange={handleDetailPanelHeightChange}
+            currentUser={currentUser}
+            onEditRoute={(r) => setEditingRoute(r)}
+            onDeleteRoute={handleDeleteRoute}
           />
         )}
       </div>
+
+      {/* Community Auth & Moderation Modals */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onLoginSuccess={(user) => {
+          setCurrentUser(user);
+          loadRoutesData();
+        }}
+      />
+
+      <UploadModal
+        isOpen={uploadModalOpen}
+        onClose={() => setUploadModalOpen(false)}
+        currentUser={currentUser}
+        onUploadSuccess={() => {
+          loadRoutesData();
+        }}
+      />
+
+      <MyUploadsModal
+        isOpen={myUploadsModalOpen}
+        onClose={() => setMyUploadsModalOpen(false)}
+        onOpenUpload={() => setUploadModalOpen(true)}
+      />
+
+      <AdminDashboard
+        isOpen={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+        onActionSuccess={() => {
+          loadRoutesData();
+        }}
+        onEditRoute={(r) => setEditingRoute(r)}
+      />
+
+      <EditTrailModal
+        isOpen={Boolean(editingRoute)}
+        route={editingRoute}
+        onClose={() => setEditingRoute(null)}
+        onSaveSuccess={handleSaveEditedRoute}
+        onDeleteSuccess={(id) => {
+          setRoutes(prev => prev.filter(r => r.id !== id));
+          setActiveRoute(prev => (prev?.id === id ? null : prev));
+        }}
+      />
     </div>
   );
 }

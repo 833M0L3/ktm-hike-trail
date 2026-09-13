@@ -2841,12 +2841,41 @@
       "lng": 83.86875
     }
   },
+  "Muhan Pokhari - Bagdwar - Tinchule - Shivapuri Peak.kml": {
+    "name": "Muhan Pokhari - Bagdwar - Tinchule - Shivapuri Peak",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Extreme",
+    "stats": {
+      "distance": 16.19,
+      "elevationGain": 5350,
+      "elevationLoss": 5358,
+      "minElevation": 1420,
+      "maxElevation": 2689,
+      "estimatedHours": 12.2
+    },
+    "bounds": [
+      [
+        27.779077,
+        85.363574
+      ],
+      [
+        27.816886,
+        85.39154
+      ]
+    ],
+    "startPos": {
+      "lat": 27.779099,
+      "lng": 85.3636
+    }
+  },
   "Muhan Pokhari - Gurje Bhanjyang.kml": {
     "name": "Muhan Pokhari - Gurje Bhanjyang",
     "description": "This one is very easy trail. It is mostly flat and well maintained trail. It is a good option for beginners and families with kids. It is also a good option for those who want to enjoy the nature and the views without much effort. Only downside is at the end of the trail, you would have to wait for the bus/jeep at Gurje Bhanjyang which is very tedious as vehicles there come packed. hia",
     "difficultyOverride": "Easy",
     "hoursOverride": "Auto",
-    "calculatedDifficulty": "Easy",
+    "calculatedDifficulty": "Hard",
     "stats": {
       "distance": 12.74,
       "elevationGain": 1846,
@@ -2868,6 +2897,35 @@
     "startPos": {
       "lat": 27.781544,
       "lng": 85.365097
+    }
+  },
+  "Paanch Pokhari.kml": {
+    "name": "Paanch Pokhari",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Extreme",
+    "stats": {
+      "distance": 17.14,
+      "elevationGain": 6972,
+      "elevationLoss": 4783,
+      "minElevation": 1821,
+      "maxElevation": 4019,
+      "estimatedHours": 15
+    },
+    "bounds": [
+      [
+        27.979938,
+        85.657816
+      ],
+      [
+        28.040685,
+        85.730198
+      ]
+    ],
+    "startPos": {
+      "lat": 27.979943,
+      "lng": 85.657816
     }
   }
 }

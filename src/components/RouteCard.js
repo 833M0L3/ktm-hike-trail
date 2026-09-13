@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, MapPin, Star } from 'lucide-react';
+import { Mountain, Clock, TrendingUp, ChevronRight, Trash2, Edit3, MapPin, Star } from 'lucide-react';
 
 const ROUTE_COLORS = [
   '#f97316', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa',
@@ -13,11 +13,12 @@ const DIFFICULTY_CLASS = {
   Extreme: 'badge-extreme',
 };
 
-const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onDelete }) {
+const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onDelete, onEdit, isAdmin }) {
   const color = ROUTE_COLORS[index % ROUTE_COLORS.length];
 
   const handleClick = () => onClick(route);
-  const handleDelete = (e) => { e.stopPropagation(); onDelete(route.id); };
+  const handleDelete = (e) => { e.stopPropagation(); onDelete(route); };
+  const handleEdit = (e) => { e.stopPropagation(); onEdit?.(route); };
 
   return (
     <div
@@ -61,29 +62,69 @@ const RouteCard = memo(function RouteCard({ route, index, isActive, onClick, onD
               </div>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
               <span
                 className={DIFFICULTY_CLASS[route.difficulty]}
                 style={{ fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 20 }}
               >
                 {route.difficulty}
               </span>
+              {route.fileFormat && (
+                <span style={{
+                  fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 4,
+                  background: 'rgba(255,255,255,0.08)', color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                }}>
+                  {route.fileFormat}
+                </span>
+              )}
+              {route.submitter?.name && (
+                <span
+                  style={{
+                    fontSize: 10,
+                    color: isActive ? 'var(--accent-secondary)' : 'var(--text-secondary)',
+                    fontWeight: isActive ? 600 : 500,
+                    transition: 'color 0.2s',
+                  }}
+                  className="truncate"
+                  title={`Submitted by ${route.submitter.name}`}
+                >
+                  by {route.submitter.name}
+                </span>
+              )}
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <button
-              onClick={handleDelete}
-              style={{
-                opacity: 0,
-                background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
-                borderRadius: 6, padding: '3px 6px', cursor: 'pointer', color: '#ef4444',
-                transition: 'opacity 0.2s', display: 'flex', alignItems: 'center',
-              }}
-              title="Delete Route"
-              className="group-hover:opacity-100"
-            >
-              <Trash2 size={11} />
-            </button>
+            {isAdmin && (
+              <button
+                onClick={handleEdit}
+                style={{
+                  opacity: 0,
+                  background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)',
+                  borderRadius: 6, padding: '3px 6px', cursor: 'pointer', color: '#f59e0b',
+                  transition: 'opacity 0.2s', display: 'flex', alignItems: 'center',
+                }}
+                title="Edit Route Data"
+                className="group-hover:opacity-100"
+              >
+                <Edit3 size={11} />
+              </button>
+            )}
+            {isAdmin && (
+              <button
+                onClick={handleDelete}
+                style={{
+                  opacity: 0,
+                  background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)',
+                  borderRadius: 6, padding: '3px 6px', cursor: 'pointer', color: '#ef4444',
+                  transition: 'opacity 0.2s', display: 'flex', alignItems: 'center',
+                }}
+                title="Delete Route"
+                className="group-hover:opacity-100"
+              >
+                <Trash2 size={11} />
+              </button>
+            )}
             <ChevronRight size={14} style={{ color: isActive ? color : 'var(--text-muted)', transition: 'color 0.2s' }} />
           </div>
         </div>

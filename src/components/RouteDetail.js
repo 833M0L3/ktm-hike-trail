@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { X, Mountain, TrendingUp, TrendingDown, Clock, Download, MapPin, Flag, Star, Share2, Check } from 'lucide-react';
+import { X, Mountain, TrendingUp, TrendingDown, Clock, Download, MapPin, Flag, Star, Share2, Check, Edit3, Trash2 } from 'lucide-react';
 import ElevationChart from './ElevationChart';
 
 const ROUTE_COLORS = [
@@ -54,7 +54,8 @@ function getHighlights(route) {
   return chips.slice(0, 3);
 }
 
-export default function RouteDetail({ route, index, onClose, isMobile, onHeightChange }) {
+export default function RouteDetail({ route, index, onClose, isMobile, onHeightChange, currentUser, onEditRoute, onDeleteRoute }) {
+  const isAdmin = currentUser?.role === 'admin';
   const [panelHeight, setPanelHeight] = useState(null);
   const [isHandleHovered, setIsHandleHovered] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -357,7 +358,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
                   <a
-                    href={`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
+                    href={route.fileFormat === 'gpx' || route.r2Key ? `/api/routes/${encodeURIComponent(route.id)}/download` : `${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}`}
                     download
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -370,7 +371,7 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                     onMouseLeave={e => { e.currentTarget.style.background = '#0ea5e9'; }}
                     title={`Export GPS (${route.fileName})`}
                   >
-                    <Download size={12} /> Export GPS
+                    <Download size={12} /> Export {route.fileFormat ? route.fileFormat.toUpperCase() : 'GPS'}
                   </a>
                   <button
                     onClick={handleShare}
@@ -390,19 +391,78 @@ export default function RouteDetail({ route, index, onClose, isMobile, onHeightC
                     {shareToast ? <Check size={12} /> : <Share2 size={12} />}
                     {shareToast ? 'Copied!' : 'Share'}
                   </button>
+                  {isAdmin && (
+                    <button
+                      onClick={() => onEditRoute?.(route)}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                        fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#ffffff',
+                        padding: '6px 10px', borderRadius: 10,
+                        background: '#f59e0b', border: '1px solid #d97706',
+                        cursor: 'pointer', transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#d97706'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#f59e0b'; }}
+                      title="Edit trail information (Admin)"
+                    >
+                      <Edit3 size={12} /> Edit
+                    </button>
+                  )}
+                  {isAdmin && (
+                    <button
+                      onClick={() => onDeleteRoute?.(route)}
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                        fontSize: isMobile ? 10 : 11, fontWeight: 600, color: '#ffffff',
+                        padding: '6px 10px', borderRadius: 10,
+                        background: '#ef4444', border: '1px solid #dc2626',
+                        cursor: 'pointer', transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#dc2626'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#ef4444'; }}
+                      title="Delete trail permanently (Admin)"
+                    >
+                      <Trash2 size={12} /> Delete
+                    </button>
+                  )}
                 </div>
               </div>
               
-              {(route.district || route.highlights) && (
+              {(route.district || route.highlights || route.submitter?.name) && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, marginBottom: 8 }}>
+                  {route.submitter?.name && (
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      color: '#ffffff',
+                      fontSize: 11, fontWeight: 600,
+                      textShadow: '0 1px 4px rgba(0,0,0,0.85)'
+                    }}>
+                      <span style={{
+                        width: 7, height: 7, borderRadius: '50%',
+                        background: 'var(--accent-primary)', display: 'inline-block',
+                        boxShadow: '0 0 6px var(--accent-primary)'
+                      }} />
+                      <span className="truncate">Submitted by {route.submitter.name}</span>
+                    </div>
+                  )}
                   {route.district && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      color: 'rgba(255,255,255,0.9)',
+                      fontSize: 11,
+                      textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+                    }}>
                       <MapPin size={11} />
                       <span className="truncate">{route.district}{route.province ? `, ${route.province}` : ''}</span>
                     </div>
                   )}
                   {route.highlights && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: 11 }}>
+                    <div style={{
+                      display: 'flex', alignItems: 'center', gap: 6,
+                      color: 'rgba(255,255,255,0.9)',
+                      fontSize: 11,
+                      textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+                    }}>
                       <Star size={11} />
                       <span className="truncate">{route.highlights}</span>
                     </div>

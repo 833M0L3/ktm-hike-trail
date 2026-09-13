@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ktm-hikes-app",
+  "main": "server/index.js",
+  "compatibility_date": "2024-09-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./build",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ktm-hikes-db",
+      "database_id": "9f9dbba4-38b9-43d3-bcde-8f7b10ca2f59"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "ktm-hikes-tracks"
+    }
+  ],
+  "vars": {
+    "GOOGLE_CLIENT_ID": "683129579615-d2uh6g9humvfb6bg4obut88lfakjc0es.apps.googleusercontent.com"
+  }
+}
