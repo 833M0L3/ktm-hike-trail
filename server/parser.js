@@ -16,7 +16,9 @@ export function haversineDistance(p1, p2) {
 }
 
 function parseCoordinateString(str) {
-  return str
+  if (!str) return [];
+  const cleaned = str.replace(/\s*,\s*/g, ',');
+  return cleaned
     .trim()
     .split(/\s+/)
     .map((coord) => {
@@ -95,24 +97,37 @@ function extractKMLSegments(xmlDoc) {
 function extractGPXSegments(xmlDoc) {
   const segments = [];
 
+  const getPtCoords = (pt) => {
+    const latStr = pt.getAttribute('lat') || pt.getAttribute('LAT');
+    const lngStr =
+      pt.getAttribute('lon') ||
+      pt.getAttribute('lng') ||
+      pt.getAttribute('LON') ||
+      pt.getAttribute('LNG');
+    if (!latStr || !lngStr) return null;
+    const lat = parseFloat(latStr);
+    const lng = parseFloat(lngStr);
+    let ele = 0;
+    const eleEl =
+      pt.getElementsByTagName('ele')[0] || pt.getElementsByTagName('ELE')[0];
+    if (eleEl && eleEl.textContent) {
+      const parsedEle = parseFloat(eleEl.textContent);
+      if (!isNaN(parsedEle)) ele = parsedEle;
+    }
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return { lat, lng, ele };
+    }
+    return null;
+  };
+
   // 1. Try track segments <trk><trkseg><trkpt>
   const trksegs = xmlDoc.getElementsByTagName('trkseg');
   for (let i = 0; i < trksegs.length; i++) {
     const trkpts = trksegs[i].getElementsByTagName('trkpt');
     const segment = [];
     for (let j = 0; j < trkpts.length; j++) {
-      const pt = trkpts[j];
-      const lat = parseFloat(pt.getAttribute('lat'));
-      const lng = parseFloat(pt.getAttribute('lon'));
-      let ele = 0;
-      const eleEl = pt.getElementsByTagName('ele')[0];
-      if (eleEl && eleEl.textContent) {
-        const parsedEle = parseFloat(eleEl.textContent);
-        if (!isNaN(parsedEle)) ele = parsedEle;
-      }
-      if (!isNaN(lat) && !isNaN(lng)) {
-        segment.push({ lat, lng, ele });
-      }
+      const pt = getPtCoords(trkpts[j]);
+      if (pt) segment.push(pt);
     }
     if (segment.length > 0) segments.push(segment);
   }
@@ -124,18 +139,8 @@ function extractGPXSegments(xmlDoc) {
       const rtepts = rtes[i].getElementsByTagName('rtept');
       const segment = [];
       for (let j = 0; j < rtepts.length; j++) {
-        const pt = rtepts[j];
-        const lat = parseFloat(pt.getAttribute('lat'));
-        const lng = parseFloat(pt.getAttribute('lon'));
-        let ele = 0;
-        const eleEl = pt.getElementsByTagName('ele')[0];
-        if (eleEl && eleEl.textContent) {
-          const parsedEle = parseFloat(eleEl.textContent);
-          if (!isNaN(parsedEle)) ele = parsedEle;
-        }
-        if (!isNaN(lat) && !isNaN(lng)) {
-          segment.push({ lat, lng, ele });
-        }
+        const pt = getPtCoords(rtepts[j]);
+        if (pt) segment.push(pt);
       }
       if (segment.length > 0) segments.push(segment);
     }
@@ -146,18 +151,8 @@ function extractGPXSegments(xmlDoc) {
     const allTrkpts = xmlDoc.getElementsByTagName('trkpt');
     const segment = [];
     for (let i = 0; i < allTrkpts.length; i++) {
-      const pt = allTrkpts[i];
-      const lat = parseFloat(pt.getAttribute('lat'));
-      const lng = parseFloat(pt.getAttribute('lon'));
-      let ele = 0;
-      const eleEl = pt.getElementsByTagName('ele')[0];
-      if (eleEl && eleEl.textContent) {
-        const parsedEle = parseFloat(eleEl.textContent);
-        if (!isNaN(parsedEle)) ele = parsedEle;
-      }
-      if (!isNaN(lat) && !isNaN(lng)) {
-        segment.push({ lat, lng, ele });
-      }
+      const pt = getPtCoords(allTrkpts[i]);
+      if (pt) segment.push(pt);
     }
     if (segment.length > 0) segments.push(segment);
   }
@@ -216,6 +211,36 @@ function sampleArray(arr, maxPoints) {
   return Array.from({ length: maxPoints }, (_, i) => arr[Math.floor(i * step)]);
 }
 
+function sampleSegmentPreserveEnds(segment, targetCount) {
+  if (segment.length <= targetCount) return segment;
+  if (targetCount <= 2) return [segment[0], segment[segment.length - 1]];
+
+  const sampled = [segment[0]];
+  const interiorCount = targetCount - 2;
+  const interiorLength = segment.length - 2;
+  const step = interiorLength / interiorCount;
+
+  for (let i = 0; i < interiorCount; i++) {
+    const idx = 1 + Math.floor(i * step);
+    sampled.push(segment[idx]);
+  }
+
+  sampled.push(segment[segment.length - 1]);
+  return sampled;
+}
+
+function simplifyLineSegments(segments, maxTotalPoints = 1500) {
+  const totalPoints = segments.reduce((sum, seg) => sum + seg.length, 0);
+  if (totalPoints <= maxTotalPoints) return segments;
+
+  const ratio = maxTotalPoints / totalPoints;
+  return segments.map((segment) => {
+    if (segment.length <= 2) return segment;
+    const targetCount = Math.max(2, Math.floor(segment.length * ratio));
+    return sampleSegmentPreserveEnds(segment, targetCount);
+  });
+}
+
 function buildElevationProfile(segments, maxPoints = 250) {
   const pointsWithDistance = [];
   let runningDistanceKm = 0;
@@ -233,12 +258,15 @@ function buildElevationProfile(segments, maxPoints = 250) {
   return {
     elevationProfile: sampled.map((p, i) => ({
       distance: parseFloat(p.distance.toFixed(2)),
-      elevation: Math.round(p.coord.ele),
+      elevation: Math.round(p.coord.ele || 0),
+      lat: p.coord.lat,
+      lng: p.coord.lng,
       index: i,
     })),
     sampledCoords: sampled.map((p) => ({
       lat: p.coord.lat,
       lng: p.coord.lng,
+      ele: Math.round(p.coord.ele || 0),
     })),
   };
 }
@@ -297,6 +325,13 @@ export function parseGPSContent(fileText, fileName, formatHint = null) {
   const difficulty = getDifficulty(stats);
   const { elevationProfile, sampledCoords } = buildElevationProfile(lineSegments, 250);
 
+  const simplifiedSegments = simplifyLineSegments(lineSegments, 1500);
+  const simplifiedCoordinates = simplifiedSegments.flat().map((c) => ({
+    lat: c.lat,
+    lng: c.lng,
+    ele: c.ele || 0,
+  }));
+
   let minLat = Infinity;
   let minLng = Infinity;
   let maxLat = -Infinity;
@@ -343,6 +378,8 @@ export function parseGPSContent(fileText, fileName, formatHint = null) {
     waypoints,
     elevationProfile,
     sampledCoords,
+    coordinates: simplifiedCoordinates,
+    lineSegments: simplifiedSegments,
     lineSegmentsCount: lineSegments.length,
     pointCount: coordinates.length,
   };

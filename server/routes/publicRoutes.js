@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { parseGPSContent } from '../parser.js';
 
 const publicRoutes = new Hono();
 
@@ -142,11 +143,44 @@ publicRoutes.get('/routes/:id', async (c) => {
     let startPos = null;
     let waypoints = [];
     let elevationProfile = [];
+    let coordinates = [];
 
     try { bounds = JSON.parse(row.bounds_json); } catch {}
     try { startPos = JSON.parse(row.start_pos_json); } catch {}
     try { waypoints = JSON.parse(row.waypoints_json || '[]'); } catch {}
     try { elevationProfile = JSON.parse(row.elevation_profile_json || '[]'); } catch {}
+    try { coordinates = JSON.parse(row.coordinates_json || '[]'); } catch {}
+
+    // Auto-heal / backfill coordinates from R2 storage if coordinates_json was not cached or has <= 2 points
+    if ((!coordinates || coordinates.length < 5) && row.r2_key && c.env.BUCKET) {
+      try {
+        const obj = await c.env.BUCKET.get(row.r2_key);
+        if (obj) {
+          const fileText = await obj.text();
+          const parsed = parseGPSContent(fileText, row.file_name, row.file_format);
+          if (parsed?.coordinates?.length) {
+            coordinates = parsed.coordinates;
+            if (parsed.elevationProfile?.length) elevationProfile = parsed.elevationProfile;
+            if (parsed.waypoints?.length) waypoints = parsed.waypoints;
+
+            // Cache back into D1
+            await db
+              .prepare(
+                'UPDATE routes SET coordinates_json = ?, elevation_profile_json = ?, waypoints_json = ? WHERE id = ?'
+              )
+              .bind(
+                JSON.stringify(coordinates),
+                JSON.stringify(elevationProfile),
+                JSON.stringify(waypoints),
+                row.id
+              )
+              .run();
+          }
+        }
+      } catch (r2Err) {
+        console.warn('Could not auto-recover coordinates from R2:', r2Err);
+      }
+    }
 
     return c.json({
       id: row.id,
@@ -169,6 +203,9 @@ publicRoutes.get('/routes/:id', async (c) => {
       },
       bounds,
       startPos,
+      coordinates,
+      lineSegments: [coordinates],
+      displayLineSegments: [coordinates],
       waypoints,
       elevationProfile,
       submitter: {

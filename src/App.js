@@ -175,66 +175,107 @@ export default function App() {
         if (route.id && !route.id.startsWith('seed-local-')) {
           try {
             const apiDetail = await fetchRouteDetail(route.id);
-            if (apiDetail && apiDetail.elevationProfile && apiDetail.elevationProfile.length > 0) {
-              const coords = apiDetail.waypoints?.length
-                ? apiDetail.waypoints.map(w => ({ lat: w.lat, lng: w.lng, ele: w.elevation || 0 }))
-                : (route.coordinates || []);
+            if (apiDetail) {
+              let coords = null;
+              if (Array.isArray(apiDetail.coordinates) && apiDetail.coordinates.length > 2) {
+                coords = apiDetail.coordinates;
+              } else if (Array.isArray(apiDetail.sampledCoords) && apiDetail.sampledCoords.length > 2) {
+                coords = apiDetail.sampledCoords;
+              } else if (
+                Array.isArray(apiDetail.elevationProfile) &&
+                apiDetail.elevationProfile.length > 2 &&
+                apiDetail.elevationProfile[0]?.lat
+              ) {
+                coords = apiDetail.elevationProfile.map(p => ({
+                  lat: p.lat,
+                  lng: p.lng,
+                  ele: p.elevation || 0,
+                }));
+              }
+
+              // Only accept updatedRoute if we actually have genuine track coordinates (not just 2-3 waypoint milestones)
+              if (coords && coords.length > 2) {
+                const lineSegs = apiDetail.lineSegments?.length ? apiDetail.lineSegments : [coords];
+                const displaySegs = apiDetail.displayLineSegments?.length ? apiDetail.displayLineSegments : lineSegs;
+
+                updatedRoute = {
+                  ...route,
+                  ...apiDetail,
+                  id: route.id,
+                  name: route.name,
+                  description: route.description,
+                  difficulty: route.difficulty,
+                  province: apiDetail?.province || route.province,
+                  district: apiDetail?.district || route.district,
+                  nearbyCity: apiDetail?.nearbyCity || route.nearbyCity,
+                  highlights: apiDetail?.highlights || route.highlights,
+                  submitter: apiDetail?.submitter?.name ? apiDetail.submitter : route.submitter,
+                  fileFormat: apiDetail?.fileFormat || route.fileFormat || 'kml',
+                  coordinates: coords,
+                  lineSegments: lineSegs,
+                  displayLineSegments: displaySegs,
+                  elevationProfile: apiDetail.elevationProfile || [],
+                  sampledCoords: coords,
+                  waypoints: apiDetail.waypoints || [],
+                  isLazyLoaded: true,
+                  loadError: null,
+                };
+              }
+            }
+          } catch (apiErr) {
+            console.warn('API route detail error, will fall back to raw track download:', apiErr);
+          }
+        }
+
+        // If not loaded from API or coordinates were missing, fetch and parse raw GPS track file
+        if (!updatedRoute) {
+          let rawText = null;
+          let trackFileName = route.fileName || 'track.kml';
+
+          // 1. Try downloading raw file from API if it has an id
+          if (route.id && !route.id.startsWith('seed-local-')) {
+            try {
+              const res = await fetch(`/api/routes/${encodeURIComponent(route.id)}/download`);
+              if (res.ok) {
+                rawText = await res.text();
+              }
+            } catch (dlErr) {
+              console.warn('Could not download raw track from API:', dlErr);
+            }
+          }
+
+          // 2. Fallback to local /public/kml/
+          if (!rawText && route.fileName) {
+            const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
+            if (res.ok) {
+              rawText = await res.text();
+            }
+          }
+
+          if (rawText) {
+            const fullParsed = parseKML(rawText, trackFileName);
+            if (fullParsed && fullParsed.coordinates?.length) {
               updatedRoute = {
                 ...route,
-                ...apiDetail,
+                ...fullParsed,
                 id: route.id,
                 name: route.name,
                 description: route.description,
                 difficulty: route.difficulty,
-                province: apiDetail?.province || route.province,
-                district: apiDetail?.district || route.district,
-                nearbyCity: apiDetail?.nearbyCity || route.nearbyCity,
-                highlights: apiDetail?.highlights || route.highlights,
-                submitter: apiDetail?.submitter?.name ? apiDetail.submitter : route.submitter,
-                fileFormat: apiDetail?.fileFormat || route.fileFormat || 'kml',
-                coordinates: coords,
-                lineSegments: [coords],
-                displayLineSegments: [coords],
-                elevationProfile: apiDetail.elevationProfile,
-                sampledCoords: apiDetail.waypoints || [],
-                waypoints: apiDetail.waypoints || [],
+                province: route.province,
+                district: route.district,
+                nearbyCity: route.nearbyCity,
+                highlights: route.highlights,
+                submitter: route.submitter,
+                fileFormat: route.fileFormat || (trackFileName.toLowerCase().endsWith('.gpx') ? 'gpx' : 'kml'),
                 isLazyLoaded: true,
                 loadError: null,
               };
+              if (route.stats?.estimatedHours) {
+                updatedRoute.stats.estimatedHours = route.stats.estimatedHours;
+              }
             }
-          } catch (apiErr) {
-            // fallback to KML fetch below
           }
-        }
-
-        // If not loaded from API, fetch raw KML
-        if (!updatedRoute && route.fileName) {
-          const res = await fetch(`${process.env.PUBLIC_URL}/kml/${encodeURIComponent(route.fileName)}?t=${Date.now()}`);
-          if (!res.ok) throw new Error(`HTTP ${res.status} while loading ${route.fileName}`);
-          const text = await res.text();
-          
-          await new Promise(resolve => setTimeout(resolve, 250));
-          
-          const fullParsed = parseKML(text, route.fileName);
-          if (!fullParsed) throw new Error('KML has no valid route geometry');
-          
-          updatedRoute = {
-            ...route,
-            ...fullParsed,
-            id: route.id,
-            name: route.name,
-            description: route.description,
-            difficulty: route.difficulty,
-            province: route.province,
-            district: route.district,
-            nearbyCity: route.nearbyCity,
-            highlights: route.highlights,
-            submitter: route.submitter,
-            fileFormat: route.fileFormat || 'kml',
-            isLazyLoaded: true,
-            loadError: null,
-          };
-          updatedRoute.stats.estimatedHours = route.stats.estimatedHours;
         }
 
         if (updatedRoute) {

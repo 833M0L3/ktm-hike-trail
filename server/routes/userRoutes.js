@@ -114,8 +114,9 @@ userRoutes.post('/upload', async (c) => {
           file_name, file_format, r2_key, file_size, status,
           difficulty, distance_km, elevation_gain_m, elevation_loss_m,
           min_elevation_m, max_elevation_m, estimated_hours,
-          bounds_json, start_pos_json, waypoints_json, elevation_profile_json
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+          bounds_json, start_pos_json, waypoints_json, elevation_profile_json,
+          coordinates_json
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         routeId,
@@ -138,7 +139,8 @@ userRoutes.post('/upload', async (c) => {
         JSON.stringify(parsed.bounds),
         JSON.stringify(parsed.startPos),
         JSON.stringify(parsed.waypoints),
-        JSON.stringify(parsed.elevationProfile)
+        JSON.stringify(parsed.elevationProfile),
+        JSON.stringify(parsed.coordinates || [])
       )
       .run();
 

@@ -33,11 +33,13 @@ adminRoutes.get('/routes/pending', async (c) => {
       let startPos = null;
       let waypoints = [];
       let elevationProfile = [];
+      let coordinates = [];
 
       try { bounds = JSON.parse(row.bounds_json); } catch {}
       try { startPos = JSON.parse(row.start_pos_json); } catch {}
       try { waypoints = JSON.parse(row.waypoints_json || '[]'); } catch {}
       try { elevationProfile = JSON.parse(row.elevation_profile_json || '[]'); } catch {}
+      try { coordinates = JSON.parse(row.coordinates_json || '[]'); } catch {}
 
       return {
         id: row.id,
@@ -60,6 +62,9 @@ adminRoutes.get('/routes/pending', async (c) => {
         },
         bounds,
         startPos,
+        coordinates,
+        lineSegments: [coordinates],
+        displayLineSegments: [coordinates],
         waypoints,
         elevationProfile,
         submitter: {

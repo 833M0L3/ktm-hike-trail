@@ -1,17 +1,32 @@
-// KML Parser utility - converts KML to usable route data
-export function parseKML(kmlText, fileName) {
+// Universal GPS Parser utility - converts KML and GPX to usable route data
+export function parseKML(text, fileName = 'track.kml') {
+  return parseGPS(text, fileName);
+}
+
+export function parseGPS(text, fileName = 'track.kml') {
+  const isGPX = fileName.toLowerCase().endsWith('.gpx') || text.includes('<gpx');
   const parser = new DOMParser();
-  const xmlDoc = parser.parseFromString(kmlText, 'application/xml');
+  const xmlDoc = parser.parseFromString(text, 'application/xml');
 
-  const nameEl = xmlDoc.querySelector('Document > name, Placemark > name');
-  const name = nameEl?.textContent?.trim() || fileName.replace('.kml', '').replace(/_/g, ' ');
+  let name = '';
+  let description = '';
+  let lineSegments = [];
 
-  const descEl = xmlDoc.querySelector('description');
-  const description = descEl?.textContent?.trim() || '';
+  if (isGPX) {
+    const nameEl = xmlDoc.querySelector('trk > name, name');
+    name = nameEl?.textContent?.trim() || fileName.replace(/\.gpx$/i, '').replace(/_/g, ' ');
+    const descEl = xmlDoc.querySelector('trk > desc, desc');
+    description = descEl?.textContent?.trim() || '';
+    lineSegments = extractGPXSegments(xmlDoc);
+  } else {
+    const nameEl = xmlDoc.querySelector('Document > name, Placemark > name');
+    name = nameEl?.textContent?.trim() || fileName.replace(/\.kml$/i, '').replace(/_/g, ' ');
+    const descEl = xmlDoc.querySelector('description');
+    description = descEl?.textContent?.trim() || '';
+    lineSegments = extractLineSegments(xmlDoc);
+  }
 
-  const lineSegments = extractLineSegments(xmlDoc);
   const coordinates = lineSegments.flat();
-
   if (coordinates.length === 0) return null;
 
   const stats = calculateStats(lineSegments);
@@ -47,7 +62,9 @@ export function parseKML(kmlText, fileName) {
 }
 
 function parseCoordinateString(str) {
-  return str.trim().split(/\s+/)
+  if (!str) return [];
+  const cleaned = str.replace(/\s*,\s*/g, ',');
+  return cleaned.trim().split(/\s+/)
     .map(coord => {
       const parts = coord.split(',');
       if (parts.length < 2) return null;
@@ -55,9 +72,70 @@ function parseCoordinateString(str) {
       const lat = parseFloat(parts[1]);
       const ele = parts[2] ? parseFloat(parts[2]) : 0;
       if (isNaN(lat) || isNaN(lng)) return null;
-      return { lat, lng, ele };
+      return { lat, lng, ele: isNaN(ele) ? 0 : ele };
     })
     .filter(Boolean);
+}
+
+function extractGPXSegments(xmlDoc) {
+  const segments = [];
+
+  const getPtCoords = (pt) => {
+    const latStr = pt.getAttribute('lat') || pt.getAttribute('LAT');
+    const lngStr = pt.getAttribute('lon') || pt.getAttribute('lng') || pt.getAttribute('LON') || pt.getAttribute('LNG');
+    if (!latStr || !lngStr) return null;
+    const lat = parseFloat(latStr);
+    const lng = parseFloat(lngStr);
+    let ele = 0;
+    const eleEl = pt.querySelector('ele, ELE');
+    if (eleEl && eleEl.textContent) {
+      const parsedEle = parseFloat(eleEl.textContent);
+      if (!isNaN(parsedEle)) ele = parsedEle;
+    }
+    if (!isNaN(lat) && !isNaN(lng)) {
+      return { lat, lng, ele };
+    }
+    return null;
+  };
+
+  // 1. Try track segments <trk><trkseg><trkpt>
+  const trksegs = xmlDoc.querySelectorAll('trkseg');
+  trksegs.forEach(trkseg => {
+    const trkpts = trkseg.querySelectorAll('trkpt');
+    const segment = [];
+    trkpts.forEach(pt => {
+      const coords = getPtCoords(pt);
+      if (coords) segment.push(coords);
+    });
+    if (segment.length > 0) segments.push(segment);
+  });
+
+  // 2. If no trkseg, look for route points <rte><rtept>
+  if (segments.length === 0) {
+    const rtes = xmlDoc.querySelectorAll('rte');
+    rtes.forEach(rte => {
+      const rtepts = rte.querySelectorAll('rtept');
+      const segment = [];
+      rtepts.forEach(pt => {
+        const coords = getPtCoords(pt);
+        if (coords) segment.push(coords);
+      });
+      if (segment.length > 0) segments.push(segment);
+    });
+  }
+
+  // 3. Fallback: all trkpts directly
+  if (segments.length === 0) {
+    const allTrkpts = xmlDoc.querySelectorAll('trkpt');
+    const segment = [];
+    allTrkpts.forEach(pt => {
+      const coords = getPtCoords(pt);
+      if (coords) segment.push(coords);
+    });
+    if (segment.length > 0) segments.push(segment);
+  }
+
+  return segments;
 }
 
 function extractLineSegments(xmlDoc) {
@@ -141,8 +219,8 @@ function calculateStats(segments) {
     elevationLoss: Math.round(loss),
     minElevation: Math.round(minEle === Infinity ? 0 : minEle),
     maxElevation: Math.round(maxEle === -Infinity ? 0 : maxEle),
-    startElevation: Math.round(coords[0].ele),
-    endElevation: Math.round(coords[coords.length - 1].ele),
+    startElevation: coords.length > 0 ? Math.round(coords[0].ele) : 0,
+    endElevation: coords.length > 0 ? Math.round(coords[coords.length - 1].ele) : 0,
     estimatedHours: parseFloat(estimatedHours.toFixed(1)),
     pointCount: coords.length,
   };
@@ -165,10 +243,16 @@ function buildElevationProfile(segments, maxPoints) {
   return {
     elevationProfile: sampled.map((p, i) => ({
       distance: parseFloat(p.distance.toFixed(2)),
-      elevation: Math.round(p.coord.ele),
+      elevation: Math.round(p.coord.ele || 0),
+      lat: p.coord.lat,
+      lng: p.coord.lng,
       index: i,
     })),
-    sampledCoords: sampled.map(p => p.coord),
+    sampledCoords: sampled.map(p => ({
+      lat: p.coord.lat,
+      lng: p.coord.lng,
+      ele: Math.round(p.coord.ele || 0),
+    })),
   };
 }
 

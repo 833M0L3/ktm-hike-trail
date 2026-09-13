@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS routes (
   start_pos_json TEXT NOT NULL,
   waypoints_json TEXT,
   elevation_profile_json TEXT,
+  coordinates_json TEXT,
   admin_note TEXT,
   reviewed_by TEXT,
   reviewed_at DATETIME,
