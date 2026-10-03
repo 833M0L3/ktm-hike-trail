@@ -2841,6 +2841,35 @@
       "lng": 83.86875
     }
   },
+  "Burje Bhanjyang - Kakani Hike (Village Route).kml": {
+    "name": "Burje Bhanjyang - Kakani Hike",
+    "description": "",
+    "difficultyOverride": "Auto",
+    "hoursOverride": "Auto",
+    "calculatedDifficulty": "Hard",
+    "stats": {
+      "distance": 21.68,
+      "elevationGain": 2737,
+      "elevationLoss": 3180,
+      "minElevation": 1420,
+      "maxElevation": 2025,
+      "estimatedHours": 8.9
+    },
+    "bounds": [
+      [
+        27.770164,
+        85.265323
+      ],
+      [
+        27.824636,
+        85.31452
+      ]
+    ],
+    "startPos": {
+      "lat": 27.814459,
+      "lng": 85.313925
+    }
+  },
   "Muhan Pokhari - Bagdwar - Tinchule - Shivapuri Peak.kml": {
     "name": "Muhan Pokhari - Bagdwar - Tinchule - Shivapuri Peak",
     "description": "",
